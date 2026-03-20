@@ -1,0 +1,10 @@
+*------------------------------------------------------------------------------*
+* Parameters file of the function optimizer                                    *
+*------------------------------------------------------------------------------*
+*--- main parameters ---
+PS=10                      * size of the population [>=1]
+D=1	                       * number of dimensions [>=1]
+Iter_N=100                 * total number of iterations [>=1]       
+*--- auxiliary parameters (coefficients) ---
+* other (specific) parameters ... 
+* end

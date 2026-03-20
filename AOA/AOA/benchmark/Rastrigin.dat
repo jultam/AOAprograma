@@ -1,0 +1,4 @@
+Name=Rastrigin                     * name of the benchmark test function
+Arg_Range_1=-5.12                  * minimum argument range value (lower bound)
+Arg_Range_2=5.12                   * maximum argument range value (upper bound)
+Best_known/optimal_value=0.0       * best known/optimal objective function value
