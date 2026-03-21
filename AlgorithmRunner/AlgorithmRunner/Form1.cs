@@ -46,7 +46,7 @@ namespace AlgorithmRunner
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // Reads all benchmark function parameters
+            // ----------- Reads all benchmark function parameters -------------------\
             try {
                 string directory = "../../benchmarks";
                 string benchName; double optimum; double ub; double lb;
@@ -55,13 +55,14 @@ namespace AlgorithmRunner
                     (benchName, lb, ub, optimum) = ReadBenchmark(file);
                     BenchmarkFunction benchmark = new BenchmarkFunction(benchName, lb, ub, optimum);
                     benchmarkFunctions.Add(benchmark);
-                    richTextBox1.AppendText("\n"+benchmark.ToString());
+                    richTextBox1.AppendText("\n"+benchmark.ToString()); // debug
                 }
             } catch (DirectoryNotFoundException ex) {
                 MessageBox.Show("Error loading benchmark directory: "+ex);
             }
+            // -----------------------------------------------------------------------/
 
-            // 
+            // ----------- Creates delegates of function methods ---------------------\
             try {
                 foreach (BenchmarkFunction benchmark in benchmarkFunctions)
                 {
@@ -72,6 +73,7 @@ namespace AlgorithmRunner
             } catch (Exception ex){
                 MessageBox.Show("Error: " + ex);
             }
+            // -----------------------------------------------------------------------/
         }
 
         /*
