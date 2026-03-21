@@ -10,59 +10,6 @@ namespace AOA
         private static Random rnd = new Random();
 
         /*
-         * Optimized function example 1
-         */
-        /*
-        static double function1(double[,] x, int i) 
-        {
-            
-            double sum = 0;
-            // Cycle through all positions
-            for (int j = 0; j < x.GetLength(1); j++)
-            {
-                sum += Math.Pow(x[i, j], 2);
-            }
-            return sum;
-        }
-
-        static double function3(double[,] x, int i) 
-        {
-            double sum = 0;
-            for (int j = 0; j < x.GetLength(1); j++)
-            {
-                double sum2 = 0;
-                for (int k = 0; k < j; k++)
-                {
-                    sum2 += Math.Pow(x[i, k], 2);
-                }
-                sum += sum2;
-            }
-            return sum;
-        }
-
-        static double function8(double[,] x, int i) 
-        {
-            double sum = 0;
-            for (int j = 0; j < x.GetLength(1); j++)
-            {
-                sum += (-x[i, j] * Math.Sin(Math.Sqrt(Math.Abs(x[i,j]))));
-            }
-            return sum;
-        }
-
-        static double function16(double[,] x, int i)
-        {
-            double x1 = x[i, 0]; double x2 = x[i, 1];
-            return 4 * Math.Pow(x1, 2) - 2.1 * Math.Pow(x1, 4) + Math.Pow(x1, 6) / 3 + x1 * x2 - 4 * Math.Pow(x2, 2) + 4 * Math.Pow(x2, 4);
-        }
-
-        static double function17(double[,] x, int i)
-        {
-            double x1 = x[i, 0]; double x2 = x[i, 1];
-            return Math.Pow(x2-(5.1/(4*Math.Pow(Math.PI, 2)))*Math.Pow(x1,2)+(5/Math.PI)*x1-6, 2) + 10*(1-1/(8*Math.PI))*Math.Cos(x1)+10;
-        }*/
-
-        /*
          * Calculate fitness functions for all solutions
          * X = solution position matrix
          * D = dimension count
@@ -198,7 +145,7 @@ namespace AOA
             double ub; double lb;
             (benchName, lb, ub, optimum) = ReadBenchmark("../../../benchmark/Griewank.dat");
             Console.WriteLine(benchName + " " + lb + " " + ub + " " + optimum);
-
+            
             // Initialize Arithmetic Optimization Algorithm parameters
             int alpha = 5; double mu = 0.6; int epsilon = 1;
             // Initialize random solution positions
