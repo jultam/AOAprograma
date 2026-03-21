@@ -1,4 +1,4 @@
-﻿// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ObjectiveFunction2.cs %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+﻿// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Rastrigin.cs %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 using System;
 using System.Runtime.CompilerServices;
 
@@ -9,7 +9,7 @@ namespace CONTOPT
     // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static double Objective_Function_Value_2(double[] x, int d)
+        public static double Rastrigin(double[] x, int d)
         // calculation of the value of the objective function (2) (Rastrigin function)
         // input: x - the current argument (solution),
         //        d - the number of dimensions;

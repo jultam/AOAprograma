@@ -1,4 +1,4 @@
-﻿// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ObjectiveFunction4.cs %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+﻿// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Schwefel.cs %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 using System;
 using System.Runtime.CompilerServices;
 
@@ -9,7 +9,7 @@ namespace CONTOPT
     // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static double Objective_Function_Value_4(double[] x, int d)
+        public static double Schwefel (double[] x, int d)
         // calculation of the value of the objective function (4) (Schwefel function)
         // input: x - the current argument (solution),
         //        d - the number of dimensions;

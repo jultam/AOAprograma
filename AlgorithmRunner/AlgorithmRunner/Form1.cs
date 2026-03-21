@@ -22,7 +22,7 @@ namespace AlgorithmRunner
             public double arg_range_1 { get; set; }
             public double arg_range_2 { get; set; }
             public double best_known { get; set; }
-            public Func<double[], int> function { get; set; }
+            public Func<double[], int, double> function { get; set; }
             public BenchmarkFunction(string name, double lb, double ub, double optimum)
             {
                 this.name = name;
@@ -65,9 +65,9 @@ namespace AlgorithmRunner
             try {
                 foreach (BenchmarkFunction benchmark in benchmarkFunctions)
                 {
-                    //MethodInfo method = typeof().GetMethod(benchmark.name);
-
-                    //Func<double[], int> function = typeof(Program).GetMethod(benchmark.name, BindingFlags.Static).Invoke();
+                    MethodInfo method = typeof(ContOpt).GetMethod(benchmark.name);
+                    var function = (Func<double[], int, double>)Delegate.CreateDelegate(typeof(Func<double[], int, double>), method);
+                    benchmarkFunctions.Find(x => x.name == benchmark.name).function = function;
                 }
             } catch (Exception ex){
                 MessageBox.Show("Error: " + ex);

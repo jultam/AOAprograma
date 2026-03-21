@@ -46,6 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="benchmarks\Griewank.cs" />
+    <Compile Include="benchmarks\Rastrigin.cs" />
+    <Compile Include="benchmarks\Rosenbrock.cs" />
+    <Compile Include="benchmarks\Schwefel.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,6 +70,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="benchmarks\Griewank.dat" />
+    <None Include="benchmarks\Rastrigin.dat" />
+    <None Include="benchmarks\Rosenbrock.dat" />
+    <None Include="benchmarks\Schwefel.dat" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -79,8 +87,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="benchmarks\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
