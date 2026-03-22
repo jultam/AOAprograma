@@ -16,7 +16,7 @@ namespace AlgorithmRunner
 {
     public partial class Form1 : Form
     {
-        class BenchmarkFunction
+        public class BenchmarkFunction
         {
             public string name { get; set; }
             public double arg_range_1 { get; set; }
@@ -39,6 +39,20 @@ namespace AlgorithmRunner
 
         private List<BenchmarkFunction> benchmarkFunctions = new List<BenchmarkFunction>();
 
+        public class InitComponentMethod
+        {
+            public string name { get; set; }
+            public Func<int, int, double, double, double[,]> method { get; set; }
+
+            public InitComponentMethod(string name, Func<int, int, double, double, double[,]> method)
+            {
+                this.name = name;
+                this.method = method;
+            }
+        }
+
+        private List<InitComponentMethod> initComponents = new List<InitComponentMethod>();
+
         public Form1()
         {
             InitializeComponent();
@@ -46,13 +60,23 @@ namespace AlgorithmRunner
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // ----------- Reads default parameters file -----------------------------\
+            try {
+                int PS; int M_Iter;
+                (PS, M_Iter) = FileMethods.ReadParameters("../../param.txt");
+                PSUpDown.Value = PS; MIterUpDown.Value = M_Iter;
+            } catch (Exception ex) {
+                MessageBox.Show("Error: " + ex);
+            }
+            // -----------------------------------------------------------------------/
+
             // ----------- Reads all benchmark function parameters -------------------\
             try {
                 string directory = "../../benchmarks";
                 string benchName; double optimum; double ub; double lb;
                 foreach (string file in Directory.GetFiles(directory, "*.dat"))
                 {
-                    (benchName, lb, ub, optimum) = ReadBenchmark(file);
+                    (benchName, lb, ub, optimum) = FileMethods.ReadBenchmark(file);
                     BenchmarkFunction benchmark = new BenchmarkFunction(benchName, lb, ub, optimum);
                     benchmarkFunctions.Add(benchmark);
                     richTextBox1.AppendText("\n"+benchmark.ToString()); // debug
@@ -67,52 +91,37 @@ namespace AlgorithmRunner
                 foreach (BenchmarkFunction benchmark in benchmarkFunctions)
                 {
                     MethodInfo method = typeof(ContOpt).GetMethod(benchmark.name);
-                    var function = (Func<double[], int, double>)Delegate.CreateDelegate(typeof(Func<double[], int, double>), method);
+                    Func<double[], int, double> function = (Func<double[], int, double>)Delegate.CreateDelegate(typeof(Func<double[], int, double>), method);
                     benchmarkFunctions.Find(x => x.name == benchmark.name).function = function;
                 }
             } catch (Exception ex){
                 MessageBox.Show("Error: " + ex);
             }
             // -----------------------------------------------------------------------/
-        }
 
-        /*
-         * Read benchmark function parameters from text file
-         * filename = text file name
-         * return function name, lower boundary, upper boundary, best known/optimal value
-         */
-        static (string, double, double, double) ReadBenchmark(string filename)
-        {
-            StreamReader sr = new StreamReader(filename);
-            string line = sr.ReadLine();
-            string name = "blank"; double lb = 0; double ub = 0; double optimum = 0;
-            while (line != null)
+            // ----------- Reads all initialization methods --------------------------\
+            try
             {
-                // Get rid of comments
-                line = line.Split('*')[0].Trim();
-                // Split line to parameter name and value
-                string[] parameters = line.Split('=');
-                switch (parameters[0])
+                comboBox1.Items.Clear();
+                string directory = "../../components/initialization";
+                string initName;
+                foreach (string file in Directory.GetFiles(directory, "*.dat"))
                 {
-                    case "Name":
-                        name = parameters[1];
-                        break;
-                    case "Arg_Range_1":
-                        lb = Double.Parse(parameters[1]);
-                        break;
-                    case "Arg_Range_2":
-                        ub = Double.Parse(parameters[1]);
-                        break;
-                    case "Best_known/optimal_value":
-                        optimum = Double.Parse(parameters[1]);
-                        break;
-                    default:
-                        break;
+                    (initName) = FileMethods.ReadComponent(file);
+                    MethodInfo method = typeof(ContOpt).GetMethod(initName);
+                    Func<int, int, double, double, double[,]> function = (Func<int, int, double, double, double[,]>)Delegate.CreateDelegate(typeof(Func<int, int, double, double, double[,]>), method);
+
+                    initComponents.Add(new InitComponentMethod(initName, function));
                 }
-                line = sr.ReadLine();
+                richTextBox1.AppendText("\n" + FileMethods.ArrayToString(initComponents.Select(m => m.name).ToArray())); // debug
+                comboBox1.Items.AddRange(initComponents.Select(m => m.name).ToArray());
+                comboBox1.SelectedIndex = 0;
             }
-            sr.Close();
-            return (name, lb, ub, optimum);
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex);
+            }
+            // -----------------------------------------------------------------------/
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -124,9 +133,30 @@ namespace AlgorithmRunner
 
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                label1.Text = openFileDialog.FileName;
+                int PS; int M_Iter;
+                (PS, M_Iter) = FileMethods.ReadParameters(openFileDialog.FileName);
+                PSUpDown.Value = PS; MIterUpDown.Value = M_Iter;
             }
         }
 
+        private void start_Click(object sender, EventArgs e)
+        {
+            int PS = (int)PSUpDown.Value; int M_Iter = (int)MIterUpDown.Value;
+            int alpha = (int)alphaUpDown.Value; double mu = (double)muUpDown.Value; int epsilon = (int)epsilonUpDown.Value;
+
+            string initMethodName = comboBox1.Text;
+            Func<int, int, double, double, double[,]> initMethod = initComponents.Find(m => m.name == initMethodName).method;
+
+            Results.OverallResults results = Algorithm.AOA(PS, M_Iter, alpha, mu, epsilon, benchmarkFunctions, initMethod);
+
+            Results.PopulateDataGridView(results, dataGridView1);
+
+            download.Enabled = true;
+        }
+
+        private void download_Click(object sender, EventArgs e)
+        {
+            FileMethods.SaveDataGridToExcel(dataGridView1);
+        }
     }
 }
