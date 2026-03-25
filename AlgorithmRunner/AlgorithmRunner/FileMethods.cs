@@ -83,11 +83,11 @@ namespace AlgorithmRunner
             return (PS, Iter_N);
         }
 
-        public static string ReadComponent(string filename)
+        public static List<string> ReadComponent(string filename)
         {
             StreamReader sr = new StreamReader(filename);
             string line = sr.ReadLine();
-            string name = "blank";
+            List<string> names = new List<string>();
             while (line != null)
             {
                 // Get rid of comments
@@ -97,7 +97,8 @@ namespace AlgorithmRunner
                 switch (parameters[0])
                 {
                     case "Name":
-                        name = parameters[1];
+                        string nameLine = parameters[1];
+                        foreach (string name in nameLine.Split(';')) { names.Add(name.Trim()); }
                         break;
                     default:
                         break;
@@ -105,7 +106,7 @@ namespace AlgorithmRunner
                 line = sr.ReadLine();
             }
             sr.Close();
-            return (name);
+            return (names);
         }
 
         public static void SaveDataGridToExcel(DataGridView dataGridView1)

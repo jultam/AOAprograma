@@ -13,6 +13,11 @@ namespace AlgorithmRunner
         public class OverallResults
         {
             public List<BenchmarkResults> benchmarkResults { get; set; }
+            public OverallResults(List<BenchmarkResults> benchmarkResults)
+            {
+                this.benchmarkResults = benchmarkResults;
+            }
+            public OverallResults() { }
         }
 
         public class BenchmarkResults

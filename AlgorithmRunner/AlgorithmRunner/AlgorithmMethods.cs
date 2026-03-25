@@ -9,6 +9,21 @@ namespace AlgorithmRunner
 {
     internal class AlgorithmMethods
     {
+        public static double[,] SolutionInitialization(int PS, int D, double ub, double lb, Func<double> map)
+        {
+            double[,] X = new double[PS, D];
+
+            for (int i = 0; i < PS; i++)
+            {
+                for (int j = 0; j < D; j++)
+                {
+                    double r = map();
+                    X[i, j] = r * (ub - lb) + lb;
+                }
+            }
+            return X;
+        }
+
         /*
          * Calculate fitness functions for all solutions
          * X = solution position matrix
@@ -63,29 +78,6 @@ namespace AlgorithmRunner
                 }
             }
             return bestIdx;
-        }
-
-        /*
-         * Generate a matrix of random solutions
-         * PS = population size (rows)
-         * D = dimension count (columns)
-         * ub = upper boundary
-         * lb = lower boundary
-         * return random solution matrix
-         */
-        public static double[,] GenerateRandomSolutions(int PS, int D, double ub, double lb)
-        {
-            double[,] X = new double[PS, D];
-
-            for (int i = 0; i < PS; i++)
-            {
-                for (int j = 0; j < D; j++)
-                {
-                    double r = Algorithm.rnd.NextDouble();
-                    X[i, j] = r * (ub - lb) + lb;
-                }
-            }
-            return X;
         }
 
         /*

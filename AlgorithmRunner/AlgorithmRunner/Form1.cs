@@ -39,19 +39,33 @@ namespace AlgorithmRunner
 
         private List<BenchmarkFunction> benchmarkFunctions = new List<BenchmarkFunction>();
 
-        public class InitComponentMethod
+        public class MapComponentMethod
         {
             public string name { get; set; }
-            public Func<int, int, double, double, double[,]> method { get; set; }
+            public Func<double> method { get; set; }
 
-            public InitComponentMethod(string name, Func<int, int, double, double, double[,]> method)
+            public MapComponentMethod(string name, Func<double> method)
             {
                 this.name = name;
                 this.method = method;
             }
         }
 
-        private List<InitComponentMethod> initComponents = new List<InitComponentMethod>();
+        private List<MapComponentMethod> mapComponents = new List<MapComponentMethod>();
+
+        public class MOAMOPComponentMethod
+        {
+            public string name { get; set; }
+            public Func<int,int,int,(double,double)> method { get; set; }
+
+            public MOAMOPComponentMethod(string name, Func<int, int, int, (double, double)> method)
+            {
+                this.name = name;
+                this.method = method;
+            }
+        }
+
+        private List<MOAMOPComponentMethod> MOAMOPComponents = new List<MOAMOPComponentMethod>();
 
         public Form1()
         {
@@ -99,23 +113,51 @@ namespace AlgorithmRunner
             }
             // -----------------------------------------------------------------------/
 
-            // ----------- Reads all initialization methods --------------------------\
+            // ----------- Reads all methods --------------------------\
             try
             {
                 comboBox1.Items.Clear();
-                string directory = "../../components/initialization";
-                string initName;
+                string directory = "../../components/maps";
+                List<string> initNames;
                 foreach (string file in Directory.GetFiles(directory, "*.dat"))
                 {
-                    (initName) = FileMethods.ReadComponent(file);
-                    MethodInfo method = typeof(ContOpt).GetMethod(initName);
-                    Func<int, int, double, double, double[,]> function = (Func<int, int, double, double, double[,]>)Delegate.CreateDelegate(typeof(Func<int, int, double, double, double[,]>), method);
+                    (initNames) = FileMethods.ReadComponent(file);
+                    foreach (string name in initNames)
+                    {
+                        MethodInfo method = typeof(ContOpt).GetMethod(name);
+                        Func<double> function = (Func<double>)Delegate.CreateDelegate(typeof(Func<double>), method);
 
-                    initComponents.Add(new InitComponentMethod(initName, function));
+                        mapComponents.Add(new MapComponentMethod(name, function));
+                    }
                 }
-                richTextBox1.AppendText("\n" + FileMethods.ArrayToString(initComponents.Select(m => m.name).ToArray())); // debug
-                comboBox1.Items.AddRange(initComponents.Select(m => m.name).ToArray());
+                richTextBox1.AppendText("\n" + FileMethods.ArrayToString(mapComponents.Select(m => m.name).ToArray())); // debug
+                comboBox1.Items.AddRange(mapComponents.Select(m => m.name).ToArray());
                 comboBox1.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex);
+            }
+
+            try
+            {
+                comboBox2.Items.Clear();
+                string directory = "../../components/MOAandMOP";
+                List<string> MOAMOPNames;
+                foreach (string file in Directory.GetFiles(directory, "*.dat"))
+                {
+                    (MOAMOPNames) = FileMethods.ReadComponent(file);
+                    foreach (string name in MOAMOPNames)
+                    {
+                        MethodInfo method = typeof(ContOpt).GetMethod(name);
+                        Func<int,int,int,(double,double)> function = (Func<int, int, int, (double, double)>)Delegate.CreateDelegate(typeof(Func<int, int, int, (double, double)>), method);
+
+                        MOAMOPComponents.Add(new MOAMOPComponentMethod(name, function));
+                    }
+                }
+                richTextBox1.AppendText("\n" + FileMethods.ArrayToString(MOAMOPComponents.Select(m => m.name).ToArray())); // debug
+                comboBox2.Items.AddRange(MOAMOPComponents.Select(m => m.name).ToArray());
+                comboBox2.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
@@ -143,11 +185,15 @@ namespace AlgorithmRunner
         {
             int PS = (int)PSUpDown.Value; int M_Iter = (int)MIterUpDown.Value;
             int alpha = (int)alphaUpDown.Value; double mu = (double)muUpDown.Value; int epsilon = (int)epsilonUpDown.Value;
+            int iterations = (int)testUpDown.Value;
 
             string initMethodName = comboBox1.Text;
-            Func<int, int, double, double, double[,]> initMethod = initComponents.Find(m => m.name == initMethodName).method;
+            Func<double> initMethod = mapComponents.Find(m => m.name == initMethodName).method;
 
-            Results.OverallResults results = Algorithm.AOA(PS, M_Iter, alpha, mu, epsilon, benchmarkFunctions, initMethod);
+            string MOAMOPMethodName = comboBox2.Text;
+            Func<int, int, int, (double, double)> MOAMOPMethod = MOAMOPComponents.Find(m => m.name == MOAMOPMethodName).method;
+
+            Results.OverallResults results = Algorithm.AOA(iterations, PS, M_Iter, alpha, mu, epsilon, benchmarkFunctions, initMethod, MOAMOPMethod);
 
             Results.PopulateDataGridView(results, dataGridView1);
 

@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -52,12 +52,17 @@
             this.PSLabel = new System.Windows.Forms.Label();
             this.MIterLabel = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.testUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.alphaUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.muUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.epsilonUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PSUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MIterUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.testUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -82,7 +87,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(70, 18);
+            this.label1.Location = new System.Drawing.Point(26, 22);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(248, 18);
             this.label1.TabIndex = 1;
@@ -133,8 +138,8 @@
             // 
             // dimensions
             // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dimensions.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dimensions.DefaultCellStyle = dataGridViewCellStyle1;
             this.dimensions.HeaderText = "Dimensions";
             this.dimensions.MinimumWidth = 6;
             this.dimensions.Name = "dimensions";
@@ -143,10 +148,10 @@
             // optimum
             // 
             this.optimum.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle8.Format = "N6";
-            dataGridViewCellStyle8.NullValue = null;
-            this.optimum.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "N6";
+            dataGridViewCellStyle2.NullValue = null;
+            this.optimum.DefaultCellStyle = dataGridViewCellStyle2;
             this.optimum.HeaderText = "Optimum";
             this.optimum.MinimumWidth = 6;
             this.optimum.Name = "optimum";
@@ -173,9 +178,9 @@
             this.comboBox1.Items.AddRange(new object[] {
             "test",
             "test2"});
-            this.comboBox1.Location = new System.Drawing.Point(29, 335);
+            this.comboBox1.Location = new System.Drawing.Point(29, 351);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(345, 28);
+            this.comboBox1.Size = new System.Drawing.Size(141, 28);
             this.comboBox1.TabIndex = 6;
             // 
             // alphaUpDown
@@ -328,17 +333,77 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(25, 312);
+            this.label2.Location = new System.Drawing.Point(25, 328);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(276, 20);
+            this.label2.Size = new System.Drawing.Size(149, 20);
             this.label2.TabIndex = 17;
-            this.label2.Text = "Active solution initialization method:\r\n";
+            this.label2.Text = "Number generator:\r\n";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(25, 262);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(127, 20);
+            this.label3.TabIndex = 19;
+            this.label3.Text = "Amount of tests";
+            // 
+            // testUpDown
+            // 
+            this.testUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.testUpDown.Location = new System.Drawing.Point(29, 285);
+            this.testUpDown.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.testUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.testUpDown.Name = "testUpDown";
+            this.testUpDown.Size = new System.Drawing.Size(147, 27);
+            this.testUpDown.TabIndex = 18;
+            this.testUpDown.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(207, 328);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(127, 20);
+            this.label4.TabIndex = 21;
+            this.label4.Text = "MOA and MOP:\r\n";
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "test",
+            "test2"});
+            this.comboBox2.Location = new System.Drawing.Point(211, 351);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(141, 28);
+            this.comboBox2.TabIndex = 20;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1239, 838);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.comboBox2);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.testUpDown);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.MIterLabel);
             this.Controls.Add(this.PSLabel);
@@ -366,6 +431,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.epsilonUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PSUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MIterUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.testUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -395,6 +461,10 @@
         private System.Windows.Forms.Label PSLabel;
         private System.Windows.Forms.Label MIterLabel;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.NumericUpDown testUpDown;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox comboBox2;
     }
 }
 
