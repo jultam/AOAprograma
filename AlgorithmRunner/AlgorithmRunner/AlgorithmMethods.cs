@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MathNet.Numerics;
+using Meta.Numerics;
+using Meta.Numerics.Functions;
 
 namespace AlgorithmRunner
 {
@@ -100,25 +103,26 @@ namespace AlgorithmRunner
             return X;
         }
 
-        /*
-         * C_Iter is current iteration
-         * M_Iter is maximum number of iterations
-         * Min and Max are minimum and maximum values of the accelerated function
-         * return function value at the tth iteration
-         */
-        public static double CalculateMOA(int C_Iter, int M_Iter, double Min, double Max)
+        // 0 < a <= 2
+        public static double CalculateLRS(double a, Func<double> map)
         {
-            return Min + C_Iter * (Max - Min) / M_Iter;
+            double numerator = AdvancedMath.Gamma(1 + a) * Math.Sin(Math.PI * a / 2);
+            double denominator = AdvancedMath.Gamma((1 + a) / 2) * a * Math.Pow(2, (a - 1) / 2);
+            double qu = Math.Pow(numerator / denominator, 1 / a);
+            double qv = 1;
+
+            double u = NextNormalDistribution(0, Math.Pow(qu, 2), map);
+            double v = NextNormalDistribution(0, Math.Pow(qv, 2), map);
+
+            return u / Math.Pow(Math.Abs(v), 1 / a);
         }
 
-        /*
-         * C_Iter is current iteration
-         * M_Iter is maximum number of iterations
-         * return MOP
-         */
-        public static double CalculateMOP(int C_Iter, int M_Iter, int alpha)
+        // Gaussian
+        private static double NextNormalDistribution(double mean, double std, Func<double> map)
         {
-            return 1 - Math.Pow(C_Iter, 1.0 / alpha) / Math.Pow(M_Iter, 1.0 / alpha);
+            double u1 = map(); double u2 = map();
+            double r = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
+            return mean + std * r;
         }
     }
 }

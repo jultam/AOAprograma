@@ -168,6 +168,8 @@ namespace AlgorithmRunner
                 }
             }
 
+            ContOpt.ResetMap();
+
             download.Enabled = true;
             start.Enabled = true;
         }

@@ -55,18 +55,19 @@ namespace AlgorithmRunner
                             double r1 = MapMethod();
                             double r2 = MapMethod();
                             double r3 = MapMethod();
+                            double S = AlgorithmMethods.CalculateLRS(1.5, MapMethod); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                             if (r1 > MOA)
                             {
                                 // Exploration
                                 if (r2 < 0.5)
                                 {
                                     // Apply Division math operator
-                                    X[i, j] = X[bestIdx, j] % (MOP + epsilon) * ((ub - lb) * mu + lb);
+                                    X[i, j] = X[bestIdx, j] % S* (MOP + epsilon) * ((ub - lb) * mu + lb);
                                 }
                                 else
                                 {
                                     // Apply Multiplication math operator
-                                    X[i, j] = X[bestIdx, j] * MOP * ((ub - lb) * mu + lb);
+                                    X[i, j] = X[bestIdx, j] * S* MOP * ((ub - lb) * mu + lb);
                                 }
                             }
                             else
@@ -75,12 +76,12 @@ namespace AlgorithmRunner
                                 if (r3 < 0.5)
                                 {
                                     // Apply Subtraction math operator
-                                    X[i, j] = X[bestIdx, j] - MOP * ((ub - lb) * mu + lb);
+                                    X[i, j] = X[bestIdx, j] - S* MOP * ((ub - lb) * mu + lb);
                                 }
                                 else
                                 {
                                     // Apply Addition math operator
-                                    X[i, j] = X[bestIdx, j] + MOP * ((ub - lb) * mu + lb);
+                                    X[i, j] = X[bestIdx, j] + S* MOP * ((ub - lb) * mu + lb);
                                 }
                             }
                         }

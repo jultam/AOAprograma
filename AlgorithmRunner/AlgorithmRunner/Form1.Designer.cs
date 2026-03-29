@@ -38,6 +38,11 @@
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.start = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.benchmark_function = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dimensions = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.optimum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RMSError = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TimeElapsed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.download = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.alphaUpDown = new System.Windows.Forms.NumericUpDown();
@@ -55,11 +60,6 @@
             this.testUpDown = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.benchmark_function = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dimensions = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.optimum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RMSError = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TimeElapsed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.alphaUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.muUpDown)).BeginInit();
@@ -102,7 +102,7 @@
             this.richTextBox1.Font = new System.Drawing.Font("Courier New", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox1.Location = new System.Drawing.Point(25, 481);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(333, 336);
+            this.richTextBox1.Size = new System.Drawing.Size(622, 336);
             this.richTextBox1.TabIndex = 2;
             this.richTextBox1.Text = "-----------------------------";
             // 
@@ -113,7 +113,7 @@
             this.start.ForeColor = System.Drawing.SystemColors.Control;
             this.start.Location = new System.Drawing.Point(25, 390);
             this.start.Name = "start";
-            this.start.Size = new System.Drawing.Size(333, 70);
+            this.start.Size = new System.Drawing.Size(622, 70);
             this.start.TabIndex = 3;
             this.start.Text = "START";
             this.start.UseVisualStyleBackColor = false;
@@ -128,12 +128,61 @@
             this.optimum,
             this.RMSError,
             this.TimeElapsed});
-            this.dataGridView1.Location = new System.Drawing.Point(402, 118);
+            this.dataGridView1.Location = new System.Drawing.Point(674, 118);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
             this.dataGridView1.Size = new System.Drawing.Size(812, 699);
             this.dataGridView1.TabIndex = 4;
+            // 
+            // benchmark_function
+            // 
+            this.benchmark_function.HeaderText = "Benchmark Function";
+            this.benchmark_function.MinimumWidth = 6;
+            this.benchmark_function.Name = "benchmark_function";
+            this.benchmark_function.Width = 125;
+            // 
+            // dimensions
+            // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dimensions.DefaultCellStyle = dataGridViewCellStyle1;
+            this.dimensions.HeaderText = "Dimensions";
+            this.dimensions.MinimumWidth = 6;
+            this.dimensions.Name = "dimensions";
+            this.dimensions.Width = 125;
+            // 
+            // optimum
+            // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "N6";
+            dataGridViewCellStyle2.NullValue = null;
+            this.optimum.DefaultCellStyle = dataGridViewCellStyle2;
+            this.optimum.HeaderText = "Optimum";
+            this.optimum.MinimumWidth = 6;
+            this.optimum.Name = "optimum";
+            this.optimum.Width = 125;
+            // 
+            // RMSError
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N6";
+            dataGridViewCellStyle3.NullValue = null;
+            this.RMSError.DefaultCellStyle = dataGridViewCellStyle3;
+            this.RMSError.HeaderText = "Root Mean Squared Error";
+            this.RMSError.MinimumWidth = 6;
+            this.RMSError.Name = "RMSError";
+            this.RMSError.Width = 125;
+            // 
+            // TimeElapsed
+            // 
+            this.TimeElapsed.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N3";
+            dataGridViewCellStyle4.NullValue = null;
+            this.TimeElapsed.DefaultCellStyle = dataGridViewCellStyle4;
+            this.TimeElapsed.HeaderText = "Time Elapsed, ms";
+            this.TimeElapsed.MinimumWidth = 6;
+            this.TimeElapsed.Name = "TimeElapsed";
             // 
             // download
             // 
@@ -141,7 +190,7 @@
             this.download.Enabled = false;
             this.download.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.download.ForeColor = System.Drawing.SystemColors.Control;
-            this.download.Location = new System.Drawing.Point(1046, 43);
+            this.download.Location = new System.Drawing.Point(1318, 43);
             this.download.Name = "download";
             this.download.Size = new System.Drawing.Size(168, 55);
             this.download.TabIndex = 5;
@@ -157,15 +206,15 @@
             this.comboBox1.Items.AddRange(new object[] {
             "test",
             "test2"});
-            this.comboBox1.Location = new System.Drawing.Point(29, 351);
+            this.comboBox1.Location = new System.Drawing.Point(29, 288);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(141, 28);
+            this.comboBox1.Size = new System.Drawing.Size(245, 28);
             this.comboBox1.TabIndex = 6;
             // 
             // alphaUpDown
             // 
             this.alphaUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.alphaUpDown.Location = new System.Drawing.Point(29, 213);
+            this.alphaUpDown.Location = new System.Drawing.Point(29, 207);
             this.alphaUpDown.Name = "alphaUpDown";
             this.alphaUpDown.Size = new System.Drawing.Size(95, 27);
             this.alphaUpDown.TabIndex = 7;
@@ -179,7 +228,7 @@
             // 
             this.alphaLabel.AutoSize = true;
             this.alphaLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.alphaLabel.Location = new System.Drawing.Point(69, 190);
+            this.alphaLabel.Location = new System.Drawing.Point(69, 184);
             this.alphaLabel.Name = "alphaLabel";
             this.alphaLabel.Size = new System.Drawing.Size(18, 20);
             this.alphaLabel.TabIndex = 8;
@@ -189,7 +238,7 @@
             // 
             this.muLabel.AutoSize = true;
             this.muLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.muLabel.Location = new System.Drawing.Point(182, 190);
+            this.muLabel.Location = new System.Drawing.Point(182, 184);
             this.muLabel.Name = "muLabel";
             this.muLabel.Size = new System.Drawing.Size(18, 20);
             this.muLabel.TabIndex = 10;
@@ -204,7 +253,7 @@
             0,
             0,
             65536});
-            this.muUpDown.Location = new System.Drawing.Point(146, 213);
+            this.muUpDown.Location = new System.Drawing.Point(146, 207);
             this.muUpDown.Maximum = new decimal(new int[] {
             1,
             0,
@@ -223,7 +272,7 @@
             // 
             this.epsilonLabel.AutoSize = true;
             this.epsilonLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.epsilonLabel.Location = new System.Drawing.Point(300, 190);
+            this.epsilonLabel.Location = new System.Drawing.Point(300, 184);
             this.epsilonLabel.Name = "epsilonLabel";
             this.epsilonLabel.Size = new System.Drawing.Size(18, 20);
             this.epsilonLabel.TabIndex = 12;
@@ -232,7 +281,7 @@
             // epsilonUpDown
             // 
             this.epsilonUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.epsilonUpDown.Location = new System.Drawing.Point(261, 213);
+            this.epsilonUpDown.Location = new System.Drawing.Point(261, 207);
             this.epsilonUpDown.Name = "epsilonUpDown";
             this.epsilonUpDown.Size = new System.Drawing.Size(97, 27);
             this.epsilonUpDown.TabIndex = 11;
@@ -312,7 +361,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(25, 328);
+            this.label2.Location = new System.Drawing.Point(25, 265);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(149, 20);
             this.label2.TabIndex = 17;
@@ -322,7 +371,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(25, 262);
+            this.label3.Location = new System.Drawing.Point(395, 118);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(127, 20);
             this.label3.TabIndex = 19;
@@ -331,7 +380,7 @@
             // testUpDown
             // 
             this.testUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.testUpDown.Location = new System.Drawing.Point(29, 285);
+            this.testUpDown.Location = new System.Drawing.Point(399, 141);
             this.testUpDown.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -355,7 +404,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(207, 328);
+            this.label4.Location = new System.Drawing.Point(300, 265);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(127, 20);
             this.label4.TabIndex = 21;
@@ -369,63 +418,16 @@
             this.comboBox2.Items.AddRange(new object[] {
             "test",
             "test2"});
-            this.comboBox2.Location = new System.Drawing.Point(211, 351);
+            this.comboBox2.Location = new System.Drawing.Point(304, 288);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(141, 28);
+            this.comboBox2.Size = new System.Drawing.Size(242, 28);
             this.comboBox2.TabIndex = 20;
-            // 
-            // benchmark_function
-            // 
-            this.benchmark_function.HeaderText = "Benchmark Function";
-            this.benchmark_function.MinimumWidth = 6;
-            this.benchmark_function.Name = "benchmark_function";
-            // 
-            // dimensions
-            // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dimensions.DefaultCellStyle = dataGridViewCellStyle1;
-            this.dimensions.HeaderText = "Dimensions";
-            this.dimensions.MinimumWidth = 6;
-            this.dimensions.Name = "dimensions";
-            // 
-            // optimum
-            // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N6";
-            dataGridViewCellStyle2.NullValue = null;
-            this.optimum.DefaultCellStyle = dataGridViewCellStyle2;
-            this.optimum.HeaderText = "Optimum";
-            this.optimum.MinimumWidth = 6;
-            this.optimum.Name = "optimum";
-            this.optimum.Width = 125;
-            // 
-            // RMSError
-            // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N6";
-            dataGridViewCellStyle3.NullValue = null;
-            this.RMSError.DefaultCellStyle = dataGridViewCellStyle3;
-            this.RMSError.HeaderText = "Root Mean Squared Error";
-            this.RMSError.MinimumWidth = 6;
-            this.RMSError.Name = "RMSError";
-            this.RMSError.Width = 125;
-            // 
-            // TimeElapsed
-            // 
-            this.TimeElapsed.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Format = "N3";
-            dataGridViewCellStyle4.NullValue = null;
-            this.TimeElapsed.DefaultCellStyle = dataGridViewCellStyle4;
-            this.TimeElapsed.HeaderText = "Time Elapsed, ms";
-            this.TimeElapsed.MinimumWidth = 6;
-            this.TimeElapsed.Name = "TimeElapsed";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1239, 838);
+            this.ClientSize = new System.Drawing.Size(1516, 844);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.label3);
