@@ -30,15 +30,14 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.start = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.benchmark_function = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dimensions = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.optimum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.download = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.alphaUpDown = new System.Windows.Forms.NumericUpDown();
@@ -56,6 +55,11 @@
             this.testUpDown = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.benchmark_function = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dimensions = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.optimum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RMSError = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TimeElapsed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.alphaUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.muUpDown)).BeginInit();
@@ -121,40 +125,15 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.benchmark_function,
             this.dimensions,
-            this.optimum});
+            this.optimum,
+            this.RMSError,
+            this.TimeElapsed});
             this.dataGridView1.Location = new System.Drawing.Point(402, 118);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
             this.dataGridView1.Size = new System.Drawing.Size(812, 699);
             this.dataGridView1.TabIndex = 4;
-            // 
-            // benchmark_function
-            // 
-            this.benchmark_function.HeaderText = "Benchmark Function";
-            this.benchmark_function.MinimumWidth = 6;
-            this.benchmark_function.Name = "benchmark_function";
-            this.benchmark_function.Width = 125;
-            // 
-            // dimensions
-            // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dimensions.DefaultCellStyle = dataGridViewCellStyle1;
-            this.dimensions.HeaderText = "Dimensions";
-            this.dimensions.MinimumWidth = 6;
-            this.dimensions.Name = "dimensions";
-            this.dimensions.Width = 125;
-            // 
-            // optimum
-            // 
-            this.optimum.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N6";
-            dataGridViewCellStyle2.NullValue = null;
-            this.optimum.DefaultCellStyle = dataGridViewCellStyle2;
-            this.optimum.HeaderText = "Optimum";
-            this.optimum.MinimumWidth = 6;
-            this.optimum.Name = "optimum";
             // 
             // download
             // 
@@ -395,6 +374,53 @@
             this.comboBox2.Size = new System.Drawing.Size(141, 28);
             this.comboBox2.TabIndex = 20;
             // 
+            // benchmark_function
+            // 
+            this.benchmark_function.HeaderText = "Benchmark Function";
+            this.benchmark_function.MinimumWidth = 6;
+            this.benchmark_function.Name = "benchmark_function";
+            // 
+            // dimensions
+            // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dimensions.DefaultCellStyle = dataGridViewCellStyle1;
+            this.dimensions.HeaderText = "Dimensions";
+            this.dimensions.MinimumWidth = 6;
+            this.dimensions.Name = "dimensions";
+            // 
+            // optimum
+            // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "N6";
+            dataGridViewCellStyle2.NullValue = null;
+            this.optimum.DefaultCellStyle = dataGridViewCellStyle2;
+            this.optimum.HeaderText = "Optimum";
+            this.optimum.MinimumWidth = 6;
+            this.optimum.Name = "optimum";
+            this.optimum.Width = 125;
+            // 
+            // RMSError
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N6";
+            dataGridViewCellStyle3.NullValue = null;
+            this.RMSError.DefaultCellStyle = dataGridViewCellStyle3;
+            this.RMSError.HeaderText = "Root Mean Squared Error";
+            this.RMSError.MinimumWidth = 6;
+            this.RMSError.Name = "RMSError";
+            this.RMSError.Width = 125;
+            // 
+            // TimeElapsed
+            // 
+            this.TimeElapsed.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N3";
+            dataGridViewCellStyle4.NullValue = null;
+            this.TimeElapsed.DefaultCellStyle = dataGridViewCellStyle4;
+            this.TimeElapsed.HeaderText = "Time Elapsed, ms";
+            this.TimeElapsed.MinimumWidth = 6;
+            this.TimeElapsed.Name = "TimeElapsed";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -445,9 +471,6 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button start;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn benchmark_function;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dimensions;
-        private System.Windows.Forms.DataGridViewTextBoxColumn optimum;
         private System.Windows.Forms.Button download;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.NumericUpDown alphaUpDown;
@@ -465,6 +488,11 @@
         private System.Windows.Forms.NumericUpDown testUpDown;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn benchmark_function;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dimensions;
+        private System.Windows.Forms.DataGridViewTextBoxColumn optimum;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RMSError;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TimeElapsed;
     }
 }
 

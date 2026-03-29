@@ -1,10 +1,13 @@
-﻿using System;
+﻿using CONTOPT;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace AlgorithmRunner
@@ -107,6 +110,32 @@ namespace AlgorithmRunner
             }
             sr.Close();
             return (names);
+        }
+
+        public static List<C> PopulateComboBox<T, C>(string directory, System.Windows.Forms.ComboBox comboBox, List<C> components)
+            where C : Form1.ComponentMethod
+        {
+            try {
+                comboBox.Items.Clear();
+                List<string> names;
+                foreach (string file in Directory.GetFiles(directory, "*.dat"))
+                {
+                    names = ReadComponent(file);
+                    foreach (string name in names)
+                    {
+                        MethodInfo method = typeof(ContOpt).GetMethod(name);
+                        T function = (T)(object)Delegate.CreateDelegate(typeof(T), method);
+                        
+                        C component = (C)Activator.CreateInstance(typeof(C), new object[] { name, function });
+                        components.Add(component);
+                    }
+                }
+                comboBox.Items.AddRange(components.Select(m => m.name).ToArray());
+                comboBox.SelectedIndex = 0;
+            } catch (Exception ex) {
+                MessageBox.Show("Error: " + ex);
+            }
+            return components;
         }
 
         public static void SaveDataGridToExcel(DataGridView dataGridView1)

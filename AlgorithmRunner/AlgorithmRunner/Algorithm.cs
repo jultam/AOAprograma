@@ -1,6 +1,7 @@
 ﻿using CONTOPT;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,8 +11,8 @@ namespace AlgorithmRunner
 {
     internal class Algorithm
     {
-        public static Results.OverallResults AOA(int iterations, int PS, int M_Iter, int alpha, double mu, int epsilon,
-            List<Form1.BenchmarkFunction> benchmarks, Func<double> MapMethod, Func<int, int, int, (double, double)> MOAMOPMethod)
+        public static Results.AlgorithmResults AOA(int iterations, int PS, int M_Iter, int D, int alpha, double mu, int epsilon,
+            Form1.BenchmarkFunction benchmark, Func<double> MapMethod, Func<int, int, int, (double, double)> MOAMOPMethod)
         {
             // main algorithm:
             // function minimizer (optimizer) based on the arithmetic optimization algorithm (AOA)
@@ -25,88 +26,84 @@ namespace AlgorithmRunner
             // program output: Final_X - final/overall best found solution (argument),
             //                 Final_F - final/overall best found objective function value
 
-            Results.OverallResults overallResults = new Results.OverallResults();
-            int[] testingDimensions = { 1, 30, 100 };
-
             // Initialize MOA and MOP variables
             double MOA; double MOP;
+            double lb = benchmark.arg_range_1; double ub = benchmark.arg_range_2;
+            double optimumSum = 0; double timeSum = 0; double errorSum = 0;
+            double bestOptimum = 999999; double[] bestPosition = new double[D];
 
-            List<Results.BenchmarkResults> benchmarkResults = new List<Results.BenchmarkResults>();
-
-            foreach (Form1.BenchmarkFunction benchmark in benchmarks)
+            for (int iter = 0; iter < iterations; iter++)
             {
-                double lb = benchmark.arg_range_1; double ub = benchmark.arg_range_2;
-                List<Results.DimensionResults> dimensionResults = new List<Results.DimensionResults>();
-                foreach (int D in testingDimensions)
+                Stopwatch stopwatch = Stopwatch.StartNew();
+
+                int C_Iter = 1;
+                int bestIdx = 0; double[] fitness = new double[PS];
+
+                // Initialize starting solution positions
+                double[,] X = AlgorithmMethods.SolutionInitialization(PS, D, ub, lb, MapMethod);
+
+                while (C_Iter < M_Iter)
                 {
-                    double optimumSum = 0;
-                    for (int iter = 0; iter < iterations; iter++)
+                    fitness = AlgorithmMethods.CalculateFitnessFunctions(X, D, benchmark.function);
+                    bestIdx = AlgorithmMethods.FindBestSolution(fitness);
+                    (MOA, MOP) = MOAMOPMethod(C_Iter, M_Iter, alpha);
+
+                    for (int i = 0; i < X.GetLength(0); i++)
                     {
-                        int C_Iter = 1;
-                        int bestIdx = 0; double[] fitness = new double[PS];
-
-                        // Initialize random solution positions
-                        double[,] X = AlgorithmMethods.SolutionInitialization(PS, D, ub, lb, MapMethod);
-
-                        while (C_Iter < M_Iter)
+                        for (int j = 0; j < X.GetLength(1); j++)
                         {
-                            fitness = AlgorithmMethods.CalculateFitnessFunctions(X, D, benchmark.function);
-                            bestIdx = AlgorithmMethods.FindBestSolution(fitness);
-                            (MOA, MOP) = MOAMOPMethod(C_Iter, M_Iter, alpha);
-                            //MOA = AlgorithmMethods.CalculateMOA(C_Iter, M_Iter, 0.2, 0.9); // verify min and max
-                            //MOP = AlgorithmMethods.CalculateMOP(C_Iter, M_Iter, alpha);
-
-                            for (int i = 0; i < X.GetLength(0); i++)
+                            double r1 = MapMethod();
+                            double r2 = MapMethod();
+                            double r3 = MapMethod();
+                            if (r1 > MOA)
                             {
-                                for (int j = 0; j < X.GetLength(1); j++)
+                                // Exploration
+                                if (r2 < 0.5)
                                 {
-                                    double r1 = MapMethod();
-                                    double r2 = MapMethod();
-                                    double r3 = MapMethod();
-                                    if (r1 > MOA)
-                                    {
-                                        // Exploration
-                                        if (r2 < 0.5)
-                                        {
-                                            // Apply Division math operator
-                                            X[i, j] = X[bestIdx, j] % (MOP + epsilon) * ((ub - lb) * mu + lb);
-                                        }
-                                        else
-                                        {
-                                            // Apply Multiplication math operator
-                                            X[i, j] = X[bestIdx, j] * MOP * ((ub - lb) * mu + lb);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        // Exploitation
-                                        if (r3 < 0.5)
-                                        {
-                                            // Apply Subtraction math operator
-                                            X[i, j] = X[bestIdx, j] - MOP * ((ub - lb) * mu + lb);
-                                        }
-                                        else
-                                        {
-                                            // Apply Addition math operator
-                                            X[i, j] = X[bestIdx, j] + MOP * ((ub - lb) * mu + lb);
-                                        }
-                                    }
+                                    // Apply Division math operator
+                                    X[i, j] = X[bestIdx, j] % (MOP + epsilon) * ((ub - lb) * mu + lb);
+                                }
+                                else
+                                {
+                                    // Apply Multiplication math operator
+                                    X[i, j] = X[bestIdx, j] * MOP * ((ub - lb) * mu + lb);
                                 }
                             }
-                            X = AlgorithmMethods.ClampSolutions(X, ub, lb); // Not included in original algorithm
-                            C_Iter++;
+                            else
+                            {
+                                // Exploitation
+                                if (r3 < 0.5)
+                                {
+                                    // Apply Subtraction math operator
+                                    X[i, j] = X[bestIdx, j] - MOP * ((ub - lb) * mu + lb);
+                                }
+                                else
+                                {
+                                    // Apply Addition math operator
+                                    X[i, j] = X[bestIdx, j] + MOP * ((ub - lb) * mu + lb);
+                                }
+                            }
                         }
-                        fitness = AlgorithmMethods.CalculateFitnessFunctions(X, D, benchmark.function);
-                        bestIdx = AlgorithmMethods.FindBestSolution(fitness);
-                        optimumSum += fitness[bestIdx];
                     }
-
-                    dimensionResults.Add(new Results.DimensionResults(D, optimumSum/iterations));
+                    X = AlgorithmMethods.ClampSolutions(X, ub, lb); // Not included in original algorithm
+                    C_Iter++;
                 }
-                benchmarkResults.Add(new Results.BenchmarkResults(benchmark, dimensionResults));
+                fitness = AlgorithmMethods.CalculateFitnessFunctions(X, D, benchmark.function);
+                bestIdx = AlgorithmMethods.FindBestSolution(fitness);
+                optimumSum += fitness[bestIdx];
+                errorSum += Math.Pow(benchmark.best_known - fitness[bestIdx], 2);
+
+                if (fitness[bestIdx] < bestOptimum)
+                {
+                    bestOptimum = fitness[bestIdx];
+                    bestPosition = AlgorithmMethods.ExtractSolutionPositions(X, bestIdx);
+                }
+
+                stopwatch.Stop();
+                timeSum += stopwatch.Elapsed.TotalMilliseconds;
             }
-            overallResults.benchmarkResults = benchmarkResults;
-            return overallResults;
+
+            return new Results.AlgorithmResults(optimumSum / iterations, timeSum / iterations, bestPosition, errorSum / iterations);
         }
     }
 }

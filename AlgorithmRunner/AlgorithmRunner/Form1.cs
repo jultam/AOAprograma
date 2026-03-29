@@ -38,10 +38,13 @@ namespace AlgorithmRunner
         }
 
         private List<BenchmarkFunction> benchmarkFunctions = new List<BenchmarkFunction>();
-
-        public class MapComponentMethod
+        public class ComponentMethod
         {
             public string name { get; set; }
+            public ComponentMethod() { }
+        }
+        public class MapComponentMethod : ComponentMethod
+        {
             public Func<double> method { get; set; }
 
             public MapComponentMethod(string name, Func<double> method)
@@ -53,9 +56,8 @@ namespace AlgorithmRunner
 
         private List<MapComponentMethod> mapComponents = new List<MapComponentMethod>();
 
-        public class MOAMOPComponentMethod
+        public class MOAMOPComponentMethod : ComponentMethod
         {
-            public string name { get; set; }
             public Func<int,int,int,(double,double)> method { get; set; }
 
             public MOAMOPComponentMethod(string name, Func<int, int, int, (double, double)> method)
@@ -74,6 +76,8 @@ namespace AlgorithmRunner
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            string directory;
+
             // ----------- Reads default parameters file -----------------------------\
             try {
                 int PS; int M_Iter;
@@ -86,7 +90,7 @@ namespace AlgorithmRunner
 
             // ----------- Reads all benchmark function parameters -------------------\
             try {
-                string directory = "../../benchmarks";
+                directory = "../../benchmarks";
                 string benchName; double optimum; double ub; double lb;
                 foreach (string file in Directory.GetFiles(directory, "*.dat"))
                 {
@@ -114,55 +118,12 @@ namespace AlgorithmRunner
             // -----------------------------------------------------------------------/
 
             // ----------- Reads all methods --------------------------\
-            try
-            {
-                comboBox1.Items.Clear();
-                string directory = "../../components/maps";
-                List<string> initNames;
-                foreach (string file in Directory.GetFiles(directory, "*.dat"))
-                {
-                    (initNames) = FileMethods.ReadComponent(file);
-                    foreach (string name in initNames)
-                    {
-                        MethodInfo method = typeof(ContOpt).GetMethod(name);
-                        Func<double> function = (Func<double>)Delegate.CreateDelegate(typeof(Func<double>), method);
 
-                        mapComponents.Add(new MapComponentMethod(name, function));
-                    }
-                }
-                richTextBox1.AppendText("\n" + FileMethods.ArrayToString(mapComponents.Select(m => m.name).ToArray())); // debug
-                comboBox1.Items.AddRange(mapComponents.Select(m => m.name).ToArray());
-                comboBox1.SelectedIndex = 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex);
-            }
+            directory = "../../components/maps";
+            mapComponents = FileMethods.PopulateComboBox<Func<double>, MapComponentMethod>(directory, comboBox1, mapComponents);
 
-            try
-            {
-                comboBox2.Items.Clear();
-                string directory = "../../components/MOAandMOP";
-                List<string> MOAMOPNames;
-                foreach (string file in Directory.GetFiles(directory, "*.dat"))
-                {
-                    (MOAMOPNames) = FileMethods.ReadComponent(file);
-                    foreach (string name in MOAMOPNames)
-                    {
-                        MethodInfo method = typeof(ContOpt).GetMethod(name);
-                        Func<int,int,int,(double,double)> function = (Func<int, int, int, (double, double)>)Delegate.CreateDelegate(typeof(Func<int, int, int, (double, double)>), method);
-
-                        MOAMOPComponents.Add(new MOAMOPComponentMethod(name, function));
-                    }
-                }
-                richTextBox1.AppendText("\n" + FileMethods.ArrayToString(MOAMOPComponents.Select(m => m.name).ToArray())); // debug
-                comboBox2.Items.AddRange(MOAMOPComponents.Select(m => m.name).ToArray());
-                comboBox2.SelectedIndex = 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex);
-            }
+            directory = "../../components/MOAandMOP";
+            MOAMOPComponents = FileMethods.PopulateComboBox<Func<int, int, int, (double, double)>, MOAMOPComponentMethod>(directory, comboBox2, MOAMOPComponents);
             // -----------------------------------------------------------------------/
         }
 
@@ -181,8 +142,11 @@ namespace AlgorithmRunner
             }
         }
 
-        private void start_Click(object sender, EventArgs e)
+        private async void start_Click(object sender, EventArgs e)
         {
+            start.Enabled = false;
+            dataGridView1.Rows.Clear();
+
             int PS = (int)PSUpDown.Value; int M_Iter = (int)MIterUpDown.Value;
             int alpha = (int)alphaUpDown.Value; double mu = (double)muUpDown.Value; int epsilon = (int)epsilonUpDown.Value;
             int iterations = (int)testUpDown.Value;
@@ -193,11 +157,19 @@ namespace AlgorithmRunner
             string MOAMOPMethodName = comboBox2.Text;
             Func<int, int, int, (double, double)> MOAMOPMethod = MOAMOPComponents.Find(m => m.name == MOAMOPMethodName).method;
 
-            Results.OverallResults results = Algorithm.AOA(iterations, PS, M_Iter, alpha, mu, epsilon, benchmarkFunctions, initMethod, MOAMOPMethod);
+            int[] testingDimensions = { 1, 30, 100 };
 
-            Results.PopulateDataGridView(results, dataGridView1);
+            foreach (BenchmarkFunction benchmark in benchmarkFunctions)
+            {
+                foreach (int D in testingDimensions)
+                {
+                    Results.AlgorithmResults results = await Task.Run(() => Algorithm.AOA(iterations, PS, M_Iter, D, alpha, mu, epsilon, benchmark, initMethod, MOAMOPMethod));
+                    dataGridView1.Rows.Add(benchmark.name, D, results.optimum, Math.Sqrt(results.MSE), results.time);
+                }
+            }
 
             download.Enabled = true;
+            start.Enabled = true;
         }
 
         private void download_Click(object sender, EventArgs e)

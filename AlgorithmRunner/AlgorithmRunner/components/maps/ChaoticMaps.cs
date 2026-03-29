@@ -77,8 +77,8 @@ namespace CONTOPT
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double SingerMap()
         {
-            double mu = 0.98; // (0.9, 1.08)
-            lastX = mu * (7.86 * lastX - 23/31 * lastX * lastX + 28.75 * lastX * lastX * lastX - 13.302875 * lastX * lastX * lastX * lastX);
+            double mu = 1.00; // (0.9, 1.08)
+            lastX = mu * (7.86 * lastX - 23.31 * lastX * lastX + 28.75 * lastX * lastX * lastX - 13.302875 * lastX * lastX * lastX * lastX);
             return lastX;
         }
 
