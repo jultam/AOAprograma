@@ -69,6 +69,19 @@ namespace AlgorithmRunner
 
         private List<MOAMOPComponentMethod> MOAMOPComponents = new List<MOAMOPComponentMethod>();
 
+        public class InitializationComponentMethod : ComponentMethod
+        {
+            public Func<int, int, double, double, Func<double>> method { get; set; }
+
+            public InitializationComponentMethod(string name, Func<int, int, double, double, Func<double>> method)
+            {
+                this.name = name;
+                this.method = method;
+            }
+        }
+
+        private List<InitializationComponentMethod> initializationComponents = new List<InitializationComponentMethod>();
+
         public Form1()
         {
             InitializeComponent();
@@ -124,6 +137,9 @@ namespace AlgorithmRunner
 
             directory = "../../components/MOAandMOP";
             MOAMOPComponents = FileMethods.PopulateComboBox<Func<int, int, int, (double, double)>, MOAMOPComponentMethod>(directory, comboBox2, MOAMOPComponents);
+
+            directory = "../../components/SolutionInitialization";
+            initializationComponents = FileMethods.PopulateComboBox<Func<int, int, double, double, Func<double>>, InitializationComponentMethod>(directory, comboBox3, initializationComponents);
             // -----------------------------------------------------------------------/
         }
 
