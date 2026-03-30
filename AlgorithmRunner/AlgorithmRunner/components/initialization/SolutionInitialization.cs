@@ -1,4 +1,5 @@
 ﻿// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SolutionInitialization.cs %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+using AlgorithmRunner;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -9,7 +10,7 @@ namespace CONTOPT
     // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static double[,] BaseInitialization(int PS, int D, double ub, double lb, Func<double> map)
+        public static double[,] BaseRandomInit(int PS, int D, double ub, double lb, Func<double> map, Func<double[], int, double> objectiveFunction)
         {
             double[,] X = new double[PS, D];
 
@@ -24,7 +25,62 @@ namespace CONTOPT
             return X;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double[,] OppositionInit(int PS, int D, double ub, double lb, Func<double> map, Func<double[], int, double> objectiveFunction)
+        {
+            double[,] X = new double[PS, D];
 
+            for (int i = 0; i < PS; i++)
+            {
+                double[] Xpos = new double[X.GetLength(1)];
+                double[] OppXpos = new double[X.GetLength(1)];
 
+                for (int j = 0; j < D; j++)
+                {
+                    double r = map();
+                    Xpos[j] = r * (ub - lb) + lb;
+                    OppXpos[j] = ub + lb - Xpos[j];
+                }
+
+                double[] best;
+                if (objectiveFunction(Xpos, D) < objectiveFunction(OppXpos, D)) best = Xpos;
+                else best = OppXpos;
+
+                for (int j = 0; j < D; j++)
+                {
+                    X[i, j] = best[j];
+                }
+            }
+            return X;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double[,] RandomOppositionInit(int PS, int D, double ub, double lb, Func<double> map, Func<double[], int, double> objectiveFunction)
+        {
+            double[,] X = new double[PS, D];
+
+            for (int i = 0; i < PS; i++)
+            {
+                double[] Xpos = new double[X.GetLength(1)];
+                double[] OppXpos = new double[X.GetLength(1)];
+
+                for (int j = 0; j < D; j++)
+                {
+                    double r1 = map(); double r2 = map();
+                    Xpos[j] = r1 * (ub - lb) + lb;
+                    OppXpos[j] = ub + lb - r2 * Xpos[j];
+                }
+
+                double[] best;
+                if (objectiveFunction(Xpos, D) < objectiveFunction(OppXpos, D)) best = Xpos;
+                else best = OppXpos;
+
+                for (int j = 0; j < D; j++)
+                {
+                    X[i, j] = best[j];
+                }
+            }
+            return X;
+        }
     }
 }

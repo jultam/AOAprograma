@@ -71,9 +71,9 @@ namespace AlgorithmRunner
 
         public class InitializationComponentMethod : ComponentMethod
         {
-            public Func<int, int, double, double, Func<double>> method { get; set; }
+            public Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]> method { get; set; }
 
-            public InitializationComponentMethod(string name, Func<int, int, double, double, Func<double>> method)
+            public InitializationComponentMethod(string name, Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]> method)
             {
                 this.name = name;
                 this.method = method;
@@ -138,8 +138,8 @@ namespace AlgorithmRunner
             directory = "../../components/MOAandMOP";
             MOAMOPComponents = FileMethods.PopulateComboBox<Func<int, int, int, (double, double)>, MOAMOPComponentMethod>(directory, comboBox2, MOAMOPComponents);
 
-            directory = "../../components/SolutionInitialization";
-            initializationComponents = FileMethods.PopulateComboBox<Func<int, int, double, double, Func<double>>, InitializationComponentMethod>(directory, comboBox3, initializationComponents);
+            directory = "../../components/initialization";
+            initializationComponents = FileMethods.PopulateComboBox<Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]>, InitializationComponentMethod>(directory, comboBox3, initializationComponents);
             // -----------------------------------------------------------------------/
         }
 
@@ -167,11 +167,14 @@ namespace AlgorithmRunner
             int alpha = (int)alphaUpDown.Value; double mu = (double)muUpDown.Value; int epsilon = (int)epsilonUpDown.Value;
             int iterations = (int)testUpDown.Value;
 
-            string initMethodName = comboBox1.Text;
-            Func<double> initMethod = mapComponents.Find(m => m.name == initMethodName).method;
+            string generatorMethodName = comboBox1.Text;
+            Func<double> generatorMethod = mapComponents.Find(m => m.name == generatorMethodName).method;
 
             string MOAMOPMethodName = comboBox2.Text;
             Func<int, int, int, (double, double)> MOAMOPMethod = MOAMOPComponents.Find(m => m.name == MOAMOPMethodName).method;
+
+            string initializationMethodName = comboBox3.Text;
+            Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]> initializationMethod = initializationComponents.Find(m => m.name == initializationMethodName).method;
 
             int[] testingDimensions = { 1, 30, 100 };
 
@@ -179,7 +182,8 @@ namespace AlgorithmRunner
             {
                 foreach (int D in testingDimensions)
                 {
-                    Results.AlgorithmResults results = await Task.Run(() => Algorithm.AOA(iterations, PS, M_Iter, D, alpha, mu, epsilon, benchmark, initMethod, MOAMOPMethod));
+                    Results.AlgorithmResults results = await Task.Run(() => Algorithm.AOA(iterations, PS, M_Iter, D, alpha, mu, epsilon, 
+                        benchmark, generatorMethod, MOAMOPMethod, initializationMethod));
                     dataGridView1.Rows.Add(benchmark.name, D, results.optimum, Math.Sqrt(results.MSE), results.time);
                 }
             }

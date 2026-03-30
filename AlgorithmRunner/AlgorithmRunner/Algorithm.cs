@@ -12,7 +12,8 @@ namespace AlgorithmRunner
     internal class Algorithm
     {
         public static Results.AlgorithmResults AOA(int iterations, int PS, int M_Iter, int D, int alpha, double mu, int epsilon,
-            Form1.BenchmarkFunction benchmark, Func<double> MapMethod, Func<int, int, int, (double, double)> MOAMOPMethod)
+            Form1.BenchmarkFunction benchmark, Func<double> MapMethod, Func<int, int, int, (double, double)> MOAMOPMethod,
+            Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]> initializationMethod)
         {
             // main algorithm:
             // function minimizer (optimizer) based on the arithmetic optimization algorithm (AOA)
@@ -40,7 +41,7 @@ namespace AlgorithmRunner
                 int bestIdx = 0; double[] fitness = new double[PS];
 
                 // Initialize starting solution positions
-                double[,] X = AlgorithmMethods.SolutionInitialization(PS, D, ub, lb, MapMethod);
+                double[,] X = initializationMethod(PS, D, ub, lb, MapMethod, benchmark.function);
 
                 while (C_Iter < M_Iter)
                 {

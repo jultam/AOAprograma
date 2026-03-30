@@ -12,21 +12,6 @@ namespace AlgorithmRunner
 {
     internal class AlgorithmMethods
     {
-        public static double[,] SolutionInitialization(int PS, int D, double ub, double lb, Func<double> map)
-        {
-            double[,] X = new double[PS, D];
-
-            for (int i = 0; i < PS; i++)
-            {
-                for (int j = 0; j < D; j++)
-                {
-                    double r = map();
-                    X[i, j] = r * (ub - lb) + lb;
-                }
-            }
-            return X;
-        }
-
         /*
          * Calculate fitness functions for all solutions
          * X = solution position matrix
