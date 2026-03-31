@@ -64,6 +64,7 @@
     <Compile Include="benchmarks\Schwefel.cs" />
     <Compile Include="components\initialization\SolutionInitialization.cs" />
     <Compile Include="components\maps\ChaoticMaps.cs" />
+    <Compile Include="components\maps\Distributions.cs" />
     <Compile Include="components\MOAandMOP\MOAMOP.cs" />
     <Compile Include="FileMethods.cs" />
     <Compile Include="Form1.cs">
@@ -110,6 +111,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="components\maps\Distributions.dat" />
     <Content Include="param.txt" />
   </ItemGroup>
   <ItemGroup>

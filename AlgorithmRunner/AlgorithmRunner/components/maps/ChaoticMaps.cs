@@ -1,4 +1,5 @@
 ﻿// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ChaoticMaps.cs %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+using Meta.Numerics.Functions;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -8,7 +9,6 @@ namespace CONTOPT
     sealed partial class ContOpt
     // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
     {
-        private static Random _rnd = new Random();
         private static double lastX = 0.6;
         private static bool firstIter = true;
         private static int currentIter = 1;
@@ -84,7 +84,6 @@ namespace CONTOPT
             return lastX;
         }
 
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double SingerMap()
         {
@@ -92,7 +91,6 @@ namespace CONTOPT
             lastX = mu * (7.86 * lastX - 23.31 * lastX * lastX + 28.75 * lastX * lastX * lastX - 13.302875 * lastX * lastX * lastX * lastX);
             return lastX;
         }
-
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double SinusoidalMap()
@@ -102,7 +100,6 @@ namespace CONTOPT
             return lastX;
         }
 
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double TentMap()
         {
@@ -110,12 +107,6 @@ namespace CONTOPT
             if (lastX < a) lastX = lastX / a;
             else lastX = (1 - lastX) / (1 - a);
             return lastX;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static double RandomMap()
-        {
-            return _rnd.NextDouble();
         }
     }
 }
