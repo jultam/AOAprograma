@@ -1,1 +1,1 @@
-﻿Name=BetaDistribution;UniformDistribution
+﻿Name=BetaDist;RayleighDist;LatinHypercubeSample;SobolLowDiscrepancySeq;UniformDist
