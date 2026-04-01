@@ -82,6 +82,21 @@ namespace AlgorithmRunner
 
         private List<InitializationComponentMethod> initializationComponents = new List<InitializationComponentMethod>();
 
+        public class StepComponentMethod : ComponentMethod
+        {
+            public Func<double[,], int, double, double, double, double, double, double, int, 
+                Func<double>, Func<double[], int, double>, double[,]> method { get; set; }
+        
+            public StepComponentMethod(string name, Func<double[,], int, double, double, double, double, double, double, int, 
+                Func<double>, Func<double[], int, double>, double[,]> method)
+            {
+                this.name = name;
+                this.method = method;
+            }
+        }
+
+        private List<StepComponentMethod> stepsComponents = new List<StepComponentMethod>();
+
         public Form1()
         {
             InitializeComponent();
@@ -140,6 +155,10 @@ namespace AlgorithmRunner
 
             directory = "../../components/initialization";
             initializationComponents = FileMethods.PopulateComboBox<Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]>, InitializationComponentMethod>(directory, comboBox3, initializationComponents);
+
+            directory = "../../components/steps";
+            stepsComponents = FileMethods.PopulateComboBox<Func<double[,], int, double, double, double, double, double, double, int, Func<double>, Func<double[], int, double>, double[,]>, StepComponentMethod>(directory, comboBox4, stepsComponents);
+
             // -----------------------------------------------------------------------/
         }
 
@@ -176,6 +195,9 @@ namespace AlgorithmRunner
             string initializationMethodName = comboBox3.Text;
             Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]> initializationMethod = initializationComponents.Find(m => m.name == initializationMethodName).method;
 
+            string stepMethodName = comboBox4.Text;
+            Func<double[,], int, double, double, double, double, double, double, int, Func<double>, Func<double[], int, double>, double[,]> stepMethod = stepsComponents.Find(m => m.name == stepMethodName).method;
+
             int[] testingDimensions = { 1, 30, 100 };
 
             foreach (BenchmarkFunction benchmark in benchmarkFunctions)
@@ -183,7 +205,7 @@ namespace AlgorithmRunner
                 foreach (int D in testingDimensions)
                 {
                     Results.AlgorithmResults results = await Task.Run(() => Algorithm.AOA(iterations, PS, M_Iter, D, alpha, mu, epsilon, 
-                        benchmark, generatorMethod, MOAMOPMethod, initializationMethod));
+                        benchmark, generatorMethod, MOAMOPMethod, initializationMethod, stepMethod));
                     dataGridView1.Rows.Add(benchmark.name, D, results.optimum, Math.Sqrt(results.MSE), results.time);
                 }
             }

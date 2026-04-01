@@ -108,5 +108,19 @@ namespace CONTOPT
             else lastX = (1 - lastX) / (1 - a);
             return lastX;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double MCDOLMap()
+        {
+            double theta = _rnd.NextDouble();
+
+            if (theta < 0.2) lastX = CircleMap();
+            else if (theta < 0.4) lastX = LogisticMap();
+            else if (theta < 0.6) lastX = PiecewiseMap();
+            else if (theta < 0.8) lastX = SineMap();
+            else lastX = TentMap();
+
+            return lastX;
+        }
     }
 }

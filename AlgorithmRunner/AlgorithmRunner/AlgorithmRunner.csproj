@@ -66,6 +66,7 @@
     <Compile Include="components\maps\ChaoticMaps.cs" />
     <Compile Include="components\maps\Distributions.cs" />
     <Compile Include="components\MOAandMOP\MOAMOP.cs" />
+    <Compile Include="components\steps\StepCalculation.cs" />
     <Compile Include="FileMethods.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -95,6 +96,7 @@
     <None Include="components\initialization\SolutionInitialization.dat" />
     <None Include="components\maps\ChaoticMaps.dat" />
     <None Include="components\MOAandMOP\MOAMOP.dat" />
+    <None Include="components\steps\StepCalculation.dat" />
     <None Include="packages.config" />
     <None Include="Properties\DataSources\Results.OverallResults.datasource" />
     <None Include="Properties\Settings.settings">

@@ -13,7 +13,8 @@ namespace AlgorithmRunner
     {
         public static Results.AlgorithmResults AOA(int iterations, int PS, int M_Iter, int D, int alpha, double mu, int epsilon,
             Form1.BenchmarkFunction benchmark, Func<double> MapMethod, Func<int, int, int, (double, double)> MOAMOPMethod,
-            Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]> initializationMethod)
+            Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]> initializationMethod,
+            Func<double[,], int, double, double, double, double, double, double, int, Func<double>, Func<double[], int, double>, double[,]> stepMethod)
         {
             // main algorithm:
             // function minimizer (optimizer) based on the arithmetic optimization algorithm (AOA)
@@ -49,45 +50,7 @@ namespace AlgorithmRunner
                     bestIdx = AlgorithmMethods.FindBestSolution(fitness);
                     (MOA, MOP) = MOAMOPMethod(C_Iter, M_Iter, alpha);
 
-                    for (int i = 0; i < X.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < X.GetLength(1); j++)
-                        {
-                            double r1 = MapMethod();
-                            double r2 = MapMethod();
-                            double r3 = MapMethod();
-                            double S = AlgorithmMethods.CalculateLRS(1.5, MapMethod); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                            if (r1 > MOA)
-                            {
-                                // Exploration
-                                if (r2 < 0.5)
-                                {
-                                    // Apply Division math operator
-                                    X[i, j] = X[bestIdx, j] % S* (MOP + epsilon) * ((ub - lb) * mu + lb);
-                                }
-                                else
-                                {
-                                    // Apply Multiplication math operator
-                                    X[i, j] = X[bestIdx, j] * S* MOP * ((ub - lb) * mu + lb);
-                                }
-                            }
-                            else
-                            {
-                                // Exploitation
-                                if (r3 < 0.5)
-                                {
-                                    // Apply Subtraction math operator
-                                    X[i, j] = X[bestIdx, j] - S* MOP * ((ub - lb) * mu + lb);
-                                }
-                                else
-                                {
-                                    // Apply Addition math operator
-                                    X[i, j] = X[bestIdx, j] + S* MOP * ((ub - lb) * mu + lb);
-                                }
-                            }
-                        }
-                        //oppo <<<<<<<<<<<<<<
-                    }
+                    X = stepMethod(X, D, epsilon, mu, lb, ub, MOA, MOP, bestIdx, MapMethod, benchmark.function);
                     X = AlgorithmMethods.ClampSolutions(X, ub, lb); // Not included in original algorithm
                     C_Iter++;
                 }
