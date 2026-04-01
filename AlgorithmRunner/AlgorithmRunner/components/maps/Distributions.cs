@@ -1,5 +1,4 @@
 ﻿using Meta.Numerics.Functions;
-using MathNet.Numerics.Distributions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,20 +28,20 @@ namespace CONTOPT
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double RayleighDist()
         {
-            lastX = Rayleigh.Sample(0.4);
-            return Rayleigh.Sample(0.4);
+
+            return lastX;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double LatinHypercubeSample()
         {
-            return Rayleigh.Sample(0.4);
+            return lastX;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double SobolLowDiscrepancySeq()
         {
-            return Rayleigh.Sample(0.4);
+            return lastX;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
