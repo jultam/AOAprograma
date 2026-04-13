@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace AlgorithmRunner
@@ -171,6 +172,38 @@ namespace AlgorithmRunner
                     System.Runtime.InteropServices.Marshal.ReleaseComObject(xlWorkSheet);
                     System.Runtime.InteropServices.Marshal.ReleaseComObject(xlWorkBook);
                     System.Runtime.InteropServices.Marshal.ReleaseComObject(xlApp);
+                }
+            }
+        }
+
+        public static void SaveDataGridToText(DataGridView dataGridView1, int PS, int M_Iter, int runs, int alpha, double mu, double epsilon, string numGen, string MOAMOP, string solutionInit, string stepCalc)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = "txt file|*.txt" })
+            {
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    using (StreamWriter sw = new StreamWriter(saveFileDialog.FileName, true)) 
+                    {
+                        sw.WriteLine();
+                        // Export parameter list
+                        sw.WriteLine(" Population size = {0}, Maximum iterations = {1}, Amount of runs = {2}, α = {3}, μ = {4}, ε = {5}, Number generator = {6}, MOA and MOP = {7}, Solution initialization = {8}, Step calculation = {9}",
+                            PS, M_Iter, runs, alpha, mu, epsilon, numGen, MOAMOP, solutionInit, stepCalc);
+
+                        // Export headers
+                        sw.WriteLine("| ID  | Benchmark Function | Dimensions | Known Optimum | Reached Optimum | Time Elapsed, ms |");
+
+                        // Export data
+                        for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+                        {
+                            sw.Write("|");
+                            sw.Write(" {0,3} |", dataGridView1.Rows[i].Cells[0].Value);
+                            sw.Write(" {0,-18} |", dataGridView1.Rows[i].Cells[1].Value);
+                            sw.Write(" {0,10} |", dataGridView1.Rows[i].Cells[2].Value);
+                            sw.Write(" {0,13:F6} |", dataGridView1.Rows[i].Cells[3].Value);
+                            sw.Write(" {0,15:F6} |", dataGridView1.Rows[i].Cells[4].Value);
+                            sw.WriteLine(" {0,16} |", dataGridView1.Rows[i].Cells[5].Value);
+                        }
+                    }
                 }
             }
         }

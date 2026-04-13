@@ -11,10 +11,10 @@ namespace AlgorithmRunner
 {
     internal class Algorithm
     {
-        public static Results.AlgorithmResults AOA(int iterations, int PS, int M_Iter, int D, int alpha, double mu, int epsilon,
-            Form1.BenchmarkFunction benchmark, Func<double> MapMethod, Func<int, int, int, (double, double)> MOAMOPMethod,
-            Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]> initializationMethod,
-            Func<double[,], int, double, double, double, double, double, double, int, Func<double>, Func<double[], int, double>, double[,]> stepMethod)
+        public static Results.AlgorithmResults AOA(int iterations, int PS, int M_Iter, int D, int alpha, double mu, double epsilon,
+            Form1.BenchmarkFunction benchmark, Func<double> NumGeneratorMethod, Func<int, int, int, (double, double)> MOAMOPMethod,
+            Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]> InitializationMethod,
+            Func<double[,], int, double, double, double, double, double, double, int, Func<double>, Func<double[], int, double>, double[,]> StepMethod)
         {
             // main algorithm:
             // function minimizer (optimizer) based on the arithmetic optimization algorithm (AOA)
@@ -42,7 +42,7 @@ namespace AlgorithmRunner
                 int bestIdx = 0; double[] fitness = new double[PS];
 
                 // Initialize starting solution positions
-                double[,] X = initializationMethod(PS, D, ub, lb, MapMethod, benchmark.function);
+                double[,] X = InitializationMethod(PS, D, ub, lb, NumGeneratorMethod, benchmark.function);
 
                 while (C_Iter < M_Iter)
                 {
@@ -50,7 +50,7 @@ namespace AlgorithmRunner
                     bestIdx = AlgorithmMethods.FindBestSolution(fitness);
                     (MOA, MOP) = MOAMOPMethod(C_Iter, M_Iter, alpha);
 
-                    X = stepMethod(X, D, epsilon, mu, lb, ub, MOA, MOP, bestIdx, MapMethod, benchmark.function);
+                    X = StepMethod(X, D, epsilon, mu, lb, ub, MOA, MOP, bestIdx, NumGeneratorMethod, benchmark.function);
                     X = AlgorithmMethods.ClampSolutions(X, ub, lb); // Not included in original algorithm
                     C_Iter++;
                 }

@@ -97,6 +97,14 @@ namespace AlgorithmRunner
 
         private List<StepComponentMethod> stepsComponents = new List<StepComponentMethod>();
 
+        int PS = 100; int M_Iter = 100; int runs = 1;
+        int alpha = 5; double mu = 0.4; double epsilon = 0.05;
+        
+        string generatorMethodName = "";
+        string MOAMOPMethodName = "";
+        string initializationMethodName = "";
+        string stepMethodName = "";
+
         public Form1()
         {
             InitializeComponent();
@@ -182,31 +190,33 @@ namespace AlgorithmRunner
             start.Enabled = false;
             dataGridView1.Rows.Clear();
 
-            int PS = (int)PSUpDown.Value; int M_Iter = (int)MIterUpDown.Value;
-            int alpha = (int)alphaUpDown.Value; double mu = (double)muUpDown.Value; int epsilon = (int)epsilonUpDown.Value;
-            int iterations = (int)testUpDown.Value;
+            PS = (int)PSUpDown.Value; int M_Iter = (int)MIterUpDown.Value; runs = (int)testUpDown.Value;
+            alpha = (int)alphaUpDown.Value; mu = (double)muUpDown.Value; epsilon = (double)epsilonUpDown.Value;
+            
 
-            string generatorMethodName = comboBox1.Text;
+            generatorMethodName = comboBox1.Text;
             Func<double> generatorMethod = mapComponents.Find(m => m.name == generatorMethodName).method;
 
-            string MOAMOPMethodName = comboBox2.Text;
+            MOAMOPMethodName = comboBox2.Text;
             Func<int, int, int, (double, double)> MOAMOPMethod = MOAMOPComponents.Find(m => m.name == MOAMOPMethodName).method;
 
-            string initializationMethodName = comboBox3.Text;
+            initializationMethodName = comboBox3.Text;
             Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]> initializationMethod = initializationComponents.Find(m => m.name == initializationMethodName).method;
 
-            string stepMethodName = comboBox4.Text;
+            stepMethodName = comboBox4.Text;
             Func<double[,], int, double, double, double, double, double, double, int, Func<double>, Func<double[], int, double>, double[,]> stepMethod = stepsComponents.Find(m => m.name == stepMethodName).method;
 
             int[] testingDimensions = { 1, 30, 100 };
+            int rowID = 1;
 
             foreach (BenchmarkFunction benchmark in benchmarkFunctions)
             {
                 foreach (int D in testingDimensions)
                 {
-                    Results.AlgorithmResults results = await Task.Run(() => Algorithm.AOA(iterations, PS, M_Iter, D, alpha, mu, epsilon, 
+                    Results.AlgorithmResults results = await Task.Run(() => Algorithm.AOA(runs, PS, M_Iter, D, alpha, mu, epsilon, 
                         benchmark, generatorMethod, MOAMOPMethod, initializationMethod, stepMethod));
-                    dataGridView1.Rows.Add(benchmark.name, D, results.optimum, Math.Sqrt(results.MSE), results.time);
+                    dataGridView1.Rows.Add(rowID, benchmark.name, D, benchmark.best_known, results.optimum,  results.time);
+                    rowID++;
                 }
             }
 
@@ -218,7 +228,7 @@ namespace AlgorithmRunner
 
         private void download_Click(object sender, EventArgs e)
         {
-            FileMethods.SaveDataGridToExcel(dataGridView1);
+            FileMethods.SaveDataGridToText(dataGridView1, PS, M_Iter, runs, alpha, mu, epsilon, generatorMethodName, MOAMOPMethodName, initializationMethodName, stepMethodName);
         }
     }
 }

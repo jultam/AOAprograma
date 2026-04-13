@@ -113,6 +113,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="results.txt" />
     <None Include="components\maps\Distributions.dat" />
     <Content Include="param.txt" />
   </ItemGroup>
