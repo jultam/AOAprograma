@@ -133,7 +133,6 @@ namespace AlgorithmRunner
                     (benchName, lb, ub, optimum) = FileMethods.ReadBenchmark(file);
                     BenchmarkFunction benchmark = new BenchmarkFunction(benchName, lb, ub, optimum);
                     benchmarkFunctions.Add(benchmark);
-                    richTextBox1.AppendText("\n"+benchmark.ToString()); // debug
                 }
             } catch (DirectoryNotFoundException ex) {
                 MessageBox.Show("Error loading benchmark directory: "+ex);

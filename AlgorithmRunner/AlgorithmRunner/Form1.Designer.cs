@@ -36,7 +36,6 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.start = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -87,7 +86,7 @@
             this.button1.ForeColor = System.Drawing.SystemColors.Control;
             this.button1.Location = new System.Drawing.Point(25, 43);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(333, 55);
+            this.button1.Size = new System.Drawing.Size(521, 55);
             this.button1.TabIndex = 0;
             this.button1.Text = "LOAD PARAMETERS";
             this.button1.UseVisualStyleBackColor = false;
@@ -103,23 +102,14 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Want to load parameters from a file?";
             // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Font = new System.Drawing.Font("Courier New", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox1.Location = new System.Drawing.Point(25, 481);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(622, 336);
-            this.richTextBox1.TabIndex = 2;
-            this.richTextBox1.Text = "-----------------------------";
-            // 
             // start
             // 
             this.start.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(182)))), ((int)(((byte)(54)))));
             this.start.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.start.ForeColor = System.Drawing.SystemColors.Control;
-            this.start.Location = new System.Drawing.Point(25, 390);
+            this.start.Location = new System.Drawing.Point(25, 747);
             this.start.Name = "start";
-            this.start.Size = new System.Drawing.Size(622, 70);
+            this.start.Size = new System.Drawing.Size(521, 70);
             this.start.TabIndex = 3;
             this.start.Text = "START";
             this.start.UseVisualStyleBackColor = false;
@@ -135,11 +125,11 @@
             this.knownOptimum,
             this.reachedOptimum,
             this.TimeElapsed});
-            this.dataGridView1.Location = new System.Drawing.Point(674, 118);
+            this.dataGridView1.Location = new System.Drawing.Point(585, 118);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(812, 699);
+            this.dataGridView1.Size = new System.Drawing.Size(901, 699);
             this.dataGridView1.TabIndex = 4;
             // 
             // ID
@@ -206,9 +196,9 @@
             this.download.Enabled = false;
             this.download.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.download.ForeColor = System.Drawing.SystemColors.Control;
-            this.download.Location = new System.Drawing.Point(1318, 43);
+            this.download.Location = new System.Drawing.Point(1170, 43);
             this.download.Name = "download";
-            this.download.Size = new System.Drawing.Size(168, 55);
+            this.download.Size = new System.Drawing.Size(316, 55);
             this.download.TabIndex = 5;
             this.download.Text = "DOWNLOAD";
             this.download.UseVisualStyleBackColor = false;
@@ -222,17 +212,17 @@
             this.comboBox1.Items.AddRange(new object[] {
             "test",
             "test2"});
-            this.comboBox1.Location = new System.Drawing.Point(29, 288);
+            this.comboBox1.Location = new System.Drawing.Point(29, 298);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(245, 28);
+            this.comboBox1.Size = new System.Drawing.Size(517, 28);
             this.comboBox1.TabIndex = 6;
             // 
             // alphaUpDown
             // 
             this.alphaUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.alphaUpDown.Location = new System.Drawing.Point(29, 207);
+            this.alphaUpDown.Location = new System.Drawing.Point(29, 217);
             this.alphaUpDown.Name = "alphaUpDown";
-            this.alphaUpDown.Size = new System.Drawing.Size(95, 27);
+            this.alphaUpDown.Size = new System.Drawing.Size(141, 27);
             this.alphaUpDown.TabIndex = 7;
             this.alphaUpDown.Value = new decimal(new int[] {
             5,
@@ -244,7 +234,7 @@
             // 
             this.alphaLabel.AutoSize = true;
             this.alphaLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.alphaLabel.Location = new System.Drawing.Point(69, 184);
+            this.alphaLabel.Location = new System.Drawing.Point(25, 194);
             this.alphaLabel.Name = "alphaLabel";
             this.alphaLabel.Size = new System.Drawing.Size(18, 20);
             this.alphaLabel.TabIndex = 8;
@@ -254,7 +244,7 @@
             // 
             this.muLabel.AutoSize = true;
             this.muLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.muLabel.Location = new System.Drawing.Point(182, 184);
+            this.muLabel.Location = new System.Drawing.Point(207, 194);
             this.muLabel.Name = "muLabel";
             this.muLabel.Size = new System.Drawing.Size(18, 20);
             this.muLabel.TabIndex = 10;
@@ -269,14 +259,14 @@
             0,
             0,
             65536});
-            this.muUpDown.Location = new System.Drawing.Point(146, 207);
+            this.muUpDown.Location = new System.Drawing.Point(211, 217);
             this.muUpDown.Maximum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.muUpDown.Name = "muUpDown";
-            this.muUpDown.Size = new System.Drawing.Size(95, 27);
+            this.muUpDown.Size = new System.Drawing.Size(147, 27);
             this.muUpDown.TabIndex = 9;
             this.muUpDown.Value = new decimal(new int[] {
             4,
@@ -288,7 +278,7 @@
             // 
             this.epsilonLabel.AutoSize = true;
             this.epsilonLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.epsilonLabel.Location = new System.Drawing.Point(300, 184);
+            this.epsilonLabel.Location = new System.Drawing.Point(395, 194);
             this.epsilonLabel.Name = "epsilonLabel";
             this.epsilonLabel.Size = new System.Drawing.Size(18, 20);
             this.epsilonLabel.TabIndex = 12;
@@ -303,14 +293,14 @@
             0,
             0,
             131072});
-            this.epsilonUpDown.Location = new System.Drawing.Point(261, 207);
+            this.epsilonUpDown.Location = new System.Drawing.Point(399, 217);
             this.epsilonUpDown.Maximum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.epsilonUpDown.Name = "epsilonUpDown";
-            this.epsilonUpDown.Size = new System.Drawing.Size(97, 27);
+            this.epsilonUpDown.Size = new System.Drawing.Size(147, 27);
             this.epsilonUpDown.TabIndex = 11;
             this.epsilonUpDown.Value = new decimal(new int[] {
             5,
@@ -388,7 +378,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(25, 265);
+            this.label2.Location = new System.Drawing.Point(25, 275);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(149, 20);
             this.label2.TabIndex = 17;
@@ -431,7 +421,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(300, 265);
+            this.label4.Location = new System.Drawing.Point(25, 354);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(127, 20);
             this.label4.TabIndex = 21;
@@ -445,16 +435,16 @@
             this.comboBox2.Items.AddRange(new object[] {
             "test",
             "test2"});
-            this.comboBox2.Location = new System.Drawing.Point(304, 288);
+            this.comboBox2.Location = new System.Drawing.Point(29, 377);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(242, 28);
+            this.comboBox2.Size = new System.Drawing.Size(517, 28);
             this.comboBox2.TabIndex = 20;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(25, 324);
+            this.label5.Location = new System.Drawing.Point(25, 435);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(167, 20);
             this.label5.TabIndex = 23;
@@ -468,16 +458,16 @@
             this.comboBox3.Items.AddRange(new object[] {
             "test",
             "test2"});
-            this.comboBox3.Location = new System.Drawing.Point(29, 347);
+            this.comboBox3.Location = new System.Drawing.Point(29, 458);
             this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(242, 28);
+            this.comboBox3.Size = new System.Drawing.Size(517, 28);
             this.comboBox3.TabIndex = 22;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(300, 324);
+            this.label6.Location = new System.Drawing.Point(25, 515);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(133, 20);
             this.label6.TabIndex = 25;
@@ -491,9 +481,9 @@
             this.comboBox4.Items.AddRange(new object[] {
             "test",
             "test2"});
-            this.comboBox4.Location = new System.Drawing.Point(304, 347);
+            this.comboBox4.Location = new System.Drawing.Point(29, 538);
             this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(242, 28);
+            this.comboBox4.Size = new System.Drawing.Size(517, 28);
             this.comboBox4.TabIndex = 24;
             // 
             // Form1
@@ -524,7 +514,6 @@
             this.Controls.Add(this.download);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.start);
-            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
@@ -547,7 +536,6 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button start;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button download;
