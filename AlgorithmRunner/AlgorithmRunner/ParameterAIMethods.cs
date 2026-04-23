@@ -56,5 +56,13 @@ namespace AlgorithmRunner
             model.save(filePath);
         }
 
+        public static void RandomSamples(Form1.BenchmarkFunction benchmark, int samplesCount)
+        {
+            for (int i = 0; i <= samplesCount; i++)
+            {
+
+            }
+        }
+
     }
 }
