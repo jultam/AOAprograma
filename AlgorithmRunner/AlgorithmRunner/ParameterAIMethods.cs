@@ -1,4 +1,6 @@
 ﻿using MathNet.Numerics.LinearAlgebra.Solvers;
+using MathNet.Numerics.Statistics;
+using Meta.Numerics.Statistics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,7 @@ namespace AlgorithmRunner
     internal class ParameterAIMethods
     {
         private static ParameterModel model;
+        private static Random _rnd = new Random();
 
         public static void CreateModel()
         {
@@ -56,12 +59,23 @@ namespace AlgorithmRunner
             model.save(filePath);
         }
 
-        public static void RandomSamples(Form1.BenchmarkFunction benchmark, int samplesCount)
+        public static (double, double) RandomSamples(Form1.BenchmarkFunction benchmark, int D, int samplesCount)
         {
+            double ub = benchmark.arg_range_2; double lb = benchmark.arg_range_1;
+            double[] values = new double[samplesCount];
+
             for (int i = 0; i <= samplesCount; i++)
             {
-
+                double[] X = new double[D];
+                for (int j = 0; j <= D; j++)
+                {
+                    double r = _rnd.NextDouble();
+                    X[j] = r * (ub - lb) + lb;
+                }
+                values[i] = benchmark.function(X, D);
             }
+
+            return (values.Mean(), values.StandardDeviation());
         }
 
     }

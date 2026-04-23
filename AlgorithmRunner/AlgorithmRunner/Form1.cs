@@ -262,6 +262,7 @@ namespace AlgorithmRunner
         {
             double[,] dataMatrix = new double[benchmarkFunctions.Count() * testingDimensions.Count(), 5];
             double[,] targetMatrix = new double[benchmarkFunctions.Count() * testingDimensions.Count(), 1];
+            double mean; double std;
 
             int k = 0;
 
@@ -269,11 +270,13 @@ namespace AlgorithmRunner
             {
                 foreach (int D in testingDimensions)
                 {
+                    (mean, std) = ParameterAIMethods.RandomSamples(benchmark, D, 10 * D);
+
                     dataMatrix[k, 0] = benchmark.arg_range_1;
                     dataMatrix[k, 1] = benchmark.arg_range_2;
                     dataMatrix[k, 2] = D;
-                    dataMatrix[k, 3] = 10;
-                    dataMatrix[k, 4] = 10;
+                    dataMatrix[k, 3] = mean;
+                    dataMatrix[k, 4] = std;
 
                     targetMatrix[k, 0] = benchmark.best_known;
 
