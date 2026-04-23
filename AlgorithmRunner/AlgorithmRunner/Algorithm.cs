@@ -12,9 +12,7 @@ namespace AlgorithmRunner
     internal class Algorithm
     {
         public static Results.AlgorithmResults AOA(int iterations, int PS, int M_Iter, int D, int alpha, double mu, double epsilon,
-            Form1.BenchmarkFunction benchmark, Func<double> NumGeneratorMethod, Func<int, int, int, (double, double)> MOAMOPMethod,
-            Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]> InitializationMethod,
-            Func<double[,], int, double, double, double, double, double, double, int, Func<double>, Func<double[], int, double>, double[,]> StepMethod)
+            Form1.BenchmarkFunction benchmark, Form1.Components components)
         {
             // main algorithm:
             // function minimizer (optimizer) based on the arithmetic optimization algorithm (AOA)
@@ -42,15 +40,15 @@ namespace AlgorithmRunner
                 int bestIdx = 0; double[] fitness = new double[PS];
 
                 // Initialize starting solution positions
-                double[,] X = InitializationMethod(PS, D, ub, lb, NumGeneratorMethod, benchmark.function);
+                double[,] X = components.initMethod(PS, D, ub, lb, components.mapMethod, benchmark.function);
 
                 while (C_Iter < M_Iter)
                 {
                     fitness = AlgorithmMethods.CalculateFitnessFunctions(X, D, benchmark.function);
                     bestIdx = AlgorithmMethods.FindBestSolution(fitness);
-                    (MOA, MOP) = MOAMOPMethod(C_Iter, M_Iter, alpha);
+                    (MOA, MOP) = components.MOAMOPMethod(C_Iter, M_Iter, alpha);
 
-                    X = StepMethod(X, D, epsilon, mu, lb, ub, MOA, MOP, bestIdx, NumGeneratorMethod, benchmark.function);
+                    X = components.stepMethod(X, D, epsilon, mu, lb, ub, MOA, MOP, bestIdx, components.mapMethod, benchmark.function);
                     X = AlgorithmMethods.ClampSolutions(X, ub, lb); // Not included in original algorithm
                     C_Iter++;
                 }

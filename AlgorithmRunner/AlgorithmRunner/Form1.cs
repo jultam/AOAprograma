@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CONTOPT;
+using TorchSharp;
+using TorchSharp.Modules;
 
 namespace AlgorithmRunner
 {
@@ -97,6 +99,29 @@ namespace AlgorithmRunner
 
         private List<StepComponentMethod> stepsComponents = new List<StepComponentMethod>();
 
+        public class Components
+        {
+            public Func<double> mapMethod { get; set; }
+
+            public Func<int, int, int, (double, double)> MOAMOPMethod { get; set; }
+
+            public Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]> initMethod { get; set; }
+
+            public Func<double[,], int, double, double, double, double, double, double, int, 
+                Func<double>, Func<double[], int, double>, double[,]> stepMethod { get; set; }
+
+            public Components(Func<double> mapMethod, Func<int, int, int, (double, double)> MOAMOPMethod,
+                Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]> initMethod,
+                Func<double[,], int, double, double, double, double, double, double, int,
+                Func<double>, Func<double[], int, double>, double[,]> stepMethod)
+            {
+                this.mapMethod = mapMethod;
+                this.MOAMOPMethod = MOAMOPMethod;
+                this.initMethod = initMethod;
+                this.stepMethod = stepMethod;
+            }
+        }
+
         int PS = 100; int M_Iter = 100; int runs = 1;
         int alpha = 5; double mu = 0.4; double epsilon = 0.05;
         
@@ -104,6 +129,8 @@ namespace AlgorithmRunner
         string MOAMOPMethodName = "";
         string initializationMethodName = "";
         string stepMethodName = "";
+
+        int[] testingDimensions = { 1, 30, 100 };
 
         public Form1()
         {
@@ -205,15 +232,16 @@ namespace AlgorithmRunner
             stepMethodName = comboBox4.Text;
             Func<double[,], int, double, double, double, double, double, double, int, Func<double>, Func<double[], int, double>, double[,]> stepMethod = stepsComponents.Find(m => m.name == stepMethodName).method;
 
-            int[] testingDimensions = { 1, 30, 100 };
             int rowID = 1;
+
+            Components components = new Components(generatorMethod, MOAMOPMethod, initializationMethod, stepMethod);
 
             foreach (BenchmarkFunction benchmark in benchmarkFunctions)
             {
                 foreach (int D in testingDimensions)
                 {
                     Results.AlgorithmResults results = await Task.Run(() => Algorithm.AOA(runs, PS, M_Iter, D, alpha, mu, epsilon, 
-                        benchmark, generatorMethod, MOAMOPMethod, initializationMethod, stepMethod));
+                        benchmark, components));
                     dataGridView1.Rows.Add(rowID, benchmark.name, D, benchmark.best_known, results.optimum,  results.time);
                     rowID++;
                 }
@@ -228,6 +256,38 @@ namespace AlgorithmRunner
         private void download_Click(object sender, EventArgs e)
         {
             FileMethods.SaveDataGridToText(dataGridView1, PS, M_Iter, runs, alpha, mu, epsilon, generatorMethodName, MOAMOPMethodName, initializationMethodName, stepMethodName);
+        }
+
+        private void train_Click(object sender, EventArgs e)
+        {
+            double[,] dataMatrix = new double[benchmarkFunctions.Count() * testingDimensions.Count(), 5];
+            double[,] targetMatrix = new double[benchmarkFunctions.Count() * testingDimensions.Count(), 1];
+
+            int k = 0;
+
+            foreach (BenchmarkFunction benchmark in benchmarkFunctions)
+            {
+                foreach (int D in testingDimensions)
+                {
+                    dataMatrix[k, 0] = benchmark.arg_range_1;
+                    dataMatrix[k, 1] = benchmark.arg_range_2;
+                    dataMatrix[k, 2] = D;
+                    dataMatrix[k, 3] = 10;
+                    dataMatrix[k, 4] = 10;
+
+                    targetMatrix[k, 0] = benchmark.best_known;
+
+                    k++;
+                }
+            }
+
+            torch.Tensor inputs = torch.tensor(dataMatrix);
+            torch.Tensor targets = torch.tensor(targetMatrix);
+
+            TensorDataset dataset = torch.utils.data.TensorDataset(inputs, targets);
+            IterableDataLoader loader = torch.utils.data.DataLoader(dataset, batchSize: 32, shuffle: true);
+
+            ParameterAIMethods.TrainModel(100, loader);
         }
     }
 }

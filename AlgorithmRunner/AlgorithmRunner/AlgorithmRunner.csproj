@@ -10,13 +10,13 @@
     <AssemblyName>AlgorithmRunner</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -106,12 +106,6 @@
     </Reference>
     <Reference Include="OneOf, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OneOf.3.0.271\lib\net45\OneOf.dll</HintPath>
-    </Reference>
-    <Reference Include="RLMatrix, Version=0.5.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RLMatrix.0.5.2\lib\netstandard2.0\RLMatrix.dll</HintPath>
-    </Reference>
-    <Reference Include="RLMatrix.Common, Version=0.5.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RLMatrix.Common.0.5.2\lib\netstandard2.0\RLMatrix.Common.dll</HintPath>
     </Reference>
     <Reference Include="SkiaSharp, Version=2.88.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\SkiaSharp.2.88.6\lib\net462\SkiaSharp.dll</HintPath>
@@ -220,11 +214,8 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="TorchSharp, Version=0.106.0.0, Culture=neutral, PublicKeyToken=67b0e5e1da516a1c, processorArchitecture=MSIL">
-      <HintPath>..\packages\TorchSharp.0.106.0\lib\netstandard2.0\TorchSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="TorchVision, Version=0.102.2.0, Culture=neutral, PublicKeyToken=ad3ebc5eb373fc14, processorArchitecture=MSIL">
-      <HintPath>..\packages\TorchVision.0.102.2\lib\netstandard2.0\TorchVision.dll</HintPath>
+    <Reference Include="TorchSharp, Version=0.102.5.0, Culture=neutral, PublicKeyToken=67b0e5e1da516a1c, processorArchitecture=MSIL">
+      <HintPath>..\packages\TorchSharp.0.102.5\lib\netstandard2.0\TorchSharp.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -235,6 +226,7 @@
     <Compile Include="benchmarks\Rastrigin.cs" />
     <Compile Include="benchmarks\Rosenbrock.cs" />
     <Compile Include="benchmarks\Schwefel.cs" />
+    <Compile Include="ComponentClasses.cs" />
     <Compile Include="components\initialization\SolutionInitialization.cs" />
     <Compile Include="components\maps\ChaoticMaps.cs" />
     <Compile Include="components\maps\Distributions.cs" />

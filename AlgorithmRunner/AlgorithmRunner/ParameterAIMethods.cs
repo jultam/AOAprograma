@@ -1,9 +1,11 @@
-﻿using System;
+﻿using MathNet.Numerics.LinearAlgebra.Solvers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TorchSharp;
+using TorchSharp.Modules;
 using static TorchSharp.torch.nn;
 
 namespace AlgorithmRunner
@@ -22,23 +24,30 @@ namespace AlgorithmRunner
             model.load(filePath);
         }
 
-        public static void TrainModel(int iter)
+        public static void TrainModel(int epochs, IterableDataLoader loader)
         {
             var optimizer = torch.optim.Adam(model.parameters(), lr: 0.01);
+            var criterion = MSELoss();
 
-            var input = torch.randn(64, 5);
-            var target = torch.randn(64, 5);
-
-            for (int i = 0; i < iter; i++)
+            for (int i = 0; i < epochs; i++)
             {
-                var eval = model.forward(input);
-                var output = functional.mse_loss(eval, target, Reduction.Sum);
+                foreach (var batch in loader)
+                {
+                    var x = batch[0];
+                    var y = batch[1];
 
-                optimizer.zero_grad();
+                    var prediction = model.forward(x);
 
-                output.backward();
+                    //Algorithm.AOA(1, prediction[0], prediction[1]);
 
-                optimizer.step();
+                    var loss = criterion.forward(prediction, y);
+
+                    optimizer.zero_grad();
+
+                    loss.backward();
+
+                    optimizer.step();
+                }
             }
         }
 

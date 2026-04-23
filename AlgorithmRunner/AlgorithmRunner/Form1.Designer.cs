@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -65,6 +65,7 @@
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.train = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.alphaUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.muUpDown)).BeginInit();
@@ -134,8 +135,8 @@
             // 
             // ID
             // 
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ID.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ID.DefaultCellStyle = dataGridViewCellStyle1;
             this.ID.HeaderText = "ID";
             this.ID.MinimumWidth = 6;
             this.ID.Name = "ID";
@@ -150,8 +151,8 @@
             // 
             // dimensions
             // 
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dimensions.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dimensions.DefaultCellStyle = dataGridViewCellStyle2;
             this.dimensions.HeaderText = "Dimensions";
             this.dimensions.MinimumWidth = 6;
             this.dimensions.Name = "dimensions";
@@ -159,10 +160,10 @@
             // 
             // knownOptimum
             // 
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle18.Format = "N6";
-            dataGridViewCellStyle18.NullValue = null;
-            this.knownOptimum.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N6";
+            dataGridViewCellStyle3.NullValue = null;
+            this.knownOptimum.DefaultCellStyle = dataGridViewCellStyle3;
             this.knownOptimum.HeaderText = "Known Optimum";
             this.knownOptimum.MinimumWidth = 6;
             this.knownOptimum.Name = "knownOptimum";
@@ -170,10 +171,10 @@
             // 
             // reachedOptimum
             // 
-            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle19.Format = "N6";
-            dataGridViewCellStyle19.NullValue = null;
-            this.reachedOptimum.DefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N6";
+            dataGridViewCellStyle4.NullValue = null;
+            this.reachedOptimum.DefaultCellStyle = dataGridViewCellStyle4;
             this.reachedOptimum.HeaderText = "Reached Optimum";
             this.reachedOptimum.MinimumWidth = 6;
             this.reachedOptimum.Name = "reachedOptimum";
@@ -182,10 +183,10 @@
             // TimeElapsed
             // 
             this.TimeElapsed.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle20.Format = "N3";
-            dataGridViewCellStyle20.NullValue = null;
-            this.TimeElapsed.DefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N3";
+            dataGridViewCellStyle5.NullValue = null;
+            this.TimeElapsed.DefaultCellStyle = dataGridViewCellStyle5;
             this.TimeElapsed.HeaderText = "Time Elapsed, ms";
             this.TimeElapsed.MinimumWidth = 100;
             this.TimeElapsed.Name = "TimeElapsed";
@@ -486,11 +487,25 @@
             this.comboBox4.Size = new System.Drawing.Size(517, 28);
             this.comboBox4.TabIndex = 24;
             // 
+            // train
+            // 
+            this.train.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(182)))), ((int)(((byte)(54)))));
+            this.train.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.train.ForeColor = System.Drawing.SystemColors.Control;
+            this.train.Location = new System.Drawing.Point(25, 655);
+            this.train.Name = "train";
+            this.train.Size = new System.Drawing.Size(521, 70);
+            this.train.TabIndex = 26;
+            this.train.Text = "TRAIN";
+            this.train.UseVisualStyleBackColor = false;
+            this.train.Click += new System.EventHandler(this.train_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1516, 844);
+            this.Controls.Add(this.train);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.comboBox4);
             this.Controls.Add(this.label5);
@@ -565,6 +580,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn knownOptimum;
         private System.Windows.Forms.DataGridViewTextBoxColumn reachedOptimum;
         private System.Windows.Forms.DataGridViewTextBoxColumn TimeElapsed;
+        private System.Windows.Forms.Button train;
     }
 }
 
