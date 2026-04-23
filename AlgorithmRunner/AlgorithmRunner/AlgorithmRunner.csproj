@@ -226,7 +226,6 @@
     <Compile Include="benchmarks\Rastrigin.cs" />
     <Compile Include="benchmarks\Rosenbrock.cs" />
     <Compile Include="benchmarks\Schwefel.cs" />
-    <Compile Include="ComponentClasses.cs" />
     <Compile Include="components\initialization\SolutionInitialization.cs" />
     <Compile Include="components\maps\ChaoticMaps.cs" />
     <Compile Include="components\maps\Distributions.cs" />
