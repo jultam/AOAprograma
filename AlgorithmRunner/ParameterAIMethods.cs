@@ -50,8 +50,11 @@ namespace AlgorithmRunner
                     loss.backward();
 
                     optimizer.step();
+
+                    Form1.richTextBox.AppendText("lalala\n");
                 }
             }
+            Form1.richTextBox.AppendText("Training completed.\n");
         }
 
         public static void SaveModel(string filePath)

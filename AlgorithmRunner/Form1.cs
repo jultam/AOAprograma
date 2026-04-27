@@ -122,6 +122,8 @@ namespace AlgorithmRunner
             }
         }
 
+        public static RichTextBox richTextBox = new RichTextBox();
+
         int PS = 100; int M_Iter = 100; int runs = 1;
         int alpha = 5; double mu = 0.4; double epsilon = 0.05;
         
@@ -135,6 +137,7 @@ namespace AlgorithmRunner
         public Form1()
         {
             InitializeComponent();
+            richTextBox = richTextBox1;
             ParameterAIMethods.CreateModel();
         }
 

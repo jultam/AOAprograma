@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -66,6 +66,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
             this.train = new System.Windows.Forms.Button();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.alphaUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.muUpDown)).BeginInit();
@@ -85,9 +86,10 @@
             this.button1.FlatAppearance.BorderColor = System.Drawing.SystemColors.Highlight;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.SystemColors.Control;
-            this.button1.Location = new System.Drawing.Point(25, 43);
+            this.button1.Location = new System.Drawing.Point(19, 35);
+            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(521, 55);
+            this.button1.Size = new System.Drawing.Size(391, 45);
             this.button1.TabIndex = 0;
             this.button1.Text = "LOAD PARAMETERS";
             this.button1.UseVisualStyleBackColor = false;
@@ -97,7 +99,8 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(26, 22);
+            this.label1.Location = new System.Drawing.Point(20, 18);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(248, 18);
             this.label1.TabIndex = 1;
@@ -108,9 +111,10 @@
             this.start.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(182)))), ((int)(((byte)(54)))));
             this.start.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.start.ForeColor = System.Drawing.SystemColors.Control;
-            this.start.Location = new System.Drawing.Point(25, 747);
+            this.start.Location = new System.Drawing.Point(19, 607);
+            this.start.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.start.Name = "start";
-            this.start.Size = new System.Drawing.Size(521, 70);
+            this.start.Size = new System.Drawing.Size(391, 57);
             this.start.TabIndex = 3;
             this.start.Text = "START";
             this.start.UseVisualStyleBackColor = false;
@@ -126,17 +130,18 @@
             this.knownOptimum,
             this.reachedOptimum,
             this.TimeElapsed});
-            this.dataGridView1.Location = new System.Drawing.Point(585, 118);
+            this.dataGridView1.Location = new System.Drawing.Point(439, 96);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(901, 699);
+            this.dataGridView1.Size = new System.Drawing.Size(676, 568);
             this.dataGridView1.TabIndex = 4;
             // 
             // ID
             // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ID.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ID.DefaultCellStyle = dataGridViewCellStyle6;
             this.ID.HeaderText = "ID";
             this.ID.MinimumWidth = 6;
             this.ID.Name = "ID";
@@ -151,8 +156,8 @@
             // 
             // dimensions
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dimensions.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dimensions.DefaultCellStyle = dataGridViewCellStyle7;
             this.dimensions.HeaderText = "Dimensions";
             this.dimensions.MinimumWidth = 6;
             this.dimensions.Name = "dimensions";
@@ -160,10 +165,10 @@
             // 
             // knownOptimum
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N6";
-            dataGridViewCellStyle3.NullValue = null;
-            this.knownOptimum.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle8.Format = "N6";
+            dataGridViewCellStyle8.NullValue = null;
+            this.knownOptimum.DefaultCellStyle = dataGridViewCellStyle8;
             this.knownOptimum.HeaderText = "Known Optimum";
             this.knownOptimum.MinimumWidth = 6;
             this.knownOptimum.Name = "knownOptimum";
@@ -171,10 +176,10 @@
             // 
             // reachedOptimum
             // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Format = "N6";
-            dataGridViewCellStyle4.NullValue = null;
-            this.reachedOptimum.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle9.Format = "N6";
+            dataGridViewCellStyle9.NullValue = null;
+            this.reachedOptimum.DefaultCellStyle = dataGridViewCellStyle9;
             this.reachedOptimum.HeaderText = "Reached Optimum";
             this.reachedOptimum.MinimumWidth = 6;
             this.reachedOptimum.Name = "reachedOptimum";
@@ -183,10 +188,10 @@
             // TimeElapsed
             // 
             this.TimeElapsed.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.Format = "N3";
-            dataGridViewCellStyle5.NullValue = null;
-            this.TimeElapsed.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle10.Format = "N3";
+            dataGridViewCellStyle10.NullValue = null;
+            this.TimeElapsed.DefaultCellStyle = dataGridViewCellStyle10;
             this.TimeElapsed.HeaderText = "Time Elapsed, ms";
             this.TimeElapsed.MinimumWidth = 100;
             this.TimeElapsed.Name = "TimeElapsed";
@@ -197,9 +202,10 @@
             this.download.Enabled = false;
             this.download.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.download.ForeColor = System.Drawing.SystemColors.Control;
-            this.download.Location = new System.Drawing.Point(1170, 43);
+            this.download.Location = new System.Drawing.Point(878, 35);
+            this.download.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.download.Name = "download";
-            this.download.Size = new System.Drawing.Size(316, 55);
+            this.download.Size = new System.Drawing.Size(237, 45);
             this.download.TabIndex = 5;
             this.download.Text = "DOWNLOAD";
             this.download.UseVisualStyleBackColor = false;
@@ -213,17 +219,19 @@
             this.comboBox1.Items.AddRange(new object[] {
             "test",
             "test2"});
-            this.comboBox1.Location = new System.Drawing.Point(29, 298);
+            this.comboBox1.Location = new System.Drawing.Point(22, 242);
+            this.comboBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(517, 28);
+            this.comboBox1.Size = new System.Drawing.Size(389, 28);
             this.comboBox1.TabIndex = 6;
             // 
             // alphaUpDown
             // 
             this.alphaUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.alphaUpDown.Location = new System.Drawing.Point(29, 217);
+            this.alphaUpDown.Location = new System.Drawing.Point(22, 176);
+            this.alphaUpDown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.alphaUpDown.Name = "alphaUpDown";
-            this.alphaUpDown.Size = new System.Drawing.Size(141, 27);
+            this.alphaUpDown.Size = new System.Drawing.Size(106, 27);
             this.alphaUpDown.TabIndex = 7;
             this.alphaUpDown.Value = new decimal(new int[] {
             5,
@@ -235,7 +243,8 @@
             // 
             this.alphaLabel.AutoSize = true;
             this.alphaLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.alphaLabel.Location = new System.Drawing.Point(25, 194);
+            this.alphaLabel.Location = new System.Drawing.Point(19, 158);
+            this.alphaLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.alphaLabel.Name = "alphaLabel";
             this.alphaLabel.Size = new System.Drawing.Size(18, 20);
             this.alphaLabel.TabIndex = 8;
@@ -245,7 +254,8 @@
             // 
             this.muLabel.AutoSize = true;
             this.muLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.muLabel.Location = new System.Drawing.Point(207, 194);
+            this.muLabel.Location = new System.Drawing.Point(155, 158);
+            this.muLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.muLabel.Name = "muLabel";
             this.muLabel.Size = new System.Drawing.Size(18, 20);
             this.muLabel.TabIndex = 10;
@@ -260,14 +270,15 @@
             0,
             0,
             196608});
-            this.muUpDown.Location = new System.Drawing.Point(211, 217);
+            this.muUpDown.Location = new System.Drawing.Point(158, 176);
+            this.muUpDown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.muUpDown.Maximum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.muUpDown.Name = "muUpDown";
-            this.muUpDown.Size = new System.Drawing.Size(147, 27);
+            this.muUpDown.Size = new System.Drawing.Size(110, 27);
             this.muUpDown.TabIndex = 9;
             this.muUpDown.Value = new decimal(new int[] {
             499,
@@ -279,7 +290,8 @@
             // 
             this.epsilonLabel.AutoSize = true;
             this.epsilonLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.epsilonLabel.Location = new System.Drawing.Point(395, 194);
+            this.epsilonLabel.Location = new System.Drawing.Point(296, 158);
+            this.epsilonLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.epsilonLabel.Name = "epsilonLabel";
             this.epsilonLabel.Size = new System.Drawing.Size(18, 20);
             this.epsilonLabel.TabIndex = 12;
@@ -294,14 +306,15 @@
             0,
             0,
             131072});
-            this.epsilonUpDown.Location = new System.Drawing.Point(399, 217);
+            this.epsilonUpDown.Location = new System.Drawing.Point(299, 176);
+            this.epsilonUpDown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.epsilonUpDown.Maximum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.epsilonUpDown.Name = "epsilonUpDown";
-            this.epsilonUpDown.Size = new System.Drawing.Size(147, 27);
+            this.epsilonUpDown.Size = new System.Drawing.Size(110, 27);
             this.epsilonUpDown.TabIndex = 11;
             this.epsilonUpDown.Value = new decimal(new int[] {
             5,
@@ -312,7 +325,8 @@
             // PSUpDown
             // 
             this.PSUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PSUpDown.Location = new System.Drawing.Point(29, 141);
+            this.PSUpDown.Location = new System.Drawing.Point(22, 115);
+            this.PSUpDown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.PSUpDown.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -324,7 +338,7 @@
             0,
             0});
             this.PSUpDown.Name = "PSUpDown";
-            this.PSUpDown.Size = new System.Drawing.Size(141, 27);
+            this.PSUpDown.Size = new System.Drawing.Size(106, 27);
             this.PSUpDown.TabIndex = 13;
             this.PSUpDown.Value = new decimal(new int[] {
             100,
@@ -335,7 +349,8 @@
             // MIterUpDown
             // 
             this.MIterUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MIterUpDown.Location = new System.Drawing.Point(211, 141);
+            this.MIterUpDown.Location = new System.Drawing.Point(158, 115);
+            this.MIterUpDown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MIterUpDown.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -347,7 +362,7 @@
             0,
             0});
             this.MIterUpDown.Name = "MIterUpDown";
-            this.MIterUpDown.Size = new System.Drawing.Size(147, 27);
+            this.MIterUpDown.Size = new System.Drawing.Size(110, 27);
             this.MIterUpDown.TabIndex = 14;
             this.MIterUpDown.Value = new decimal(new int[] {
             100,
@@ -359,7 +374,8 @@
             // 
             this.PSLabel.AutoSize = true;
             this.PSLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PSLabel.Location = new System.Drawing.Point(25, 118);
+            this.PSLabel.Location = new System.Drawing.Point(19, 96);
+            this.PSLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.PSLabel.Name = "PSLabel";
             this.PSLabel.Size = new System.Drawing.Size(123, 20);
             this.PSLabel.TabIndex = 15;
@@ -369,7 +385,8 @@
             // 
             this.MIterLabel.AutoSize = true;
             this.MIterLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MIterLabel.Location = new System.Drawing.Point(207, 118);
+            this.MIterLabel.Location = new System.Drawing.Point(155, 96);
+            this.MIterLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.MIterLabel.Name = "MIterLabel";
             this.MIterLabel.Size = new System.Drawing.Size(155, 20);
             this.MIterLabel.TabIndex = 16;
@@ -379,7 +396,8 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(25, 275);
+            this.label2.Location = new System.Drawing.Point(19, 223);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(149, 20);
             this.label2.TabIndex = 17;
@@ -389,7 +407,8 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(395, 118);
+            this.label3.Location = new System.Drawing.Point(296, 96);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(123, 20);
             this.label3.TabIndex = 19;
@@ -398,7 +417,8 @@
             // testUpDown
             // 
             this.testUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.testUpDown.Location = new System.Drawing.Point(399, 141);
+            this.testUpDown.Location = new System.Drawing.Point(299, 115);
+            this.testUpDown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.testUpDown.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -410,7 +430,7 @@
             0,
             0});
             this.testUpDown.Name = "testUpDown";
-            this.testUpDown.Size = new System.Drawing.Size(147, 27);
+            this.testUpDown.Size = new System.Drawing.Size(110, 27);
             this.testUpDown.TabIndex = 18;
             this.testUpDown.Value = new decimal(new int[] {
             1,
@@ -422,7 +442,8 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(25, 354);
+            this.label4.Location = new System.Drawing.Point(19, 288);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(127, 20);
             this.label4.TabIndex = 21;
@@ -436,16 +457,18 @@
             this.comboBox2.Items.AddRange(new object[] {
             "test",
             "test2"});
-            this.comboBox2.Location = new System.Drawing.Point(29, 377);
+            this.comboBox2.Location = new System.Drawing.Point(22, 306);
+            this.comboBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(517, 28);
+            this.comboBox2.Size = new System.Drawing.Size(389, 28);
             this.comboBox2.TabIndex = 20;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(25, 435);
+            this.label5.Location = new System.Drawing.Point(19, 353);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(167, 20);
             this.label5.TabIndex = 23;
@@ -459,16 +482,18 @@
             this.comboBox3.Items.AddRange(new object[] {
             "test",
             "test2"});
-            this.comboBox3.Location = new System.Drawing.Point(29, 458);
+            this.comboBox3.Location = new System.Drawing.Point(22, 372);
+            this.comboBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(517, 28);
+            this.comboBox3.Size = new System.Drawing.Size(389, 28);
             this.comboBox3.TabIndex = 22;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(25, 515);
+            this.label6.Location = new System.Drawing.Point(19, 418);
+            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(133, 20);
             this.label6.TabIndex = 25;
@@ -482,9 +507,10 @@
             this.comboBox4.Items.AddRange(new object[] {
             "test",
             "test2"});
-            this.comboBox4.Location = new System.Drawing.Point(29, 538);
+            this.comboBox4.Location = new System.Drawing.Point(22, 437);
+            this.comboBox4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(517, 28);
+            this.comboBox4.Size = new System.Drawing.Size(389, 28);
             this.comboBox4.TabIndex = 24;
             // 
             // train
@@ -492,19 +518,30 @@
             this.train.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(182)))), ((int)(((byte)(54)))));
             this.train.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.train.ForeColor = System.Drawing.SystemColors.Control;
-            this.train.Location = new System.Drawing.Point(25, 655);
+            this.train.Location = new System.Drawing.Point(19, 532);
+            this.train.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.train.Name = "train";
-            this.train.Size = new System.Drawing.Size(521, 70);
+            this.train.Size = new System.Drawing.Size(391, 57);
             this.train.TabIndex = 26;
             this.train.Text = "TRAIN";
             this.train.UseVisualStyleBackColor = false;
             this.train.Click += new System.EventHandler(this.train_Click);
             // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Font = new System.Drawing.Font("Courier New", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox1.Location = new System.Drawing.Point(1147, 35);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(464, 629);
+            this.richTextBox1.TabIndex = 27;
+            this.richTextBox1.Text = "";
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1516, 844);
+            this.ClientSize = new System.Drawing.Size(1641, 686);
+            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.train);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.comboBox4);
@@ -531,6 +568,7 @@
             this.Controls.Add(this.start);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Form1";
             this.Text = "Arithmetic Optimization Algorithm Controller";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -581,6 +619,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn reachedOptimum;
         private System.Windows.Forms.DataGridViewTextBoxColumn TimeElapsed;
         private System.Windows.Forms.Button train;
+        private System.Windows.Forms.RichTextBox richTextBox1;
     }
 }
 
