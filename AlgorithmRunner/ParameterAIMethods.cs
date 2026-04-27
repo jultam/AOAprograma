@@ -27,7 +27,7 @@ namespace AlgorithmRunner
             model.load(filePath);
         }
 
-        public static void TrainModel(int epochs, IterableDataLoader loader)
+        public static void TrainModel(int epochs, torch.utils.data.DataLoader<IList<torch.Tensor>, IList<torch.Tensor>> loader)
         {
             var optimizer = torch.optim.Adam(model.parameters(), lr: 0.01);
             var criterion = MSELoss();
@@ -64,10 +64,10 @@ namespace AlgorithmRunner
             double ub = benchmark.arg_range_2; double lb = benchmark.arg_range_1;
             double[] values = new double[samplesCount];
 
-            for (int i = 0; i <= samplesCount; i++)
+            for (int i = 0; i < samplesCount; i++)
             {
                 double[] X = new double[D];
-                for (int j = 0; j <= D; j++)
+                for (int j = 0; j < D; j++)
                 {
                     double r = _rnd.NextDouble();
                     X[j] = r * (ub - lb) + lb;

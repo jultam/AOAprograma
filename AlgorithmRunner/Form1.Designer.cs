@@ -253,13 +253,13 @@
             // 
             // muUpDown
             // 
-            this.muUpDown.DecimalPlaces = 1;
+            this.muUpDown.DecimalPlaces = 3;
             this.muUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.muUpDown.Increment = new decimal(new int[] {
             1,
             0,
             0,
-            65536});
+            196608});
             this.muUpDown.Location = new System.Drawing.Point(211, 217);
             this.muUpDown.Maximum = new decimal(new int[] {
             1,
@@ -270,10 +270,10 @@
             this.muUpDown.Size = new System.Drawing.Size(147, 27);
             this.muUpDown.TabIndex = 9;
             this.muUpDown.Value = new decimal(new int[] {
-            4,
+            499,
             0,
             0,
-            65536});
+            196608});
             // 
             // epsilonLabel
             // 

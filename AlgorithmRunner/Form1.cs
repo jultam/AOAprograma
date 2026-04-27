@@ -260,6 +260,19 @@ namespace AlgorithmRunner
 
         private void train_Click(object sender, EventArgs e)
         {
+            // Diagnostic check
+            string binPath = AppDomain.CurrentDomain.BaseDirectory;
+            bool hasTorchCpu = File.Exists(Path.Combine(binPath, "torch_cpu.dll"));
+            bool hasLibTorchSharp = File.Exists(Path.Combine(binPath, "LibTorchSharp.dll"));
+
+            if (!hasTorchCpu || !hasLibTorchSharp)
+            {
+                MessageBox.Show("Native libraries still missing!\n" +
+                               $"torch_cpu.dll: {hasTorchCpu}\n" +
+                               $"LibTorchSharp.dll: {hasLibTorchSharp}");
+                return;
+            }
+
             double[,] dataMatrix = new double[benchmarkFunctions.Count() * testingDimensions.Count(), 5];
             double[,] targetMatrix = new double[benchmarkFunctions.Count() * testingDimensions.Count(), 1];
             double mean; double std;
@@ -287,8 +300,19 @@ namespace AlgorithmRunner
             torch.Tensor inputs = torch.tensor(dataMatrix);
             torch.Tensor targets = torch.tensor(targetMatrix);
 
-            TensorDataset dataset = torch.utils.data.TensorDataset(inputs, targets);
-            IterableDataLoader loader = torch.utils.data.DataLoader(dataset, batchSize: 32, shuffle: true);
+            //torch.utils.data.Dataset dataset = torch.utils.data.Dataset(inputs, targets);
+            //torch.utils.data.DataLoader loader = new torch.utils.data.DataLoader(dataset, batchSize: 32, shuffle: true);
+            var dataset = torch.utils.data.TensorDataset(inputs, targets);
+            var loader = new torch.utils.data.DataLoader<IList<torch.Tensor>, IList<torch.Tensor>>(
+                dataset,
+                32,  // batchSize
+                null, // collate_fn - can be null for default behavior
+                true, // shuffle
+                torch.CPU, // device
+                null, // num_worker
+                0,    // drop_last
+                false // pin_memory
+            );
 
             ParameterAIMethods.TrainModel(100, loader);
         }
