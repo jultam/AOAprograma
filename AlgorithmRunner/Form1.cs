@@ -135,6 +135,7 @@ namespace AlgorithmRunner
         public Form1()
         {
             InitializeComponent();
+            ParameterAIMethods.CreateModel();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -297,16 +298,36 @@ namespace AlgorithmRunner
                 }
             }
 
-            torch.Tensor inputs = torch.tensor(dataMatrix);
-            torch.Tensor targets = torch.tensor(targetMatrix);
+            torch.Tensor inputs = torch.tensor(dataMatrix, dtype: torch.float32);
+            torch.Tensor targets = torch.tensor(targetMatrix, dtype: torch.float32);
 
             //torch.utils.data.Dataset dataset = torch.utils.data.Dataset(inputs, targets);
             //torch.utils.data.DataLoader loader = new torch.utils.data.DataLoader(dataset, batchSize: 32, shuffle: true);
             var dataset = torch.utils.data.TensorDataset(inputs, targets);
+
+            Func<IEnumerable<IList<torch.Tensor>>, torch.Device, IList<torch.Tensor>> collateFn =
+                (samples, device) =>
+                {
+                    var inputList = new List<torch.Tensor>();
+                    var targetList = new List<torch.Tensor>();
+
+                    foreach (var sample in samples)
+                    {
+                        inputList.Add(sample[0]);
+                        targetList.Add(sample[1]);
+                    }
+
+                    // Stack the tensors to create batches
+                    var batchInputs = torch.stack(inputList.ToArray());
+                    var batchTargets = torch.stack(targetList.ToArray());
+
+                    return new List<torch.Tensor> { batchInputs, batchTargets };
+                };
+
             var loader = new torch.utils.data.DataLoader<IList<torch.Tensor>, IList<torch.Tensor>>(
                 dataset,
                 32,  // batchSize
-                null, // collate_fn - can be null for default behavior
+                collateFn, // collate_fn
                 true, // shuffle
                 torch.CPU, // device
                 null, // num_worker
@@ -314,7 +335,7 @@ namespace AlgorithmRunner
                 false // pin_memory
             );
 
-            ParameterAIMethods.TrainModel(100, loader);
+            ParameterAIMethods.TrainModel(10, loader);
         }
     }
 }
