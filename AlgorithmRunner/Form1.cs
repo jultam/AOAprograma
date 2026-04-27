@@ -139,6 +139,7 @@ namespace AlgorithmRunner
             InitializeComponent();
             richTextBox = richTextBox1;
             ParameterAIMethods.CreateModel();
+            ParameterAIMethods.LoadModel("../../parameter_ai_model.pt");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -262,7 +263,7 @@ namespace AlgorithmRunner
             FileMethods.SaveDataGridToText(dataGridView1, PS, M_Iter, runs, alpha, mu, epsilon, generatorMethodName, MOAMOPMethodName, initializationMethodName, stepMethodName);
         }
 
-        private void train_Click(object sender, EventArgs e)
+        private async void train_Click(object sender, EventArgs e)
         {
             // Diagnostic check
             string binPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -329,7 +330,7 @@ namespace AlgorithmRunner
 
             var loader = new torch.utils.data.DataLoader<IList<torch.Tensor>, IList<torch.Tensor>>(
                 dataset,
-                32,  // batchSize
+                1,  // batchSize
                 collateFn, // collate_fn
                 true, // shuffle
                 torch.CPU, // device
@@ -338,7 +339,34 @@ namespace AlgorithmRunner
                 false // pin_memory
             );
 
-            ParameterAIMethods.TrainModel(10, loader);
+            generatorMethodName = comboBox1.Text;
+            Func<double> generatorMethod = mapComponents.Find(m => m.name == generatorMethodName).method;
+
+            MOAMOPMethodName = comboBox2.Text;
+            Func<int, int, int, (double, double)> MOAMOPMethod = MOAMOPComponents.Find(m => m.name == MOAMOPMethodName).method;
+
+            initializationMethodName = comboBox3.Text;
+            Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]> initializationMethod = initializationComponents.Find(m => m.name == initializationMethodName).method;
+
+            stepMethodName = comboBox4.Text;
+            Func<double[,], int, double, double, double, double, double, double, int, Func<double>, Func<double[], int, double>, double[,]> stepMethod = stepsComponents.Find(m => m.name == stepMethodName).method;
+
+            Components components = new Components(generatorMethod, MOAMOPMethod, initializationMethod, stepMethod);
+
+            await Task.Run(() => ParameterAIMethods.TrainModel(100, loader, benchmarkFunctions[0], components));
+            ParameterAIMethods.SaveModel("../../parameter_ai_model.pt");
+        }
+
+        public static void AppendTextSafe(string text)
+        {
+            if (richTextBox.InvokeRequired)
+            {
+                richTextBox.Invoke(new Action<string>(AppendTextSafe), text);
+            }
+            else
+            {
+                richTextBox.AppendText(text);
+            }
         }
     }
 }
