@@ -139,7 +139,7 @@ namespace AlgorithmRunner
             InitializeComponent();
             richTextBox = richTextBox1;
             ParameterAIMethods.CreateModel();
-            ParameterAIMethods.LoadModel("../../parameter_ai_model.pt");
+            //ParameterAIMethods.LoadModel("../../parameter_ai_model.pt");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -353,7 +353,7 @@ namespace AlgorithmRunner
 
             Components components = new Components(generatorMethod, MOAMOPMethod, initializationMethod, stepMethod);
 
-            await Task.Run(() => ParameterAIMethods.TrainModel(100, loader, benchmarkFunctions[0], components));
+            await Task.Run(() => ParameterAIMethods.TrainModel(20, loader, benchmarkFunctions[0], components));
             ParameterAIMethods.SaveModel("../../parameter_ai_model.pt");
         }
 

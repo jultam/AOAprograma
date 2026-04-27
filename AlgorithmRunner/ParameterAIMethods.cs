@@ -118,13 +118,6 @@ namespace AlgorithmRunner
         {
             try
             {
-                // Ensure directory exists
-                string directory = Path.GetDirectoryName(filePath);
-                if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
-                {
-                    Directory.CreateDirectory(directory);
-                }
-
                 // Save the model
                 model.save(filePath);
 
