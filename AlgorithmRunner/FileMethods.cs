@@ -110,7 +110,7 @@ namespace AlgorithmRunner
             {
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    using (StreamWriter sw = new StreamWriter(saveFileDialog.FileName, true))
+                    using (StreamWriter sw = new StreamWriter(saveFileDialog.FileName))
                     {
                         sw.WriteLine("*------------------------------------------------------------------------------*\n"+
                             "*Parameters file for the arithmetic optimization algorithm *\n"+
@@ -123,8 +123,7 @@ namespace AlgorithmRunner
                         sw.WriteLine("mu=" + mu);
                         sw.WriteLine("epsilon=" + epsilon);
                         sw.WriteLine("*--- benchmark parameters ---");
-                        sw.Write("dimensions=");
-                        foreach (int D in dimensions) { sw.Write("{0},", D); }
+                        sw.WriteLine("dimensions=" + string.Join(",", dimensions));
 
                         sw.Close();
                     }
