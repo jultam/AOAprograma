@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -67,7 +67,7 @@
             this.comboBox4 = new System.Windows.Forms.ComboBox();
             this.train = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.generateParamsButton = new System.Windows.Forms.Button();
             this.saveParamButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.alphaUpDown)).BeginInit();
@@ -142,8 +142,8 @@
             // 
             // ID
             // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ID.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ID.DefaultCellStyle = dataGridViewCellStyle6;
             this.ID.HeaderText = "ID";
             this.ID.MinimumWidth = 6;
             this.ID.Name = "ID";
@@ -158,8 +158,8 @@
             // 
             // dimensions
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dimensions.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dimensions.DefaultCellStyle = dataGridViewCellStyle7;
             this.dimensions.HeaderText = "Dimensions";
             this.dimensions.MinimumWidth = 6;
             this.dimensions.Name = "dimensions";
@@ -167,10 +167,10 @@
             // 
             // knownOptimum
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N6";
-            dataGridViewCellStyle3.NullValue = null;
-            this.knownOptimum.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle8.Format = "N6";
+            dataGridViewCellStyle8.NullValue = null;
+            this.knownOptimum.DefaultCellStyle = dataGridViewCellStyle8;
             this.knownOptimum.HeaderText = "Known Optimum";
             this.knownOptimum.MinimumWidth = 6;
             this.knownOptimum.Name = "knownOptimum";
@@ -178,10 +178,10 @@
             // 
             // reachedOptimum
             // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Format = "N6";
-            dataGridViewCellStyle4.NullValue = null;
-            this.reachedOptimum.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle9.Format = "N6";
+            dataGridViewCellStyle9.NullValue = null;
+            this.reachedOptimum.DefaultCellStyle = dataGridViewCellStyle9;
             this.reachedOptimum.HeaderText = "Reached Optimum";
             this.reachedOptimum.MinimumWidth = 6;
             this.reachedOptimum.Name = "reachedOptimum";
@@ -190,10 +190,10 @@
             // TimeElapsed
             // 
             this.TimeElapsed.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.Format = "N3";
-            dataGridViewCellStyle5.NullValue = null;
-            this.TimeElapsed.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle10.Format = "N3";
+            dataGridViewCellStyle10.NullValue = null;
+            this.TimeElapsed.DefaultCellStyle = dataGridViewCellStyle10;
             this.TimeElapsed.HeaderText = "Time Elapsed, ms";
             this.TimeElapsed.MinimumWidth = 100;
             this.TimeElapsed.Name = "TimeElapsed";
@@ -538,18 +538,19 @@
             this.richTextBox1.TabIndex = 27;
             this.richTextBox1.Text = "";
             // 
-            // button2
+            // generateParamsButton
             // 
-            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(182)))), ((int)(((byte)(54)))));
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.ForeColor = System.Drawing.SystemColors.Control;
-            this.button2.Location = new System.Drawing.Point(193, 492);
-            this.button2.Margin = new System.Windows.Forms.Padding(2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(216, 78);
-            this.button2.TabIndex = 28;
-            this.button2.Text = "GENERATE PARAMETERS";
-            this.button2.UseVisualStyleBackColor = false;
+            this.generateParamsButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(182)))), ((int)(((byte)(54)))));
+            this.generateParamsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.generateParamsButton.ForeColor = System.Drawing.SystemColors.Control;
+            this.generateParamsButton.Location = new System.Drawing.Point(193, 492);
+            this.generateParamsButton.Margin = new System.Windows.Forms.Padding(2);
+            this.generateParamsButton.Name = "generateParamsButton";
+            this.generateParamsButton.Size = new System.Drawing.Size(216, 78);
+            this.generateParamsButton.TabIndex = 28;
+            this.generateParamsButton.Text = "GENERATE PARAMETERS";
+            this.generateParamsButton.UseVisualStyleBackColor = false;
+            this.generateParamsButton.Click += new System.EventHandler(this.generateParamsButton_Click);
             // 
             // saveParamButton
             // 
@@ -572,7 +573,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1641, 686);
             this.Controls.Add(this.saveParamButton);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.generateParamsButton);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.train);
             this.Controls.Add(this.label6);
@@ -652,7 +653,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn TimeElapsed;
         private System.Windows.Forms.Button train;
         private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button generateParamsButton;
         private System.Windows.Forms.Button saveParamButton;
     }
 }

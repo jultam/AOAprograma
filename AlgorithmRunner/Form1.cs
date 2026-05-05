@@ -270,7 +270,6 @@ namespace AlgorithmRunner
 
         private async void train_Click(object sender, EventArgs e)
         {
-            // Diagnostic check
             string binPath = AppDomain.CurrentDomain.BaseDirectory;
             bool hasTorchCpu = File.Exists(Path.Combine(binPath, "torch_cpu.dll"));
             bool hasLibTorchSharp = File.Exists(Path.Combine(binPath, "LibTorchSharp.dll"));
@@ -376,5 +375,9 @@ namespace AlgorithmRunner
             }
         }
 
+        private async void generateParamsButton_Click(object sender, EventArgs e)
+        {
+            //await Task.Run(() => ParameterAIMethods.GenerateParameters(benchmarkFunctions, testingDimensions));
+        }
     }
 }
