@@ -32,9 +32,9 @@ namespace AlgorithmRunner
             // M_Iter (index 1): 5 to 1000
             // alpha (index 2): 1 to 10
             // mu (index 3): 0.1 to 1.0
-            // epsilon (index 4): 0.001 to 0.5
-            var scaleValues = new float[] { 9995f, 995f, 9f, 0.9f, 0.499f };
-            var offsetValues = new float[] { 5f, 5f, 1f, 0.1f, 0.001f };
+            // epsilon (index 4): 0.000001 to 0.5
+            var scaleValues = new float[] { 9995f, 995f, 9f, 0.9f, 0.499999f };
+            var offsetValues = new float[] { 5f, 5f, 1f, 0.1f, 0.000001f };
 
             scales = torch.tensor(scaleValues);
             offsets = torch.tensor(offsetValues);

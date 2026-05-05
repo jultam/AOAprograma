@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -68,6 +68,7 @@
             this.train = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.button2 = new System.Windows.Forms.Button();
+            this.saveParamButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.alphaUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.muUpDown)).BeginInit();
@@ -90,7 +91,7 @@
             this.button1.Location = new System.Drawing.Point(19, 35);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(391, 45);
+            this.button1.Size = new System.Drawing.Size(185, 45);
             this.button1.TabIndex = 0;
             this.button1.Text = "LOAD PARAMETERS";
             this.button1.UseVisualStyleBackColor = false;
@@ -141,8 +142,8 @@
             // 
             // ID
             // 
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ID.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ID.DefaultCellStyle = dataGridViewCellStyle1;
             this.ID.HeaderText = "ID";
             this.ID.MinimumWidth = 6;
             this.ID.Name = "ID";
@@ -157,8 +158,8 @@
             // 
             // dimensions
             // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dimensions.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dimensions.DefaultCellStyle = dataGridViewCellStyle2;
             this.dimensions.HeaderText = "Dimensions";
             this.dimensions.MinimumWidth = 6;
             this.dimensions.Name = "dimensions";
@@ -166,10 +167,10 @@
             // 
             // knownOptimum
             // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle8.Format = "N6";
-            dataGridViewCellStyle8.NullValue = null;
-            this.knownOptimum.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N6";
+            dataGridViewCellStyle3.NullValue = null;
+            this.knownOptimum.DefaultCellStyle = dataGridViewCellStyle3;
             this.knownOptimum.HeaderText = "Known Optimum";
             this.knownOptimum.MinimumWidth = 6;
             this.knownOptimum.Name = "knownOptimum";
@@ -177,10 +178,10 @@
             // 
             // reachedOptimum
             // 
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle9.Format = "N6";
-            dataGridViewCellStyle9.NullValue = null;
-            this.reachedOptimum.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N6";
+            dataGridViewCellStyle4.NullValue = null;
+            this.reachedOptimum.DefaultCellStyle = dataGridViewCellStyle4;
             this.reachedOptimum.HeaderText = "Reached Optimum";
             this.reachedOptimum.MinimumWidth = 6;
             this.reachedOptimum.Name = "reachedOptimum";
@@ -189,10 +190,10 @@
             // TimeElapsed
             // 
             this.TimeElapsed.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle10.Format = "N3";
-            dataGridViewCellStyle10.NullValue = null;
-            this.TimeElapsed.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N3";
+            dataGridViewCellStyle5.NullValue = null;
+            this.TimeElapsed.DefaultCellStyle = dataGridViewCellStyle5;
             this.TimeElapsed.HeaderText = "Time Elapsed, ms";
             this.TimeElapsed.MinimumWidth = 100;
             this.TimeElapsed.Name = "TimeElapsed";
@@ -550,11 +551,27 @@
             this.button2.Text = "GENERATE PARAMETERS";
             this.button2.UseVisualStyleBackColor = false;
             // 
+            // saveParamButton
+            // 
+            this.saveParamButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(160)))), ((int)(((byte)(237)))));
+            this.saveParamButton.FlatAppearance.BorderColor = System.Drawing.SystemColors.Highlight;
+            this.saveParamButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.saveParamButton.ForeColor = System.Drawing.SystemColors.Control;
+            this.saveParamButton.Location = new System.Drawing.Point(220, 35);
+            this.saveParamButton.Margin = new System.Windows.Forms.Padding(2);
+            this.saveParamButton.Name = "saveParamButton";
+            this.saveParamButton.Size = new System.Drawing.Size(189, 45);
+            this.saveParamButton.TabIndex = 29;
+            this.saveParamButton.Text = "SAVE PARAMETERS";
+            this.saveParamButton.UseVisualStyleBackColor = false;
+            this.saveParamButton.Click += new System.EventHandler(this.saveParamButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1641, 686);
+            this.Controls.Add(this.saveParamButton);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.train);
@@ -636,6 +653,7 @@
         private System.Windows.Forms.Button train;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button saveParamButton;
     }
 }
 

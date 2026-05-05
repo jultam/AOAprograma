@@ -1,5 +1,4 @@
-﻿using CONTOPT;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,8 +6,12 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CONTOPT;
+using Microsoft.Office.Interop.Excel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using static TorchSharp.torch.nn;
+using static TorchSharp.torch.optim;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace AlgorithmRunner
@@ -59,11 +62,12 @@ namespace AlgorithmRunner
          * filename = text file name
          * return population size, dimension count, maximum iterations
          */
-        public static (int, int, int, double, double) ReadParameters(string filename)
+        public static (int, int, int, double, double, int[]) ReadParameters(string filename)
         {
             StreamReader sr = new StreamReader(filename);
             string line = sr.ReadLine();
             int PS = -1; int Iter_N = -1; int alpha = -1; double mu = -1; double epsilon = -1;
+            int[] dimensions = { 1 };
             while (line != null)
             {
                 // Get rid of comments
@@ -87,21 +91,45 @@ namespace AlgorithmRunner
                     case "epsilon":
                         epsilon = Double.Parse(parameters[1]);
                         break;
+                    case "dimensions":
+                        string[] dims = parameters[1].Split(',');
+                        dimensions = Array.ConvertAll(dims, int.Parse);
+                        break;
                     default:
                         break;
                 }
                 line = sr.ReadLine();
             }
             sr.Close();
-            return (PS, Iter_N, alpha, mu, epsilon);
+            return (PS, Iter_N, alpha, mu, epsilon, dimensions);
         }
 
-        public static void SaveParameters(string filename, int PS, int Iter_N)
+        public static void SaveParameters(int PS, int Iter_N, int alpha, double mu, double epsilon, int[] dimensions)
         {
-            StreamWriter sw = new StreamWriter(filename);
-            sw.WriteLine("PS = " + PS);
-            sw.WriteLine("Iter_N = " + Iter_N);
-            sw.Close();
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = "txt file|*.txt" })
+            {
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    using (StreamWriter sw = new StreamWriter(saveFileDialog.FileName, true))
+                    {
+                        sw.WriteLine("*------------------------------------------------------------------------------*\n"+
+                            "*Parameters file for the arithmetic optimization algorithm *\n"+
+                            "*------------------------------------------------------------------------------*");
+                        sw.WriteLine("*--- main parameters ---");
+                        sw.WriteLine("PS=" + PS);
+                        sw.WriteLine("Iter_N=" + Iter_N);
+                        sw.WriteLine("*--- coefficients ---");
+                        sw.WriteLine("alpha=" + alpha);
+                        sw.WriteLine("mu=" + mu);
+                        sw.WriteLine("epsilon=" + epsilon);
+                        sw.WriteLine("*--- benchmark parameters ---");
+                        sw.Write("dimensions=");
+                        foreach (int D in dimensions) { sw.Write("{0},", D); }
+
+                        sw.Close();
+                    }
+                }
+            }
         }
 
         public static List<string> ReadComponent(string filename)

@@ -139,7 +139,7 @@ namespace AlgorithmRunner
             InitializeComponent();
             richTextBox = richTextBox1;
             ParameterAIMethods.CreateModel();
-            //ParameterAIMethods.LoadModel("../../parameter_ai_model.pt");
+            ParameterAIMethods.LoadModel("../../parameter_ai_model.pt");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -149,7 +149,7 @@ namespace AlgorithmRunner
             // ----------- Reads default parameters file -----------------------------\
             try {
                 int PS; int M_Iter;
-                (PS, M_Iter, alpha, mu, epsilon) = FileMethods.ReadParameters("../../param.txt");
+                (PS, M_Iter, alpha, mu, epsilon, testingDimensions) = FileMethods.ReadParameters("../../param.txt");
                 PSUpDown.Value = PS; MIterUpDown.Value = M_Iter; alphaUpDown.Value = alpha; muUpDown.Value = (decimal)mu; epsilonUpDown.Value = (decimal)epsilon;
             }
             catch (Exception ex) {
@@ -212,9 +212,13 @@ namespace AlgorithmRunner
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 int PS; int M_Iter; int alpha; double mu; double epsilon;
-                (PS, M_Iter, alpha, mu, epsilon) = FileMethods.ReadParameters(openFileDialog.FileName);
+                (PS, M_Iter, alpha, mu, epsilon, testingDimensions) = FileMethods.ReadParameters(openFileDialog.FileName);
                 PSUpDown.Value = PS; MIterUpDown.Value = M_Iter; alphaUpDown.Value = alpha; muUpDown.Value = (decimal)mu; epsilonUpDown.Value = (decimal)epsilon;
             }
+        }
+        private void saveParamButton_Click(object sender, EventArgs e)
+        {
+            FileMethods.SaveParameters((int)PSUpDown.Value, (int)MIterUpDown.Value, (int)alphaUpDown.Value, (double)muUpDown.Value, (double)epsilonUpDown.Value, testingDimensions);
         }
 
         private async void start_Click(object sender, EventArgs e)
@@ -281,6 +285,7 @@ namespace AlgorithmRunner
 
             double[,] dataMatrix = new double[benchmarkFunctions.Count() * testingDimensions.Count(), 5];
             double[,] targetMatrix = new double[benchmarkFunctions.Count() * testingDimensions.Count(), 1];
+            List<BenchmarkFunction> activeBenchmarks = new List<BenchmarkFunction>();
             double mean; double std;
 
             int k = 0;
@@ -298,6 +303,8 @@ namespace AlgorithmRunner
                     dataMatrix[k, 4] = std;
 
                     targetMatrix[k, 0] = benchmark.best_known;
+
+                    activeBenchmarks.Add(benchmark);
 
                     k++;
                 }
@@ -324,7 +331,7 @@ namespace AlgorithmRunner
 
             // Create manual batches
             int batchSize = 4;
-            var batches = new List<IList<torch.Tensor>>();
+            var batches = new List<(IList<torch.Tensor> tensors, List<BenchmarkFunction> benchmarks)>();
 
             for (int i = 0; i < k; i += batchSize)
             {
@@ -332,8 +339,9 @@ namespace AlgorithmRunner
                 
                 var batchInputs = inputs.slice(0, i, endIdx, 1);
                 var batchTargets = targets.slice(0, i, endIdx, 1);
+                var batchBenchmarks = activeBenchmarks.GetRange(i, endIdx - i);
                 
-                batches.Add(new List<torch.Tensor> { batchInputs, batchTargets });
+                batches.Add((new List<torch.Tensor> { batchInputs, batchTargets }, batchBenchmarks));
             }
 
             AppendTextSafe($"Created {batches.Count} batches\n");
@@ -367,5 +375,6 @@ namespace AlgorithmRunner
                 richTextBox.AppendText(text);
             }
         }
+
     }
 }

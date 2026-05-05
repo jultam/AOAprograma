@@ -4,7 +4,9 @@
 *--- main parameters ---
 PS=10                      * size of the population [>=1]
 Iter_N=100                 * total number of iterations [>=1]
-*--- auxiliary parameters (coefficients) ---
+*--- coefficients ---
 alpha=5
 mu=0.499
 epsilon=0.00001
+*--- benchmark function parameters ---
+dimensions=1,30,50

@@ -30,8 +30,8 @@ namespace AlgorithmRunner
             model.load(filePath);
         }
 
-        public static void TrainModel(int epochs, List<IList<torch.Tensor>> batches,
-            Form1.BenchmarkFunction benchmark, Form1.Components components)
+        public static void TrainModel(int epochs, List<(IList<torch.Tensor> tensors, List<Form1.BenchmarkFunction> benchmarks)> batches,
+            Form1.BenchmarkFunction benchmarks, Form1.Components components)
         {
             var optimizer = torch.optim.Adam(model.parameters(), lr: 0.001);
             var scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode: "max", factor: 0.5, patience: 3);
@@ -47,8 +47,9 @@ namespace AlgorithmRunner
 
                 foreach (var batch in batches)
                 {
-                    var x = batch[0];
-                    var y = batch[1];
+                    var x = batch.tensors[0];
+                    var y = batch.tensors[1];
+                    var batchBenchmarks = batch.benchmarks;
 
                     Form1.AppendTextSafe($"Batch {batchCount + 1}: x shape = [{string.Join(", ", x.shape)}], y shape = [{string.Join(", ", y.shape)}]\n");
 
@@ -58,33 +59,39 @@ namespace AlgorithmRunner
 
                     double precisionReward;
                     double timeReward;
-                    double overallReward;
+                    double overallReward = 0;
                     using (torch.no_grad())
                     {
                         var detachedPrediction = prediction.detach();
-                        Results.AlgorithmResults result = Algorithm.AOA(
-                            1,
-                            (int)detachedPrediction[0][0],
-                            (int)detachedPrediction[0][1],
-                            (int)x[0][2],
-                            (int)detachedPrediction[0][2],
-                            (double)detachedPrediction[0][3],
-                            (double)detachedPrediction[0][4],
-                            benchmark,
-                            components);
 
-                        var targetValue = y[0].ToDouble();
-                        precisionReward = Math.Exp(-Math.Abs(result.optimum - targetValue));
-                        var targetTime = 1000.0;
-                        timeReward = Math.Exp(-result.time / targetTime);
+                        for (int s = 0; s < x.shape[0]; s++)
+                        {
+                            Form1.BenchmarkFunction benchmark = batchBenchmarks[s];
 
-                        double precisionWeight = 0.7;
-                        double timeWeight = 0.3;
+                            Results.AlgorithmResults result = Algorithm.AOA(
+                                1,
+                                (int)detachedPrediction[s][0],
+                                (int)detachedPrediction[s][1],
+                                (int)x[s][2],
+                                (int)detachedPrediction[s][2],
+                                (double)detachedPrediction[s][3],
+                                (double)detachedPrediction[s][4],
+                                benchmark,
+                                components);
+                            
+                            var targetValue = y[0].ToDouble();
+                            precisionReward = Math.Exp(-Math.Abs(result.optimum - targetValue));
+                            var targetTime = 1000.0;
+                            timeReward = Math.Exp(-result.time / targetTime);
 
-                        overallReward = precisionWeight * precisionReward + timeWeight * timeReward;
-                        totalReward += overallReward;
+                            double precisionWeight = 0.7;
+                            double timeWeight = 0.3;
 
-                        Form1.AppendTextSafe($"AOA Result: {result.optimum}, Target: {targetValue}, Reward: {precisionReward}\n");
+                            overallReward = precisionWeight * precisionReward + timeWeight * timeReward;
+                            totalReward += overallReward;
+
+                            Form1.AppendTextSafe($"AOA Result: {result.optimum}, Target: {targetValue}, Reward: {precisionReward}\n");
+                        }
                     }
 
                     //var logProbs = -torch.sum(torch.log(prediction + 1e-8));
