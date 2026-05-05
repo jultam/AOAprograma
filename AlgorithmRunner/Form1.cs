@@ -149,9 +149,10 @@ namespace AlgorithmRunner
             // ----------- Reads default parameters file -----------------------------\
             try {
                 int PS; int M_Iter;
-                (PS, M_Iter) = FileMethods.ReadParameters("../../param.txt");
-                PSUpDown.Value = PS; MIterUpDown.Value = M_Iter;
-            } catch (Exception ex) {
+                (PS, M_Iter, alpha, mu, epsilon) = FileMethods.ReadParameters("../../param.txt");
+                PSUpDown.Value = PS; MIterUpDown.Value = M_Iter; alphaUpDown.Value = alpha; muUpDown.Value = (decimal)mu; epsilonUpDown.Value = (decimal)epsilon;
+            }
+            catch (Exception ex) {
                 MessageBox.Show("Error: " + ex);
             }
             // -----------------------------------------------------------------------/
@@ -210,9 +211,9 @@ namespace AlgorithmRunner
 
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                int PS; int M_Iter;
-                (PS, M_Iter) = FileMethods.ReadParameters(openFileDialog.FileName);
-                PSUpDown.Value = PS; MIterUpDown.Value = M_Iter;
+                int PS; int M_Iter; int alpha; double mu; double epsilon;
+                (PS, M_Iter, alpha, mu, epsilon) = FileMethods.ReadParameters(openFileDialog.FileName);
+                PSUpDown.Value = PS; MIterUpDown.Value = M_Iter; alphaUpDown.Value = alpha; muUpDown.Value = (decimal)mu; epsilonUpDown.Value = (decimal)epsilon;
             }
         }
 

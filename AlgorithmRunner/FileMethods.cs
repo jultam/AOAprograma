@@ -59,11 +59,11 @@ namespace AlgorithmRunner
          * filename = text file name
          * return population size, dimension count, maximum iterations
          */
-        public static (int, int) ReadParameters(string filename)
+        public static (int, int, int, double, double) ReadParameters(string filename)
         {
             StreamReader sr = new StreamReader(filename);
             string line = sr.ReadLine();
-            int PS = -1; int Iter_N = -1;
+            int PS = -1; int Iter_N = -1; int alpha = -1; double mu = -1; double epsilon = -1;
             while (line != null)
             {
                 // Get rid of comments
@@ -78,13 +78,30 @@ namespace AlgorithmRunner
                     case "Iter_N":
                         Iter_N = Int32.Parse(parameters[1]);
                         break;
+                    case "alpha":
+                        alpha = Int32.Parse(parameters[1]); 
+                        break;
+                    case "mu":
+                        mu = Double.Parse(parameters[1]);
+                        break;
+                    case "epsilon":
+                        epsilon = Double.Parse(parameters[1]);
+                        break;
                     default:
                         break;
                 }
                 line = sr.ReadLine();
             }
             sr.Close();
-            return (PS, Iter_N);
+            return (PS, Iter_N, alpha, mu, epsilon);
+        }
+
+        public static void SaveParameters(string filename, int PS, int Iter_N)
+        {
+            StreamWriter sw = new StreamWriter(filename);
+            sw.WriteLine("PS = " + PS);
+            sw.WriteLine("Iter_N = " + Iter_N);
+            sw.Close();
         }
 
         public static List<string> ReadComponent(string filename)
