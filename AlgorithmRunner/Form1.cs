@@ -303,42 +303,40 @@ namespace AlgorithmRunner
                 }
             }
 
+            // Convert 2D arrays to 1D then reshape
+            var inputsFlat = new float[k * 5];
+            var targetsFlat = new float[k * 1];
+
+            for (int i = 0; i < k; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    inputsFlat[i * 5 + j] = (float)dataMatrix[i, j];
+                }
+                targetsFlat[i] = (float)targetMatrix[i, 0];
+            }
+
             torch.Tensor inputs = torch.tensor(dataMatrix, dtype: torch.float32);
             torch.Tensor targets = torch.tensor(targetMatrix, dtype: torch.float32);
 
-            //torch.utils.data.Dataset dataset = torch.utils.data.Dataset(inputs, targets);
-            //torch.utils.data.DataLoader loader = new torch.utils.data.DataLoader(dataset, batchSize: 32, shuffle: true);
-            var dataset = torch.utils.data.TensorDataset(inputs, targets);
+            AppendTextSafe($"Input tensor shape: [{string.Join(", ", inputs.shape)}]\n");
+            AppendTextSafe($"Target tensor shape: [{string.Join(", ", targets.shape)}]\n");
 
-            Func<IEnumerable<IList<torch.Tensor>>, torch.Device, IList<torch.Tensor>> collateFn =
-                (samples, device) =>
-                {
-                    var inputList = new List<torch.Tensor>();
-                    var targetList = new List<torch.Tensor>();
+            // Create manual batches
+            int batchSize = 4;
+            var batches = new List<IList<torch.Tensor>>();
 
-                    foreach (var sample in samples)
-                    {
-                        inputList.Add(sample[0]);
-                        targetList.Add(sample[1]);
-                    }
+            for (int i = 0; i < k; i += batchSize)
+            {
+                int endIdx = Math.Min(i + batchSize, k);
+                
+                var batchInputs = inputs.slice(0, i, endIdx, 1);
+                var batchTargets = targets.slice(0, i, endIdx, 1);
+                
+                batches.Add(new List<torch.Tensor> { batchInputs, batchTargets });
+            }
 
-                    // Stack the tensors to create batches
-                    var batchInputs = torch.stack(inputList.ToArray());
-                    var batchTargets = torch.stack(targetList.ToArray());
-
-                    return new List<torch.Tensor> { batchInputs, batchTargets };
-                };
-
-            var loader = new torch.utils.data.DataLoader<IList<torch.Tensor>, IList<torch.Tensor>>(
-                dataset,
-                1,  // batchSize
-                collateFn, // collate_fn
-                true, // shuffle
-                torch.CPU, // device
-                null, // num_worker
-                0,    // drop_last
-                false // pin_memory
-            );
+            AppendTextSafe($"Created {batches.Count} batches\n");
 
             generatorMethodName = comboBox1.Text;
             Func<double> generatorMethod = mapComponents.Find(m => m.name == generatorMethodName).method;
@@ -354,7 +352,7 @@ namespace AlgorithmRunner
 
             Components components = new Components(generatorMethod, MOAMOPMethod, initializationMethod, stepMethod);
 
-            await Task.Run(() => ParameterAIMethods.TrainModel(20, loader, benchmarkFunctions[0], components));
+            await Task.Run(() => ParameterAIMethods.TrainModel(20, batches, benchmarkFunctions[0], components));
             ParameterAIMethods.SaveModel("../../parameter_ai_model.pt");
         }
 

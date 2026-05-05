@@ -30,7 +30,7 @@ namespace AlgorithmRunner
             model.load(filePath);
         }
 
-        public static void TrainModel(int epochs, torch.utils.data.DataLoader<IList<torch.Tensor>, IList<torch.Tensor>> loader,
+        public static void TrainModel(int epochs, List<IList<torch.Tensor>> batches,
             Form1.BenchmarkFunction benchmark, Form1.Components components)
         {
             var optimizer = torch.optim.Adam(model.parameters(), lr: 0.001);
@@ -45,10 +45,12 @@ namespace AlgorithmRunner
                 double totalReward = 0;
                 int batchCount = 0;
 
-                foreach (var batch in loader)
+                foreach (var batch in batches)
                 {
                     var x = batch[0];
                     var y = batch[1];
+
+                    Form1.AppendTextSafe($"Batch {batchCount + 1}: x shape = [{string.Join(", ", x.shape)}], y shape = [{string.Join(", ", y.shape)}]\n");
 
                     model.train();
                     var prediction = model.forward(x);
