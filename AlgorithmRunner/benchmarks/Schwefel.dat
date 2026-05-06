@@ -1,5 +1,4 @@
 Name=Schwefel                      * name of the benchmark test function
 Arg_Range_1=-500                   * minimum argument range value (lower bound)
 Arg_Range_2=500                    * maximum argument range value (upper bound)
-Best_known/optimal_value=0 * best known/optimal objective function value (d=1)
-*Best_known/optimal_value=-418.9829*d * best known/optimal objective function value (d>1)
+Optimal_Value=0 * best known/optimal objective function value (d=1)

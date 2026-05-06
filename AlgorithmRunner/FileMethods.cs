@@ -45,7 +45,7 @@ namespace AlgorithmRunner
                     case "Arg_Range_2":
                         ub = Double.Parse(parameters[1]);
                         break;
-                    case "Best_known/optimal_value":
+                    case "Optimal_Value":
                         optimum = Double.Parse(parameters[1]);
                         break;
                     default:

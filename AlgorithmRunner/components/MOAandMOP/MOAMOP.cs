@@ -29,7 +29,7 @@ namespace CONTOPT
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static (double, double) ChaoticMOAandMOP(int C_Iter, int M_Iter, int alpha)
         {
-            alpha = 4;
+            //alpha = 4;
             lastMOA = alpha * lastMOA * (1 - lastMOA);
             double value1 = Math.Pow((double)C_Iter / (double)M_Iter, 1.0 / 6.0);
             double MOA = lastMOA * value1;
@@ -44,7 +44,7 @@ namespace CONTOPT
         {
             double Min = 0.2; double Max = 0.9;
             double MOA = Min + C_Iter * (Max - Min) / M_Iter;
-            alpha = 4;
+            //alpha = 4;
             lastMOP = alpha * lastMOP * (1 - lastMOP);
             double value2 = 1 - Math.Pow((double)C_Iter / (double)M_Iter, 1.0 / 2.0);
             double MOP = lastMOP * value2;
@@ -54,7 +54,7 @@ namespace CONTOPT
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static (double, double) ChaoticMOABaseMOP(int C_Iter, int M_Iter, int alpha)
         {
-            alpha = 4;
+            //alpha = 4;
             lastMOA = alpha * lastMOA * (1 - lastMOA);
             double value1 = Math.Pow((double)C_Iter / (double)M_Iter, 1.0 / 6.0);
             double MOA = lastMOA * value1;
