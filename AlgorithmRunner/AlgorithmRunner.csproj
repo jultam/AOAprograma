@@ -272,6 +272,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="obj\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs" />
     <Compile Include="ParameterAIMethods.cs" />
     <Compile Include="ParameterModel.cs" />
     <Compile Include="Program.cs" />
@@ -293,6 +294,7 @@
     <None Include="benchmarks\Rastrigin.dat" />
     <None Include="benchmarks\Rosenbrock.dat" />
     <None Include="benchmarks\Schwefel.dat" />
+    <None Include="bin\Debug\AlgorithmRunner.exe.config" />
     <None Include="components\initialization\SolutionInitialization.dat" />
     <None Include="components\maps\ChaoticMaps.dat" />
     <None Include="components\MOAandMOP\MOAMOP.dat" />
@@ -314,6 +316,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\Debug\AlgorithmRunner.exe" />
+    <Content Include="bin\Debug\AlgorithmRunner.pdb" />
     <Content Include="results.txt" />
     <None Include="components\maps\Distributions.dat" />
     <Content Include="param.txt" />
@@ -355,7 +359,9 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="bin\Release\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\libtorch-cpu-win-x64.1.13.0.1\buildTransitive\libtorch-cpu-win-x64.targets" Condition="Exists('..\packages\libtorch-cpu-win-x64.1.13.0.1\buildTransitive\libtorch-cpu-win-x64.targets')" />
 </Project>
