@@ -7,12 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CONTOPT;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis;
 using Microsoft.Office.Interop.Excel;
+using SkiaSharp;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 using static TorchSharp.torch.nn;
 using static TorchSharp.torch.optim;
 using Excel = Microsoft.Office.Interop.Excel;
+using static System.Net.WebRequestMethods;
 
 namespace AlgorithmRunner
 {
@@ -162,21 +166,71 @@ namespace AlgorithmRunner
         {
             try {
                 comboBox.Items.Clear();
-                List<string> names;
-                foreach (string file in Directory.GetFiles(directory, "*.dat"))
+                
+                foreach (string file in Directory.GetFiles(directory, "*.cs"))
                 {
-                    names = ReadComponent(file);
-                    foreach (string name in names)
+                    var syntaxTree = CSharpSyntaxTree.ParseText(System.IO.File.ReadAllText(file));
+                    var references = new List<MetadataReference> {
+                        MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+                        MetadataReference.CreateFromFile(typeof(Math).Assembly.Location),
+                        MetadataReference.CreateFromFile(typeof(Uri).Assembly.Location),
+                        MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location),
+                        MetadataReference.CreateFromFile(typeof(Meta.Numerics.Functions.AdvancedMath).Assembly.Location)
+                    };
+
+                    foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
                     {
-                        MethodInfo method = typeof(ContOpt).GetMethod(name);
-                        T function = (T)(object)Delegate.CreateDelegate(typeof(T), method);
-                        
-                        C component = (C)Activator.CreateInstance(typeof(C), new object[] { name, function });
-                        components.Add(component);
+                        try
+                        {
+                            if (!assembly.IsDynamic && !string.IsNullOrWhiteSpace(assembly.Location))
+                            {
+                                references.Add(MetadataReference.CreateFromFile(assembly.Location));
+                            }
+                        }
+                        catch { continue; }
+                    }
+
+                    var compilation = CSharpCompilation.Create(
+                        Path.GetRandomFileName(),
+                        new[] { syntaxTree },
+                        references,
+                        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+                    using (var ms = new MemoryStream())
+                    {
+                        var result = compilation.Emit(ms);
+                        if (!result.Success)
+                        {
+                            var errors = string.Join("\n", result.Diagnostics
+                                .Where(d => d.Severity == DiagnosticSeverity.Error)
+                                .Select(d => d.ToString()));
+                            MessageBox.Show($"Failed to compile {file}:\n{errors}");
+                            continue; // Skip files that don't compile
+                        }
+
+                        Assembly assembly = Assembly.Load(ms.ToArray());
+                        Type type = assembly.GetType("CONTOPT.ContOpt");
+                        if (type == null) continue;
+
+                        var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Static);
+
+                        foreach (var method in methods)
+                        {
+                            try
+                            {
+                                T function = (T)(object)Delegate.CreateDelegate(typeof(T), method);
+                                C component = (C)Activator.CreateInstance(typeof(C), new object[] { method.Name, function });
+                                components.Add(component);
+                            }
+                            catch
+                            {
+                                continue;
+                            }
+                        }
                     }
                 }
                 comboBox.Items.AddRange(components.Select(m => m.name).ToArray());
-                comboBox.SelectedIndex = 0;
+                if (comboBox.Items.Count > 0) comboBox.SelectedIndex = 0;
             } catch (Exception ex) {
                 MessageBox.Show("Error: " + ex);
             }

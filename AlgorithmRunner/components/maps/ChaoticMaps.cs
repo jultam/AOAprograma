@@ -1,5 +1,4 @@
 ﻿// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ChaoticMaps.cs %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-using Meta.Numerics.Functions;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -12,6 +11,7 @@ namespace CONTOPT
         private static double lastX = 0.6;
         private static bool firstIter = true;
         private static int currentIter = 1;
+        private static Random chaosMapRandom = new Random();
 
         public static void ResetMap()
         {
@@ -112,7 +112,7 @@ namespace CONTOPT
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double MCDOLMap()
         {
-            double theta = _rnd.NextDouble();
+            double theta = chaosMapRandom.NextDouble();
 
             if (theta < 0.2) lastX = CircleMap();
             else if (theta < 0.4) lastX = LogisticMap();

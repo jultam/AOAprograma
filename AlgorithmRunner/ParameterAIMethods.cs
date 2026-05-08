@@ -27,11 +27,18 @@ namespace AlgorithmRunner
 
         public static void LoadModel(string filePath)
         {
-            model.load(filePath);
+            try
+            {
+                model.load(filePath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex);
+            }
         }
 
         public static void TrainModel(int epochs, List<(IList<torch.Tensor> tensors, List<Form1.BenchmarkFunction> benchmarks)> batches,
-            Form1.BenchmarkFunction benchmarks, Form1.Components components)
+            Form1.Components components)
         {
             var optimizer = torch.optim.Adam(model.parameters(), lr: 0.001);
             var scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode: "max", factor: 0.5, patience: 3);
@@ -55,7 +62,7 @@ namespace AlgorithmRunner
 
                     model.train();
                     var prediction = model.forward(x);
-                    Form1.AppendTextSafe("| " + TensorToString(x) + " |\n " + TensorToString(y) + " |\n " + TensorToString(prediction) + " |\n ");
+                    Form1.AppendTextSafe("| " + TensorToString(x) + " |\n " + TensorToString(prediction) + " |\n ");
 
                     double precisionReward;
                     double timeReward;
@@ -111,7 +118,6 @@ namespace AlgorithmRunner
 
                     optimizer.step();
 
-                    Form1.AppendTextSafe("lalala\n------------\n");
                     batchCount++;
                 }
                 double avgReward = totalReward / batchCount;

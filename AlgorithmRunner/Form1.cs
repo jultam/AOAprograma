@@ -11,8 +11,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CONTOPT;
+using Microsoft.CodeAnalysis.CSharp;
 using TorchSharp;
 using TorchSharp.Modules;
+using Microsoft.CodeAnalysis;
 
 namespace AlgorithmRunner
 {
@@ -131,15 +133,20 @@ namespace AlgorithmRunner
         string MOAMOPMethodName = "";
         string initializationMethodName = "";
         string stepMethodName = "";
+        string pathToFiles = "../../../";
 
         int[] testingDimensions = { 1, 30, 100 };
+        
+        //[System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        //static extern bool AllocConsole();
 
         public Form1()
         {
             InitializeComponent();
+            //AllocConsole();
             richTextBox = richTextBox1;
             ParameterAIMethods.CreateModel();
-            ParameterAIMethods.LoadModel("../../parameter_ai_model.pt");
+            ParameterAIMethods.LoadModel(pathToFiles+"parameter_ai_model.pt");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -149,7 +156,7 @@ namespace AlgorithmRunner
             // ----------- Reads default parameters file -----------------------------\
             try {
                 int PS; int M_Iter;
-                (PS, M_Iter, alpha, mu, epsilon, testingDimensions) = FileMethods.ReadParameters("../../param.txt");
+                (PS, M_Iter, alpha, mu, epsilon, testingDimensions) = FileMethods.ReadParameters(pathToFiles + "param.txt");
                 PSUpDown.Value = PS; MIterUpDown.Value = M_Iter; alphaUpDown.Value = alpha; muUpDown.Value = (decimal)mu; epsilonUpDown.Value = (decimal)epsilon;
             }
             catch (Exception ex) {
@@ -159,7 +166,7 @@ namespace AlgorithmRunner
 
             // ----------- Reads all benchmark function parameters -------------------\
             try {
-                directory = "../../benchmarks";
+                directory = pathToFiles + "benchmarks";
                 string benchName; double optimum; double ub; double lb;
                 foreach (string file in Directory.GetFiles(directory, "*.dat"))
                 {
@@ -168,7 +175,7 @@ namespace AlgorithmRunner
                     benchmarkFunctions.Add(benchmark);
                 }
             } catch (DirectoryNotFoundException ex) {
-                MessageBox.Show("Error loading benchmark directory: "+ex);
+                MessageBox.Show("Error loading benchmark: "+ex);
             }
             // -----------------------------------------------------------------------/
 
@@ -176,9 +183,62 @@ namespace AlgorithmRunner
             try {
                 foreach (BenchmarkFunction benchmark in benchmarkFunctions)
                 {
-                    MethodInfo method = typeof(ContOpt).GetMethod(benchmark.name);
-                    Func<double[], int, double> function = (Func<double[], int, double>)Delegate.CreateDelegate(typeof(Func<double[], int, double>), method);
-                    benchmarkFunctions.Find(x => x.name == benchmark.name).function = function;
+                    string code = File.ReadAllText(pathToFiles + "benchmarks/" + benchmark.name + ".cs");
+
+                    SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code);
+
+                    var references = new List<MetadataReference>
+                    {
+                        MetadataReference.CreateFromFile(typeof(object).Assembly.Location),    // mscorlib.dll
+                        MetadataReference.CreateFromFile(typeof(Math).Assembly.Location),      // System.dll
+                        MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location) // System.Core.dll
+                    };
+
+                    CSharpCompilation compilation = CSharpCompilation.Create(
+                        Path.GetRandomFileName(),
+                        new[] { syntaxTree },
+                        references,
+                        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+                    using (var ms = new MemoryStream())
+                    {
+                        // 4. Build the DLL in memory
+                        var result = compilation.Emit(ms);
+
+                        if (result.Success)
+                        {
+                            ms.Seek(0, SeekOrigin.Begin);
+
+                            // 5. Load assembly using the legacy method for .NET 4.7.2
+                            Assembly assembly = Assembly.Load(ms.ToArray());
+
+                            // 6. Access your class and method (adjust namespace if different)
+                            Type type = assembly.GetType("CONTOPT.ContOpt");
+                            MethodInfo method = type.GetMethod(benchmark.name);
+
+                            if (method != null)
+                            {
+                                benchmark.function = (Func<double[], int, double>)Delegate.CreateDelegate(
+                                    typeof(Func<double[], int, double>), method);
+                            }
+                            else
+                            {
+                                MessageBox.Show($"Could not find method '{benchmark.name}' in class 'ContOpt'");
+                            }
+                        }
+                        else
+                        {
+                            // Display specific errors from the .cs file
+                            var errors = string.Join("\n", result.Diagnostics
+                                .Where(d => d.Severity == DiagnosticSeverity.Error)
+                                .Select(d => d.GetMessage()));
+                            MessageBox.Show($"Compilation failed for {benchmark.name}:\n{errors}");
+                        }
+                    }
+
+                    //MethodInfo method = typeof(ContOpt).GetMethod(benchmark.name);
+                    //Func<double[], int, double> function = (Func<double[], int, double>)Delegate.CreateDelegate(typeof(Func<double[], int, double>), method);
+                    //benchmarkFunctions.Find(x => x.name == benchmark.name).function = function;
                 }
             } catch (Exception ex){
                 MessageBox.Show("Error: " + ex);
@@ -187,16 +247,16 @@ namespace AlgorithmRunner
 
             // ----------- Reads all methods --------------------------\
 
-            directory = "../../components/maps";
+            directory = pathToFiles + "components/maps";
             mapComponents = FileMethods.PopulateComboBox<Func<double>, MapComponentMethod>(directory, comboBox1, mapComponents);
 
-            directory = "../../components/MOAandMOP";
+            directory = pathToFiles + "components/MOAandMOP";
             MOAMOPComponents = FileMethods.PopulateComboBox<Func<int, int, int, (double, double)>, MOAMOPComponentMethod>(directory, comboBox2, MOAMOPComponents);
 
-            directory = "../../components/initialization";
+            directory = pathToFiles + "components/initialization";
             initializationComponents = FileMethods.PopulateComboBox<Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]>, InitializationComponentMethod>(directory, comboBox3, initializationComponents);
 
-            directory = "../../components/steps";
+            directory = pathToFiles + "components/steps";
             stepsComponents = FileMethods.PopulateComboBox<Func<double[,], int, double, double, double, double, double, double, int, Func<double>, Func<double[], int, double>, double[,]>, StepComponentMethod>(directory, comboBox4, stepsComponents);
 
             // -----------------------------------------------------------------------/
@@ -270,6 +330,8 @@ namespace AlgorithmRunner
 
         private async void train_Click(object sender, EventArgs e)
         {
+            richTextBox1.Clear();
+
             string binPath = AppDomain.CurrentDomain.BaseDirectory;
             bool hasTorchCpu = File.Exists(Path.Combine(binPath, "torch_cpu.dll"));
             bool hasLibTorchSharp = File.Exists(Path.Combine(binPath, "LibTorchSharp.dll"));
@@ -359,7 +421,7 @@ namespace AlgorithmRunner
 
             Components components = new Components(generatorMethod, MOAMOPMethod, initializationMethod, stepMethod);
 
-            await Task.Run(() => ParameterAIMethods.TrainModel(20, batches, benchmarkFunctions[0], components));
+            await Task.Run(() => ParameterAIMethods.TrainModel(20, batches, components));
             ParameterAIMethods.SaveModel("../../parameter_ai_model.pt");
         }
 

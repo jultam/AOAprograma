@@ -1,5 +1,5 @@
 ﻿// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% StepCalculation.cs %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-using AlgorithmRunner;
+using Meta.Numerics.Functions;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -53,6 +53,26 @@ namespace CONTOPT
             return X;
         }
 
+        private static double NextNormalDistribution(double mean, double std, Func<double> map)
+        {
+            double u1 = map(); double u2 = map();
+            double r = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
+            return mean + std * r;
+        }
+
+        public static double CalculateLRS(double a, Func<double> map)
+        {
+            double numerator = AdvancedMath.Gamma(1 + a) * Math.Sin(Math.PI * a / 2);
+            double denominator = AdvancedMath.Gamma((1 + a) / 2) * a * Math.Pow(2, (a - 1) / 2);
+            double qu = Math.Pow(numerator / denominator, 1 / a);
+            double qv = 1;
+
+            double u = NextNormalDistribution(0, Math.Pow(qu, 2), map);
+            double v = NextNormalDistribution(0, Math.Pow(qv, 2), map);
+
+            return u / Math.Pow(Math.Abs(v), 1 / a);
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double[,] LevyRandomStepCalc(double[,] X, int D, double epsilon, double mu, double lb, double ub, double MOA, double MOP,
             int bestIdx, Func<double> map, Func<double[], int, double> objectiveFunction)
@@ -64,7 +84,7 @@ namespace CONTOPT
                     double r1 = map();
                     double r2 = map();
                     double r3 = map();
-                    double S = AlgorithmMethods.CalculateLRS(1.5, map);
+                    double S = CalculateLRS(1.5, map);
                     if (r1 > MOA)
                     {
                         // Exploration

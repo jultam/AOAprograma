@@ -1,1 +1,0 @@
-parameter mu halts the search progress if its 0.5 and the upper and lower bounds are opposites. This is because the value that the position is multiplied / divided by ends up being 0 and all of the agents get dragged to 0.
