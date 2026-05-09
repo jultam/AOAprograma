@@ -310,7 +310,7 @@ namespace AlgorithmRunner
             {
                 foreach (int D in testingDimensions)
                 {
-                    Results.AlgorithmResults results = await Task.Run(() => Algorithm.AOA(runs, PS, M_Iter, D, alpha, mu, epsilon, 
+                    Results.AlgorithmResults results = await Task.Run(() => Algorithm.AOA(runs, PS*D, M_Iter, D, alpha, mu, epsilon, 
                         benchmark, components));
                     dataGridView1.Rows.Add(rowID, benchmark.name, D, benchmark.best_known, results.optimum,  results.time);
                     rowID++;

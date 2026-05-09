@@ -77,7 +77,7 @@ namespace AlgorithmRunner
 
                             Results.AlgorithmResults result = Algorithm.AOA(
                                 1,
-                                (int)detachedPrediction[s][0],
+                                (int)detachedPrediction[s][0] * (int)x[s][2],
                                 (int)detachedPrediction[s][1],
                                 (int)x[s][2],
                                 (int)detachedPrediction[s][2],
