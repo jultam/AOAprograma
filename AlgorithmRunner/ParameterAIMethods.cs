@@ -58,15 +58,15 @@ namespace AlgorithmRunner
                     var y = batch.tensors[1];
                     var batchBenchmarks = batch.benchmarks;
 
-                    Form1.AppendTextSafe($"Batch {batchCount + 1}: x shape = [{string.Join(", ", x.shape)}], y shape = [{string.Join(", ", y.shape)}]\n");
+                    Form1.AppendTextSafe($"------\nBatch {batchCount + 1}: x shape = [{string.Join(", ", x.shape)}], y shape = [{string.Join(", ", y.shape)}]\n");
 
                     model.train();
                     var prediction = model.forward(x);
-                    Form1.AppendTextSafe("| " + TensorToString(x) + " |\n " + TensorToString(prediction) + " |\n ");
+                    //Form1.AppendTextSafe("| " + TensorToString(x) + " |\n " + TensorToString(prediction) + " |\n ");
 
                     double precisionReward;
                     double timeReward;
-                    double overallReward = 0;
+                    double batchReward = 0;
                     using (torch.no_grad())
                     {
                         var detachedPrediction = prediction.detach();
@@ -75,41 +75,77 @@ namespace AlgorithmRunner
                         {
                             Form1.BenchmarkFunction benchmark = batchBenchmarks[s];
 
-                            Results.AlgorithmResults result = Algorithm.AOA(
-                                1,
-                                (int)detachedPrediction[s][0] * (int)x[s][2],
-                                (int)detachedPrediction[s][1],
-                                (int)x[s][2],
-                                (int)detachedPrediction[s][2],
-                                (double)detachedPrediction[s][3],
-                                (double)detachedPrediction[s][4],
-                                benchmark,
-                                components);
-                            
-                            var targetValue = y[0].ToDouble();
-                            precisionReward = Math.Exp(-Math.Abs(result.optimum - targetValue));
-                            var targetTime = 1000.0;
-                            timeReward = Math.Exp(-result.time / targetTime);
+                            Form1.AppendTextSafe("---------\n"+benchmark.name + "\n" + TensorToString(x[s]) + "\n" + TensorToString(detachedPrediction[s]) + "\n");
 
-                            double precisionWeight = 0.7;
-                            double timeWeight = 0.3;
+                            TimeSpan timeout = TimeSpan.FromMinutes(2);
+                            bool timedOut = false;
+                            var startTimeout = DateTime.Now;
+                            Results.AlgorithmResults result = null;
 
-                            overallReward = precisionWeight * precisionReward + timeWeight * timeReward;
-                            totalReward += overallReward;
+                            try
+                            {
+                                var task = System.Threading.Tasks.Task.Run(() =>
+                                {
+                                    return result = Algorithm.AOA(
+                                    1,
+                                    (int)detachedPrediction[s][0] * (int)x[s][2],
+                                    (int)detachedPrediction[s][1],
+                                    (int)x[s][2],
+                                    (int)detachedPrediction[s][2],
+                                    (double)detachedPrediction[s][3],
+                                    (double)detachedPrediction[s][4],
+                                    benchmark,
+                                    components);
+                                });
 
-                            Form1.AppendTextSafe($"AOA Result: {result.optimum}, Target: {targetValue}, Reward: {precisionReward}\n");
+                                if (!task.Wait(timeout))
+                                {
+                                    Form1.AppendTextSafe("Timeout reached\n");
+                                    timedOut = true;
+                                } else
+                                {
+                                    result = task.Result;
+                                }
+                            } catch (Exception ex)
+                            {
+                                Form1.AppendTextSafe("Error: " + ex.Message + "\n");
+                                timedOut = true;
+                            }
+
+                            double sampleReward = 0;
+                            if (!timedOut)
+                            {
+                                Form1.AppendTextSafe("Found optimum: "+result.optimum.ToString() + "\nCalculation time: " + result.time.ToString() + "\n");
+
+                                double targetValue = y[s].ToDouble();
+                                double absError = Math.Abs(result.optimum - targetValue);
+                                precisionReward = 1.0 / (1.0 + absError);
+                                //precisionReward = Math.Exp(-Math.Abs(result.optimum - targetValue));
+
+                                double targetTime = 50000.0;
+                                timeReward = 1.0 / (1.0 + result.time / targetTime);
+                                //timeReward = Math.Exp(-result.time / targetTime);
+
+                                double precisionWeight = 0.7;
+                                double timeWeight = 0.3;
+
+                                sampleReward = precisionWeight * precisionReward + timeWeight * timeReward;
+                                batchReward += sampleReward;
+
+                                Form1.AppendTextSafe($"AOA Result: {result.optimum}, Target: {targetValue}, Reward: {sampleReward}\n");
+                                Form1.AppendTextSafe($"Precision reward: {precisionReward}, Time reward: {timeReward}\n");
+                            }
                         }
                     }
 
-                    //var logProbs = -torch.sum(torch.log(prediction + 1e-8));
-                    var rewardTensor = torch.tensor((float)overallReward, dtype: torch.float32);
+                    double avgBatchReward = batchReward / x.shape[0];
 
                     var meanPrediction = prediction.mean();
                     var regLoss = 0.01f * torch.sum(torch.pow(prediction - meanPrediction, 2));
 
                     var entropy = -torch.sum(prediction * torch.log(prediction + 1e-8));
-                    var loss = -rewardTensor + regLoss - 0.01f * entropy;
-                    //var loss = logProbs * (-rewardTensor);
+                    var rewardTensor = torch.tensor((float)avgBatchReward, dtype: torch.float32);
+                    var loss = -rewardTensor + regLoss - 0.1f * entropy;
 
                     optimizer.zero_grad();
                     loss.backward();
@@ -118,6 +154,7 @@ namespace AlgorithmRunner
 
                     optimizer.step();
 
+                    totalReward += avgBatchReward;
                     batchCount++;
                 }
                 double avgReward = totalReward / batchCount;

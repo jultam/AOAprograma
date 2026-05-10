@@ -17,23 +17,54 @@ namespace AlgorithmRunner
 
         public ParameterModel(string name) : base(name) 
         {
-            layers = Sequential(
+            /*layers = Sequential(
                 Linear(5, 7),
-                ReLU(), 
+                LeakyReLU(), 
                 Dropout(0.1), 
                 Linear(7, 7),
-                ReLU(),
+                LeakyReLU(),
                 Linear(7, 5),
+                Sigmoid()
+            );*/
+
+
+            layers = Sequential(
+                Linear(5, 10),
+                LeakyReLU(), 
+                Dropout(0.1), 
+                Linear(10, 10),
+                LeakyReLU(),
+                Dropout(0.1), 
+                Linear(10, 10),
+                LeakyReLU(),
+                Dropout(0.1),
+                Linear(10, 5),
                 Sigmoid()
             );
 
+            /*
+            layers = Sequential(
+                Linear(5, 36),
+                LeakyReLU(),
+                Dropout(0.1),
+                Linear(36, 18),
+                LeakyReLU(),
+                Dropout(0.1),
+                Linear(10, 10),
+                LeakyReLU(),
+                Dropout(0.1),
+                Linear(10, 5),
+                Sigmoid()
+            );
+            */
+
             // Scale outputs to acceptable ranges for algorithm parameters
-            // PS (index 0): 5 to 50000
+            // PS (index 0): 5 to 2000
             // M_Iter (index 1): 5 to 5000
             // alpha (index 2): 1 to 10
-            // mu (index 3): 0.1 to 1.0
+            // mu (index 3): 0.1 to 0.499
             // epsilon (index 4): 0.000001 to 0.5
-            var scaleValues = new float[] { 49995f, 4995f, 9f, 0.9f, 0.499999f };
+            var scaleValues = new float[] { 1995f, 4995f, 9f, 0.398f, 0.499999f };
             var offsetValues = new float[] { 5f, 5f, 1f, 0.1f, 0.000001f };
 
             scales = torch.tensor(scaleValues);
@@ -50,6 +81,16 @@ namespace AlgorithmRunner
             var output = layers.forward(input);
 
             return output * scales + offsets;
+        }
+
+        public Tensor GetScales()
+        {
+            return scales;
+        }
+
+        public Tensor GetOffsets()
+        {
+            return offsets;
         }
     }
 }
