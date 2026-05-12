@@ -14,18 +14,6 @@ namespace AlgorithmRunner
         public static Results.AlgorithmResults AOA(int iterations, int PS, int M_Iter, int D, int alpha, double mu, double epsilon,
             Form1.BenchmarkFunction benchmark, Form1.Components components)
         {
-            // main algorithm:
-            // function minimizer (optimizer) based on the arithmetic optimization algorithm (AOA)
-            // (the goal is to search for a variable (argument) Final_X from [X_Range1, X_Range2] such that 
-            // the given objective function is minimized        
-            // method input:  iterations - the number of runs for each test,
-            //                PS - population size
-            //                M_Iter - maximum iteration count for the search process
-            //                alpha, mu, epsilon
-            //                MapMethod - chaotic map
-            // program output: Final_X - final/overall best found solution (argument),
-            //                 Final_F - final/overall best found objective function value
-
             // Initialize MOA and MOP variables
             double MOA; double MOP;
             double lb = benchmark.arg_range_1; double ub = benchmark.arg_range_2;
@@ -38,18 +26,40 @@ namespace AlgorithmRunner
 
                 int C_Iter = 1;
                 int bestIdx = 0; double[] fitness = new double[PS];
+                double bestFoundOptimum = 99999.0;
 
                 // Initialize starting solution positions
                 double[,] X = components.initMethod(PS, D, ub, lb, components.mapMethod, benchmark.function);
+                //fitness = AlgorithmMethods.CalculateFitnessFunctions(X, D, benchmark.function);
 
                 while (C_Iter < M_Iter)
                 {
                     fitness = AlgorithmMethods.CalculateFitnessFunctions(X, D, benchmark.function);
                     bestIdx = AlgorithmMethods.FindBestSolution(fitness);
+                    if (bestFoundOptimum > fitness[bestIdx])
+                    {
+                        bestFoundOptimum = fitness[bestIdx];
+                        bestPosition = AlgorithmMethods.ExtractSolutionPositions(X, bestIdx);
+                    }
+
                     (MOA, MOP) = components.MOAMOPMethod(C_Iter, M_Iter, alpha);
 
                     X = components.stepMethod(X, D, epsilon, mu, lb, ub, MOA, MOP, bestIdx, components.mapMethod, benchmark.function);
                     X = AlgorithmMethods.ClampSolutions(X, ub, lb); // Not included in original algorithm
+
+                    /*double[,] newX = components.stepMethod(X, D, epsilon, mu, lb, ub, MOA, MOP, bestIdx, components.mapMethod, benchmark.function);
+                    newX = AlgorithmMethods.ClampSolutions(newX, ub, lb); // Not included in original algorithm
+
+                    // Only update positions if an improvement was made (not included in original algorithm)
+                    double[] newFitness = AlgorithmMethods.CalculateFitnessFunctions(X, D, benchmark.function);
+                    int newBestIdx = AlgorithmMethods.FindBestSolution(newFitness);
+                    if (fitness[bestIdx] > newFitness[newBestIdx])
+                    {
+                        fitness = newFitness;
+                        bestIdx = newBestIdx;
+                        X = newX;
+                    }*/
+
                     C_Iter++;
                 }
                 fitness = AlgorithmMethods.CalculateFitnessFunctions(X, D, benchmark.function);

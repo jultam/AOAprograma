@@ -30,41 +30,48 @@ namespace AlgorithmRunner
 
             layers = Sequential(
                 Linear(5, 10),
+                BatchNorm1d(10),
                 LeakyReLU(), 
                 Dropout(0.1), 
+
                 Linear(10, 10),
+                BatchNorm1d(10),
                 LeakyReLU(),
                 Dropout(0.1), 
+
                 Linear(10, 10),
+                BatchNorm1d(10),
                 LeakyReLU(),
                 Dropout(0.1),
+
                 Linear(10, 5),
+                BatchNorm1d(5),
                 Sigmoid()
             );
 
-            /*
-            layers = Sequential(
-                Linear(5, 36),
+            
+            /*layers = Sequential(
+                Linear(5, 32),
                 LeakyReLU(),
                 Dropout(0.1),
-                Linear(36, 18),
+                Linear(32, 16),
                 LeakyReLU(),
                 Dropout(0.1),
-                Linear(10, 10),
+                Linear(16, 8),
                 LeakyReLU(),
                 Dropout(0.1),
-                Linear(10, 5),
+                Linear(8, 5),
                 Sigmoid()
-            );
-            */
+            );*/
+            
 
             // Scale outputs to acceptable ranges for algorithm parameters
-            // PS (index 0): 5 to 2000
-            // M_Iter (index 1): 5 to 5000
+            // PS (index 0): 5 to 2500
+            // M_Iter (index 1): 5 to 2000
             // alpha (index 2): 1 to 10
             // mu (index 3): 0.1 to 0.499
             // epsilon (index 4): 0.000001 to 0.5
-            var scaleValues = new float[] { 1995f, 4995f, 9f, 0.398f, 0.499999f };
+            var scaleValues = new float[] { 2495f, 1995f, 9f, 0.398f, 0.499999f };
             var offsetValues = new float[] { 5f, 5f, 1f, 0.1f, 0.000001f };
 
             scales = torch.tensor(scaleValues);

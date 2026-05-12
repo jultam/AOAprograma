@@ -13,6 +13,7 @@ namespace CONTOPT
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double[,] BaseRandomInit(int PS, int D, double ub, double lb, Func<double> map, Func<double[], int, double> objectiveFunction)
         {
+            //if (D == 1) Console.WriteLine("- Base Init ------");
             double[,] X = new double[PS, D];
 
             for (int i = 0; i < PS; i++)
@@ -21,8 +22,11 @@ namespace CONTOPT
                 {
                     double r = map();
                     X[i, j] = r * (ub - lb) + lb;
+                    //if (D == 1) Console.Write(X[i, j] + " ");
                 }
+                //if (D == 1) Console.WriteLine();
             }
+            //if (D == 1) Console.WriteLine("-------");
             return X;
         }
 
@@ -30,6 +34,7 @@ namespace CONTOPT
         public static double[,] OppositionInit(int PS, int D, double ub, double lb, Func<double> map, Func<double[], int, double> objectiveFunction)
         {
             double[,] X = new double[PS, D];
+            //if (D == 1) Console.WriteLine("- Oppo Init ------");
 
             for (int i = 0; i < PS; i++)
             {
@@ -41,6 +46,8 @@ namespace CONTOPT
                     double r = map();
                     Xpos[j] = r * (ub - lb) + lb;
                     OppXpos[j] = ub + lb - Xpos[j];
+                    //if (D == 1) Console.Write(objectiveFunction(Xpos, D) + " ");
+                    //if (D == 1) Console.Write(objectiveFunction(OppXpos, D) + " ");
                 }
 
                 double[] best;
@@ -50,8 +57,10 @@ namespace CONTOPT
                 for (int j = 0; j < D; j++)
                 {
                     X[i, j] = best[j];
+                    //if (D == 1) Console.WriteLine(objectiveFunction(best, D) + " ");
                 }
             }
+            //if (D == 1) Console.WriteLine("-------");
             return X;
         }
 

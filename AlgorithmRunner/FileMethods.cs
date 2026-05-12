@@ -17,6 +17,7 @@ using static TorchSharp.torch.nn;
 using static TorchSharp.torch.optim;
 using Excel = Microsoft.Office.Interop.Excel;
 using static System.Net.WebRequestMethods;
+using System.Diagnostics.Metrics;
 
 namespace AlgorithmRunner
 {
@@ -70,7 +71,7 @@ namespace AlgorithmRunner
         {
             StreamReader sr = new StreamReader(filename);
             string line = sr.ReadLine();
-            int PS = -1; int Iter_N = -1; int alpha = -1; double mu = -1; double epsilon = -1;
+            int PS = 5; int Iter_N = 5; int alpha = 4; double mu = 0.499; double epsilon = 0.00001;
             int[] dimensions = { 1 };
             while (line != null)
             {
@@ -231,8 +232,17 @@ namespace AlgorithmRunner
                 }
                 comboBox.Items.AddRange(components.Select(m => m.name).ToArray());
                 if (comboBox.Items.Count > 0) comboBox.SelectedIndex = 0;
-            } catch (Exception ex) {
-                MessageBox.Show("Error: " + ex);
+            } catch (FileNotFoundException ex) {
+                string message = "";
+                message += "Component file could not be found! Make sure it is named exactly as in the corresponding .dat file and that it has an .cs extension!\n";
+                message += ex.Message;
+                MessageBox.Show(message);
+            } catch (Exception ex)
+            {
+                string message = "";
+                if (Directory.Exists(directory) && Directory.GetFiles(directory, "*.dat").Length <= 0) message += "Component directory has no readable files! Make sure the files have a .dat extension!\n";
+                message += ex.Message;
+                MessageBox.Show(message);
             }
             return components;
         }
@@ -301,6 +311,20 @@ namespace AlgorithmRunner
                             sw.Write(" {0,15:F6} |", dataGridView1.Rows[i].Cells[4].Value);
                             sw.WriteLine(" {0,16} |", dataGridView1.Rows[i].Cells[5].Value);
                         }
+                    }
+                }
+            }
+        }
+
+        public static void SaveText(string text)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = "txt file|*.txt" })
+            {
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    using (StreamWriter sw = new StreamWriter(saveFileDialog.FileName))
+                    {
+                        sw.WriteLine(text);
                     }
                 }
             }

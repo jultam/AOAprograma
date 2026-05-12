@@ -1,4 +1,5 @@
 ﻿// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ChaoticMaps.cs %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -27,9 +28,8 @@ namespace CONTOPT
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double ChebyshevMap()
         {
-            lastX = Math.Cos(currentIter / Math.Cos(lastX));
-            currentIter++;
-            return (lastX + 1) / 2;
+            lastX = Math.Cos(4 * Math.Acos(lastX));
+            return (lastX + 1.0) / 2.0;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -68,11 +68,15 @@ namespace CONTOPT
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double PiecewiseMap()
         {
-            double p = 0.7; // (0, 1)
-            if (lastX >= 0 && lastX < p) lastX = lastX / p;
-            else if (lastX >= p && lastX < 1 / 2) lastX = (lastX - p) / (0.5 - p);
-            else if (lastX >= 1/2 && lastX < 1 - p) lastX = (1 - p - lastX) / (0.5 - p);
-            else lastX = (1 - lastX) / p;
+            double p = 0.3; // (0, 1)
+
+            if (lastX <= 0) lastX = 0.1;
+            else if (lastX > 0 && lastX < p) lastX = lastX / p;
+            else if (lastX >= p && lastX < 0.5) lastX = (lastX - p) / (0.5 - p);
+            else if (lastX >= 0.5 && lastX < 1 - p) lastX = (1 - p - lastX) / (0.5 - p);
+            else if (lastX >= 1-p && lastX < 1) lastX = (1 - lastX) / p;
+            else lastX = 0.9;
+
             return lastX;
         }
 
@@ -106,6 +110,10 @@ namespace CONTOPT
             double a = 0.55; // (0, 1)
             if (lastX < a) lastX = lastX / a;
             else lastX = (1 - lastX) / (1 - a);
+
+            if (lastX <= 0) lastX = 0.01;
+            else if (lastX >= 1) lastX = 0.99;
+            //Console.WriteLine(lastX);
             return lastX;
         }
 

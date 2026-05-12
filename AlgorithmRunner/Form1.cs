@@ -15,6 +15,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using TorchSharp;
 using TorchSharp.Modules;
 using Microsoft.CodeAnalysis;
+using System.Net.Http;
 
 namespace AlgorithmRunner
 {
@@ -137,13 +138,13 @@ namespace AlgorithmRunner
 
         int[] testingDimensions = { 1, 30, 100 };
         
-        //[System.Runtime.InteropServices.DllImport("kernel32.dll")]
-        //static extern bool AllocConsole();
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        static extern bool AllocConsole();
 
         public Form1()
         {
             InitializeComponent();
-            //AllocConsole();
+            AllocConsole();
             richTextBox = richTextBox1;
             ParameterAIMethods.CreateModel();
             ParameterAIMethods.LoadModel(pathToFiles+"parameter_ai_model.pt");
@@ -160,13 +161,16 @@ namespace AlgorithmRunner
                 PSUpDown.Value = PS; MIterUpDown.Value = M_Iter; alphaUpDown.Value = alpha; muUpDown.Value = (decimal)mu; epsilonUpDown.Value = (decimal)epsilon;
             }
             catch (Exception ex) {
-                MessageBox.Show("Error: " + ex);
+                string message = "";
+                if (!File.Exists(pathToFiles + "param.txt")) message += "Default parameter file does not exist! Make sure it is called \"param.txt\"!\n";
+                message += ex.Message;
+                MessageBox.Show(message);
             }
             // -----------------------------------------------------------------------/
 
             // ----------- Reads all benchmark function parameters -------------------\
+            directory = pathToFiles + "benchmarks";
             try {
-                directory = pathToFiles + "benchmarks";
                 string benchName; double optimum; double ub; double lb;
                 foreach (string file in Directory.GetFiles(directory, "*.dat"))
                 {
@@ -174,8 +178,12 @@ namespace AlgorithmRunner
                     BenchmarkFunction benchmark = new BenchmarkFunction(benchName, lb, ub, optimum);
                     benchmarkFunctions.Add(benchmark);
                 }
-            } catch (DirectoryNotFoundException ex) {
-                MessageBox.Show("Error loading benchmark: "+ex);
+            } catch (Exception ex)
+            {
+                string message = "";
+                if (Directory.Exists(directory) && Directory.GetFiles(directory, "*.dat").Length <= 0) message += "Benchmarks directory has no readable files! Make sure the files have a .dat extension!\n";
+                message += ex.Message;
+                MessageBox.Show(message);
             }
             // -----------------------------------------------------------------------/
 
@@ -240,8 +248,12 @@ namespace AlgorithmRunner
                     //Func<double[], int, double> function = (Func<double[], int, double>)Delegate.CreateDelegate(typeof(Func<double[], int, double>), method);
                     //benchmarkFunctions.Find(x => x.name == benchmark.name).function = function;
                 }
-            } catch (Exception ex){
-                MessageBox.Show("Error: " + ex);
+            } catch (Exception ex)
+            {
+                string message = "";
+                message += "Benchmark file could not be found! Make sure it is named exactly as in the corresponding .dat file and that it has an .cs extension!\n";
+                message += ex.Message;
+                MessageBox.Show(message);
             }
             // -----------------------------------------------------------------------/
 
@@ -346,16 +358,16 @@ namespace AlgorithmRunner
 
             double[,] dataMatrix = new double[benchmarkFunctions.Count() * testingDimensions.Count(), 5];
             double[,] targetMatrix = new double[benchmarkFunctions.Count() * testingDimensions.Count(), 1];
+
             List<BenchmarkFunction> activeBenchmarks = new List<BenchmarkFunction>();
             double mean; double std;
-
             int k = 0;
 
             foreach (BenchmarkFunction benchmark in benchmarkFunctions)
             {
                 foreach (int D in testingDimensions)
                 {
-                    (mean, std) = ParameterAIMethods.RandomSamples(benchmark, D, 10 * D);
+                    (mean, std) = ParameterAIMethods.RandomSamples(benchmark, D, 50 * D);
 
                     dataMatrix[k, 0] = benchmark.arg_range_1;
                     dataMatrix[k, 1] = benchmark.arg_range_2;
@@ -371,8 +383,7 @@ namespace AlgorithmRunner
                 }
             }
 
-            // Convert 2D arrays to 1D then reshape
-            var inputsFlat = new float[k * 5];
+            /*var inputsFlat = new float[k * 5];
             var targetsFlat = new float[k * 1];
 
             for (int i = 0; i < k; i++)
@@ -382,6 +393,108 @@ namespace AlgorithmRunner
                     inputsFlat[i * 5 + j] = (float)dataMatrix[i, j];
                 }
                 targetsFlat[i] = (float)targetMatrix[i, 0];
+            }*/
+
+            torch.Tensor inputs = torch.tensor(dataMatrix, dtype: torch.float32);
+            torch.Tensor targets = torch.tensor(targetMatrix, dtype: torch.float32);
+
+            AppendTextSafe($"Input tensor shape: [{string.Join(", ", inputs.shape)}]\n");
+            AppendTextSafe($"Target tensor shape: [{string.Join(", ", targets.shape)}]\n");
+
+            // Manual batches
+            int batchSize = 4;
+            List<(IList<torch.Tensor> tensors, List<BenchmarkFunction> benchmarks)> batches =
+                new List<(IList<torch.Tensor> tensors, List<BenchmarkFunction> benchmarks)>();
+
+            torch.Tensor perm = torch.randperm(k);
+            long[] indices = perm.data<long>().ToArray();
+            inputs = inputs.index_select(0, perm);
+            targets = targets.index_select(0, perm);
+            activeBenchmarks = indices.Select(i => activeBenchmarks[(int)i]).ToList();
+
+            for (int i = 0; i < k; i += batchSize)
+            {
+                int endIdx = Math.Min(i + batchSize, k);
+
+                torch.Tensor batchInputs = inputs.slice(0, i, endIdx, 1);
+                torch.Tensor batchTargets = targets.slice(0, i, endIdx, 1);
+                List<BenchmarkFunction> batchBenchmarks = activeBenchmarks.GetRange(i, endIdx - i);
+
+                batches.Add((new List<torch.Tensor> { batchInputs, batchTargets }, batchBenchmarks));
+            }
+            AppendTextSafe($"Created {batches.Count} batches\n");
+
+            generatorMethodName = comboBox1.Text;
+            Func<double> generatorMethod = mapComponents.Find(m => m.name == generatorMethodName).method;
+
+            MOAMOPMethodName = comboBox2.Text;
+            Func<int, int, int, (double, double)> MOAMOPMethod = MOAMOPComponents.Find(m => m.name == MOAMOPMethodName).method;
+
+            initializationMethodName = comboBox3.Text;
+            Func<int, int, double, double, Func<double>, Func<double[], int, double>, double[,]> initializationMethod = initializationComponents.Find(m => m.name == initializationMethodName).method;
+
+            stepMethodName = comboBox4.Text;
+            Func<double[,], int, double, double, double, double, double, double, int, Func<double>, Func<double[], int, double>, double[,]> stepMethod = stepsComponents.Find(m => m.name == stepMethodName).method;
+
+            Components components = new Components(generatorMethod, MOAMOPMethod, initializationMethod, stepMethod);
+
+            await Task.Run(() => ParameterAIMethods.TrainModel(7, batches, components));
+            ParameterAIMethods.SaveModel(pathToFiles+"parameter_ai_model.pt");
+        }
+
+        public static void AppendTextSafe(string text)
+        {
+            if (richTextBox.InvokeRequired)
+            {
+                richTextBox.Invoke(new Action<string>(AppendTextSafe), text);
+            }
+            else
+            {
+                richTextBox.AppendText(text);
+            }
+        }
+
+        private async void generateParamsButton_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Clear();
+
+            string binPath = AppDomain.CurrentDomain.BaseDirectory;
+            bool hasTorchCpu = File.Exists(Path.Combine(binPath, "torch_cpu.dll"));
+            bool hasLibTorchSharp = File.Exists(Path.Combine(binPath, "LibTorchSharp.dll"));
+
+            if (!hasTorchCpu || !hasLibTorchSharp)
+            {
+                MessageBox.Show("Native libraries still missing!\n" +
+                               $"torch_cpu.dll: {hasTorchCpu}\n" +
+                               $"LibTorchSharp.dll: {hasLibTorchSharp}");
+                return;
+            }
+
+            double[,] dataMatrix = new double[benchmarkFunctions.Count() * testingDimensions.Count(), 5];
+            double[,] targetMatrix = new double[benchmarkFunctions.Count() * testingDimensions.Count(), 1];
+
+            List<BenchmarkFunction> activeBenchmarks = new List<BenchmarkFunction>();
+            double mean; double std;
+            int k = 0;
+
+            foreach (BenchmarkFunction benchmark in benchmarkFunctions)
+            {
+                foreach (int D in testingDimensions)
+                {
+                    (mean, std) = ParameterAIMethods.RandomSamples(benchmark, D, 50 * D);
+
+                    dataMatrix[k, 0] = benchmark.arg_range_1;
+                    dataMatrix[k, 1] = benchmark.arg_range_2;
+                    dataMatrix[k, 2] = D;
+                    dataMatrix[k, 3] = mean;
+                    dataMatrix[k, 4] = std;
+
+                    targetMatrix[k, 0] = benchmark.best_known;
+
+                    activeBenchmarks.Add(benchmark);
+
+                    k++;
+                }
             }
 
             torch.Tensor inputs = torch.tensor(dataMatrix, dtype: torch.float32);
@@ -390,18 +503,22 @@ namespace AlgorithmRunner
             AppendTextSafe($"Input tensor shape: [{string.Join(", ", inputs.shape)}]\n");
             AppendTextSafe($"Target tensor shape: [{string.Join(", ", targets.shape)}]\n");
 
-            // Create manual batches
+            // Manual batches
+
+
+
             int batchSize = 4;
-            var batches = new List<(IList<torch.Tensor> tensors, List<BenchmarkFunction> benchmarks)>();
+            List<(IList<torch.Tensor> tensors, List<BenchmarkFunction> benchmarks)> batches = 
+                new List<(IList<torch.Tensor> tensors, List<BenchmarkFunction> benchmarks)>();
 
             for (int i = 0; i < k; i += batchSize)
             {
                 int endIdx = Math.Min(i + batchSize, k);
-                
-                var batchInputs = inputs.slice(0, i, endIdx, 1);
-                var batchTargets = targets.slice(0, i, endIdx, 1);
-                var batchBenchmarks = activeBenchmarks.GetRange(i, endIdx - i);
-                
+
+                torch.Tensor batchInputs = inputs.slice(0, i, endIdx, 1);
+                torch.Tensor batchTargets = targets.slice(0, i, endIdx, 1);
+                List<BenchmarkFunction> batchBenchmarks = activeBenchmarks.GetRange(i, endIdx - i);
+
                 batches.Add((new List<torch.Tensor> { batchInputs, batchTargets }, batchBenchmarks));
             }
 
@@ -421,25 +538,13 @@ namespace AlgorithmRunner
 
             Components components = new Components(generatorMethod, MOAMOPMethod, initializationMethod, stepMethod);
 
-            await Task.Run(() => ParameterAIMethods.TrainModel(20, batches, components));
-            ParameterAIMethods.SaveModel("../../parameter_ai_model.pt");
+            await Task.Run(() => ParameterAIMethods.GenerateParameters(3, batches, components, benchmarkFunctions.Count() * testingDimensions.Count()));
         }
 
-        public static void AppendTextSafe(string text)
+        private void saveLogsButton_Click(object sender, EventArgs e)
         {
-            if (richTextBox.InvokeRequired)
-            {
-                richTextBox.Invoke(new Action<string>(AppendTextSafe), text);
-            }
-            else
-            {
-                richTextBox.AppendText(text);
-            }
-        }
+            FileMethods.SaveText(richTextBox1.Text);
 
-        private async void generateParamsButton_Click(object sender, EventArgs e)
-        {
-            //await Task.Run(() => ParameterAIMethods.GenerateParameters(benchmarkFunctions, testingDimensions));
         }
     }
 }

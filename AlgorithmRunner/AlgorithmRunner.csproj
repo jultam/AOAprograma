@@ -303,8 +303,6 @@
   <ItemGroup>
     <Compile Include="Algorithm.cs" />
     <Compile Include="AlgorithmMethods.cs" />
-    <Compile Include="benchmarks\Griewank.cs" />
-    <Compile Include="benchmarks\Rastrigin.cs" />
     <Compile Include="benchmarks\Rosenbrock.cs" />
     <Compile Include="benchmarks\Schwefel.cs" />
     <Compile Include="components\initialization\SolutionInitialization.cs" />
@@ -337,8 +335,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="AlgorithmRunner_TemporaryKey.pfx" />
-    <None Include="benchmarks\Griewank.dat" />
-    <None Include="benchmarks\Rastrigin.dat" />
     <None Include="benchmarks\Rosenbrock.dat" />
     <None Include="benchmarks\Schwefel.dat" />
     <None Include="bin\Debug\AlgorithmRunner.exe.config" />
@@ -347,7 +343,6 @@
     <None Include="components\MOAandMOP\MOAMOP.dat" />
     <None Include="components\steps\StepCalculation.dat" />
     <None Include="packages.config" />
-    <None Include="parameter_ai_model.pt" />
     <None Include="Properties\DataSources\Results.OverallResults.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
