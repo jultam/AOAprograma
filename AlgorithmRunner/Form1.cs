@@ -564,7 +564,6 @@ namespace AlgorithmRunner
         private void saveLogsButton_Click(object sender, EventArgs e)
         {
             FileMethods.SaveText(richTextBox1.Text);
-
         }
 
         private void quitButton_Click(object sender, EventArgs e)

@@ -113,7 +113,7 @@ namespace CONTOPT
 
             if (lastX <= 0) lastX = 0.01;
             else if (lastX >= 1) lastX = 0.99;
-            //Console.WriteLine(lastX);
+
             return lastX;
         }
 

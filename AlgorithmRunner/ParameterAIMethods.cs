@@ -284,7 +284,7 @@ namespace AlgorithmRunner
                                 Form1.AppendTextSafe($"Precision reward: {precisionReward}, Time reward: {timeReward}\n");
                             }
 
-                            if (sampleReward > bestRewards[s])
+                            if (sampleReward > bestRewards[s] || true)
                             {
                                 bestRewards[s] = sampleReward;
                                 parameters[s] = detachedPrediction[s];

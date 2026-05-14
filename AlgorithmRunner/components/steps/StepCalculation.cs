@@ -13,7 +13,6 @@ namespace CONTOPT
         public static double[,] BaseStepCalc(double[,] X, int D, double epsilon, double mu, double lb, double ub, double MOA, double MOP, 
             int bestIdx, Func<double> map, Func<double[], int, double> objectiveFunction)
         {
-            //if (D == 1) Console.WriteLine(bestIdx);
             for (int i = 0; i < X.GetLength(0); i++)
             {
                 for (int j = 0; j < X.GetLength(1); j++)
@@ -50,10 +49,8 @@ namespace CONTOPT
                             X[i, j] = X[bestIdx, j] + MOP * ((ub - lb) * mu + lb);
                         }
                     }
-                    //if (D == 1) Console.WriteLine(X[i, j]);
                 }
             }
-            //if (D == 1) Console.WriteLine(".............");
             return X;
         }
 
@@ -89,7 +86,12 @@ namespace CONTOPT
                     double r2 = map();
                     double r3 = map();
                     double S = CalculateLRS(1.5, map);
-                    if (S < 0.001) S = 0.001;
+
+                    if (Math.Abs(S) < 1) 
+                    {
+                        if (S < 0) S = -1; 
+                        else S = 1;
+                    }
 
                     if (r1 > MOA)
                     {
@@ -119,10 +121,8 @@ namespace CONTOPT
                             X[i, j] = X[bestIdx, j] + S * MOP * ((ub - lb) * mu + lb);
                         }
                     }
-                    //if (D == 1) Console.WriteLine(X[i, j]);
                 }
             }
-            //if (D == 1) Console.WriteLine(".............");
             return X;
         }
 
@@ -168,6 +168,10 @@ namespace CONTOPT
                             Xpos[j] = X[bestIdx, j] + MOP * ((ub - lb) * mu + lb);
                         }
                     }
+
+                    if (Xpos[j] < lb) Xpos[j] = lb;
+                    else if (Xpos[j] > ub) Xpos[j] = ub;
+
                     OppXpos[j] = ub + lb - Xpos[j];
                 }
 
@@ -225,6 +229,9 @@ namespace CONTOPT
                             Xpos[j] = X[bestIdx, j] + MOP * ((ub - lb) * mu + lb);
                         }
                     }
+
+                    if (Xpos[j] < lb) Xpos[j] = lb;
+                    else if (Xpos[j] > ub) Xpos[j] = ub;
 
                     double r = map();
                     OppXpos[j] = ub + lb - r * Xpos[j];
