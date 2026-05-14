@@ -31,6 +31,7 @@ namespace AlgorithmRunner
                 // Initialize starting solution positions
                 double[,] X = components.initMethod(PS, D, ub, lb, components.mapMethod, benchmark.function);
                 //fitness = AlgorithmMethods.CalculateFitnessFunctions(X, D, benchmark.function);
+                //bestIdx = AlgorithmMethods.FindBestSolution(fitness);
 
                 while (C_Iter < M_Iter)
                 {

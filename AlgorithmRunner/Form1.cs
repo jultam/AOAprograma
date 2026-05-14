@@ -16,6 +16,7 @@ using TorchSharp;
 using TorchSharp.Modules;
 using Microsoft.CodeAnalysis;
 using System.Net.Http;
+using MathNet.Numerics.Optimization;
 
 namespace AlgorithmRunner
 {
@@ -538,13 +539,37 @@ namespace AlgorithmRunner
 
             Components components = new Components(generatorMethod, MOAMOPMethod, initializationMethod, stepMethod);
 
-            await Task.Run(() => ParameterAIMethods.GenerateParameters(3, batches, components, benchmarkFunctions.Count() * testingDimensions.Count()));
+            int taskCount = benchmarkFunctions.Count() * testingDimensions.Count();
+            torch.Tensor generatedParameters = torch.zeros(taskCount, 5);
+            await Task.Run(() => generatedParameters = ParameterAIMethods.GenerateParameters(3, batches, components, taskCount));
+            double[] overallParameters = new double[5];
+        
+            for (int i = 0; i < 5; i++)
+            {
+                double sum = 0;
+                for (int j = 0; j < taskCount; j++)
+                {
+                    sum += (double)generatedParameters[j][i];
+                }
+                overallParameters[i] = sum / taskCount;
+            }
+
+            PSUpDown.Value = (decimal)overallParameters[0];
+            MIterUpDown.Value = (decimal)overallParameters[1];
+            alphaUpDown.Value = (decimal)overallParameters[2];
+            muUpDown.Value = (decimal)overallParameters[3];
+            epsilonUpDown.Value = (decimal)overallParameters[4];
         }
 
         private void saveLogsButton_Click(object sender, EventArgs e)
         {
             FileMethods.SaveText(richTextBox1.Text);
 
+        }
+
+        private void quitButton_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

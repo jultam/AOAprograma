@@ -70,6 +70,7 @@
             this.generateParamsButton = new System.Windows.Forms.Button();
             this.saveParamButton = new System.Windows.Forms.Button();
             this.saveLogsButton = new System.Windows.Forms.Button();
+            this.quitButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.alphaUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.muUpDown)).BeginInit();
@@ -563,7 +564,7 @@
             this.saveLogsButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(160)))), ((int)(((byte)(237)))));
             this.saveLogsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.saveLogsButton.ForeColor = System.Drawing.SystemColors.Control;
-            this.saveLogsButton.Location = new System.Drawing.Point(1910, 43);
+            this.saveLogsButton.Location = new System.Drawing.Point(1529, 43);
             this.saveLogsButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.saveLogsButton.Name = "saveLogsButton";
             this.saveLogsButton.Size = new System.Drawing.Size(316, 55);
@@ -572,11 +573,26 @@
             this.saveLogsButton.UseVisualStyleBackColor = false;
             this.saveLogsButton.Click += new System.EventHandler(this.saveLogsButton_Click);
             // 
+            // quitButton
+            // 
+            this.quitButton.BackColor = System.Drawing.Color.Brown;
+            this.quitButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.quitButton.ForeColor = System.Drawing.SystemColors.Control;
+            this.quitButton.Location = new System.Drawing.Point(2041, 43);
+            this.quitButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.quitButton.Name = "quitButton";
+            this.quitButton.Size = new System.Drawing.Size(185, 55);
+            this.quitButton.TabIndex = 31;
+            this.quitButton.Text = "QUIT";
+            this.quitButton.UseVisualStyleBackColor = false;
+            this.quitButton.Click += new System.EventHandler(this.quitButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2264, 844);
+            this.Controls.Add(this.quitButton);
             this.Controls.Add(this.saveLogsButton);
             this.Controls.Add(this.saveParamButton);
             this.Controls.Add(this.generateParamsButton);
@@ -662,6 +678,7 @@
         private System.Windows.Forms.Button generateParamsButton;
         private System.Windows.Forms.Button saveParamButton;
         private System.Windows.Forms.Button saveLogsButton;
+        private System.Windows.Forms.Button quitButton;
     }
 }
 

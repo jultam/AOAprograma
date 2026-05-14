@@ -58,24 +58,23 @@ namespace AlgorithmRunner
 
 
 
-                foreach (var batch in batches)
+                foreach ((IList<torch.Tensor> tensors, List<Form1.BenchmarkFunction> benchmarks) batch in batches)
                 {
-                    var x = batch.tensors[0];
-                    var y = batch.tensors[1];
-                    var batchBenchmarks = batch.benchmarks;
+                    torch.Tensor x = batch.tensors[0];
+                    torch.Tensor y = batch.tensors[1];
+                    List<Form1.BenchmarkFunction> batchBenchmarks = batch.benchmarks;
 
                     Form1.AppendTextSafe($"------------------------\nBatch {batchCount + 1}: x shape = [{string.Join(", ", x.shape)}], y shape = [{string.Join(", ", y.shape)}]\n");
 
                     model.train();
-                    var prediction = model.forward(x);
-                    //Form1.AppendTextSafe("| " + TensorToString(x) + " |\n " + TensorToString(prediction) + " |\n ");
+                    torch.Tensor prediction = model.forward(x);
 
                     double precisionReward;
                     double timeReward;
                     double batchReward = 0;
                     using (torch.no_grad())
                     {
-                        var detachedPrediction = prediction.detach();
+                        torch.Tensor detachedPrediction = prediction.detach();
 
                         for (int s = 0; s < x.shape[0]; s++)
                         {
@@ -124,7 +123,7 @@ namespace AlgorithmRunner
                             double sampleReward = 0.0;
                             if (!timedOut)
                             {
-                                Form1.AppendTextSafe("Found optimum: "+result.optimum.ToString() + "\nCalculation time: " + result.time.ToString() + "\n");
+                                Form1.AppendTextSafe("Found optimum: "+result.optimum.ToString() + "\nCalculation time (ms): " + result.time.ToString() + "\n");
 
                                 double targetValue = y[s].ToDouble();
                                 double absError = Math.Log10(Math.Abs(result.optimum - targetValue) + 1.0001);
@@ -143,20 +142,20 @@ namespace AlgorithmRunner
 
                                 batchReward += sampleReward;
 
-                                //Form1.AppendTextSafe($"AOA Result: {result.optimum}, Target: {targetValue}, Reward: {sampleReward}\n");
-                                //Form1.AppendTextSafe($"Precision reward: {precisionReward}, Time reward: {timeReward}\n");
+                                Form1.AppendTextSafe($"AOA Result: {result.optimum}, Target: {targetValue}, Reward: {sampleReward}\n");
+                                Form1.AppendTextSafe($"Precision reward: {precisionReward}, Time reward: {timeReward}\n");
                             }
                         }
                     }
 
                     double avgBatchReward = batchReward / x.shape[0];
 
-                    var meanPrediction = prediction.mean();
-                    var regLoss = 0.01f * torch.sum(torch.pow(prediction - meanPrediction, 2));
+                    torch.Tensor meanPrediction = prediction.mean();
+                    torch.Tensor regLoss = 0.01f * torch.sum(torch.pow(prediction - meanPrediction, 2));
 
-                    var entropy = -torch.sum(prediction * torch.log(prediction + 1e-8));
-                    var rewardTensor = torch.tensor((float)avgBatchReward, dtype: torch.float32);
-                    var loss = -rewardTensor + regLoss - 0.25f * entropy;
+                    torch.Tensor entropy = -torch.sum(prediction * torch.log(prediction + 1e-8));
+                    torch.Tensor rewardTensor = torch.tensor((float)avgBatchReward, dtype: torch.float32);
+                    torch.Tensor loss = -rewardTensor + regLoss - 0.25f * entropy;
 
                     optimizer.zero_grad();
                     loss.backward();
@@ -172,20 +171,21 @@ namespace AlgorithmRunner
                 scheduler.step(avgReward);
 
                 TimeSpan elapsed = DateTime.Now - startTime;
-                Form1.AppendTextSafe($"Epoch done, Time elapsed: {elapsed:hh\\:mm\\:ss}\n");
+                Form1.AppendTextSafe($"Epoch done, Time elapsed (hours, minutes, seconds): {elapsed:hh\\:mm\\:ss}\n");
             }
             Form1.AppendTextSafe("Training completed.\n");
         }
 
-        public static void GenerateParameters(int epochs, List<(IList<torch.Tensor> tensors, List<Form1.BenchmarkFunction> benchmarks)> batches,
+        public static torch.Tensor GenerateParameters(int epochs, List<(IList<torch.Tensor> tensors, List<Form1.BenchmarkFunction> benchmarks)> batches,
             Form1.Components components, int taskCount)
         {
-            torch.Tensor[] parameters = new torch.Tensor[taskCount];
+            torch.Tensor parameters = torch.zeros(taskCount, 5);
+            double[] bestRewards = new double[taskCount];
 
             var optimizer = torch.optim.Adam(model.parameters(), lr: 0.001);
             var scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode: "max", factor: 0.5, patience: 3);
 
-            Form1.AppendTextSafe($"=== Starting adjustment: {epochs} epochs ===\n");
+            Form1.AppendTextSafe($"=== Starting value generation: {epochs} epochs ===\n");
             DateTime startTime = DateTime.Now;
 
             for (int i = 0; i < epochs; i++)
@@ -194,30 +194,32 @@ namespace AlgorithmRunner
                 double totalReward = 0;
                 int batchCount = 0;
 
-                foreach (var batch in batches)
+                foreach ((IList<torch.Tensor> tensors, List<Form1.BenchmarkFunction> benchmarks) batch in batches)
                 {
-                    var x = batch.tensors[0];
-                    var y = batch.tensors[1];
-                    var batchBenchmarks = batch.benchmarks;
+                    torch.Tensor x = batch.tensors[0];
+                    torch.Tensor y = batch.tensors[1];
+                    List<Form1.BenchmarkFunction> batchBenchmarks = batch.benchmarks;
 
-                    Form1.AppendTextSafe($"------\nBatch {batchCount + 1}: x shape = [{string.Join(", ", x.shape)}], y shape = [{string.Join(", ", y.shape)}]\n");
+                    Form1.AppendTextSafe($"------------------------\nBatch {batchCount + 1}: x shape = [{string.Join(", ", x.shape)}], y shape = [{string.Join(", ", y.shape)}]\n");
 
                     model.train();
-                    var prediction = model.forward(x);
-                    //Form1.AppendTextSafe("| " + TensorToString(x) + " |\n " + TensorToString(prediction) + " |\n ");
+                    torch.Tensor prediction = model.forward(x);
 
                     double precisionReward;
                     double timeReward;
                     double batchReward = 0;
                     using (torch.no_grad())
                     {
-                        var detachedPrediction = prediction.detach();
+                        torch.Tensor detachedPrediction = prediction.detach();
 
                         for (int s = 0; s < x.shape[0]; s++)
                         {
                             Form1.BenchmarkFunction benchmark = batchBenchmarks[s];
 
-                            Form1.AppendTextSafe("---------\n" + benchmark.name + "\n" + TensorToString(x[s]) + "\n" + TensorToString(detachedPrediction[s]) + "\n");
+                            Form1.AppendTextSafe(string.Format("-------------\n\n{0} function\nbounds = [{1}, {2}], dimensions = {3}, mean = {4:F4}, std = {5:F4}\n\n",
+                                benchmark.name, (int)x[s][0], (int)x[s][1], (int)x[s][2], (double)x[s][3], (double)x[s][4]));
+                            Form1.AppendTextSafe(string.Format("Generated parameters:\npopulation size per dimension = {0}, max iterations = {1}, \nα = {2}, μ = {3:F3}, ε = {4:F8}\n\n",
+                                (int)detachedPrediction[s][0] / (int)x[s][2], (int)detachedPrediction[s][1], (int)detachedPrediction[s][2], (double)detachedPrediction[s][3], (double)detachedPrediction[s][4]));
 
                             TimeSpan timeout = TimeSpan.FromMinutes(5);
                             bool timedOut = false;
@@ -230,7 +232,7 @@ namespace AlgorithmRunner
                                 {
                                     return result = Algorithm.AOA(
                                     1,
-                                    (int)detachedPrediction[s][0] * (int)x[s][2],
+                                    (int)detachedPrediction[s][0],
                                     (int)detachedPrediction[s][1],
                                     (int)x[s][2],
                                     (int)detachedPrediction[s][2],
@@ -259,10 +261,10 @@ namespace AlgorithmRunner
                             double sampleReward = 0.0;
                             if (!timedOut)
                             {
-                                Form1.AppendTextSafe("Found optimum: " + result.optimum.ToString() + "\nCalculation time: " + result.time.ToString() + "\n");
+                                Form1.AppendTextSafe("Found optimum: " + result.optimum.ToString() + "\nCalculation time (ms): " + result.time.ToString() + "\n");
 
                                 double targetValue = y[s].ToDouble();
-                                double absError = Math.Abs(result.optimum - targetValue);
+                                double absError = Math.Log10(Math.Abs(result.optimum - targetValue) + 1.0001);
                                 precisionReward = 1.0 / (1.0 + absError);
                                 //precisionReward = Math.Exp(-Math.Abs(result.optimum - targetValue));
 
@@ -270,26 +272,34 @@ namespace AlgorithmRunner
                                 timeReward = 1.0 / (1.0 + result.time / targetTime);
                                 //timeReward = Math.Exp(-result.time / targetTime);
 
-                                double precisionWeight = 0.7;
-                                double timeWeight = 0.3;
+                                double precisionWeight = 0.9;
+                                double timeWeight = 0.1;
 
                                 sampleReward = precisionWeight * precisionReward + timeWeight * timeReward;
+                                if (double.IsNaN(sampleReward)) sampleReward = 0.0;
+
                                 batchReward += sampleReward;
 
                                 Form1.AppendTextSafe($"AOA Result: {result.optimum}, Target: {targetValue}, Reward: {sampleReward}\n");
                                 Form1.AppendTextSafe($"Precision reward: {precisionReward}, Time reward: {timeReward}\n");
+                            }
+
+                            if (sampleReward > bestRewards[s])
+                            {
+                                bestRewards[s] = sampleReward;
+                                parameters[s] = detachedPrediction[s];
                             }
                         }
                     }
 
                     double avgBatchReward = batchReward / x.shape[0];
 
-                    var meanPrediction = prediction.mean();
-                    var regLoss = 0.01f * torch.sum(torch.pow(prediction - meanPrediction, 2));
+                    torch.Tensor meanPrediction = prediction.mean();
+                    torch.Tensor regLoss = 0.01f * torch.sum(torch.pow(prediction - meanPrediction, 2));
 
-                    var entropy = -torch.sum(prediction * torch.log(prediction + 1e-8));
-                    var rewardTensor = torch.tensor((float)avgBatchReward, dtype: torch.float32);
-                    var loss = -rewardTensor + regLoss - 0.25f * entropy;
+                    torch.Tensor entropy = -torch.sum(prediction * torch.log(prediction + 1e-8));
+                    torch.Tensor rewardTensor = torch.tensor((float)avgBatchReward, dtype: torch.float32);
+                    torch.Tensor loss = -rewardTensor + regLoss - 0.25f * entropy;
 
                     optimizer.zero_grad();
                     loss.backward();
@@ -305,9 +315,11 @@ namespace AlgorithmRunner
                 scheduler.step(avgReward);
 
                 TimeSpan elapsed = DateTime.Now - startTime;
-                Form1.AppendTextSafe($"Epoch done, Time Elapsed: {elapsed:hh\\:mm\\:ss}\n");
+                Form1.AppendTextSafe($"Epoch done, Time elapsed (hours, minutes, seconds): {elapsed:hh\\:mm\\:ss}\n");
             }
-            Form1.AppendTextSafe("Training completed.\n");
+            Form1.AppendTextSafe("Values generated.\n");
+
+            return parameters;
         }
 
         public static void SaveModel(string filePath)
