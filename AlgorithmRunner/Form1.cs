@@ -139,13 +139,13 @@ namespace AlgorithmRunner
 
         int[] testingDimensions = { 1, 30, 100 };
         
-        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
-        static extern bool AllocConsole();
+        //[System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        //static extern bool AllocConsole();
 
         public Form1()
         {
             InitializeComponent();
-            AllocConsole();
+            //AllocConsole();
             richTextBox = richTextBox1;
             ParameterAIMethods.CreateModel();
             ParameterAIMethods.LoadModel(pathToFiles+"parameter_ai_model.pt");
