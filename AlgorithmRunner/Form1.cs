@@ -334,8 +334,8 @@ namespace AlgorithmRunner
                 }
             }
 
-            richTextBox1.AppendText(String.Format("Avg optimum: {0}\n", sumOptimum / rowID));
-            richTextBox1.AppendText(String.Format("Avg time: {0}\n", sumTime / rowID));
+            //richTextBox1.AppendText(String.Format("Avg optimum: {0}\n", sumOptimum / rowID));
+            //richTextBox1.AppendText(String.Format("Avg time: {0}\n", sumTime / rowID));
 
             download.Enabled = true;
             start.Enabled = true;
