@@ -13,7 +13,8 @@ namespace CONTOPT
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double UniformDist()
         {
-            return _rnd.NextDouble();
+            double value = _rnd.NextDouble();
+            return value;
         }
     }
 }

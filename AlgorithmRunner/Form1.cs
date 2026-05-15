@@ -318,6 +318,9 @@ namespace AlgorithmRunner
 
             Components components = new Components(generatorMethod, MOAMOPMethod, initializationMethod, stepMethod);
 
+            double sumOptimum = 0;
+            double sumTime = 0;
+
             foreach (BenchmarkFunction benchmark in benchmarkFunctions)
             {
                 foreach (int D in testingDimensions)
@@ -325,9 +328,14 @@ namespace AlgorithmRunner
                     Results.AlgorithmResults results = await Task.Run(() => Algorithm.AOA(runs, PS*D, M_Iter, D, alpha, mu, epsilon, 
                         benchmark, components));
                     dataGridView1.Rows.Add(rowID, benchmark.name, D, benchmark.best_known, results.optimum,  results.time);
+                    sumOptimum += results.optimum;
+                    sumTime += results.time;
                     rowID++;
                 }
             }
+
+            richTextBox1.AppendText(String.Format("Avg optimum: {0}\n", sumOptimum / rowID));
+            richTextBox1.AppendText(String.Format("Avg time: {0}\n", sumTime / rowID));
 
             download.Enabled = true;
             start.Enabled = true;
