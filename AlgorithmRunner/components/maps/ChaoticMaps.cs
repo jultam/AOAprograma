@@ -11,15 +11,7 @@ namespace CONTOPT
     {
         private static double lastX = 0.6;
         private static bool firstIter = true;
-        private static int currentIter = 1;
         private static Random chaosMapRandom = new Random();
-
-        public static void ResetMap()
-        {
-            lastX = 0.6;
-            firstIter = true;
-            currentIter = 1;
-        }
 
         /*
          * Generate a chaotic map

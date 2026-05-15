@@ -10,7 +10,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using CONTOPT;
 using Microsoft.CodeAnalysis.CSharp;
 using TorchSharp;
 using TorchSharp.Modules;
@@ -329,8 +328,6 @@ namespace AlgorithmRunner
                     rowID++;
                 }
             }
-
-            ContOpt.ResetMap();
 
             download.Enabled = true;
             start.Enabled = true;

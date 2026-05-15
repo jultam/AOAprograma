@@ -15,7 +15,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>C:\Users\Admin\Desktop\aoapp\</PublishUrl>
+    <PublishUrl>C:\Users\Admin\Desktop\aoapp2\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -26,8 +26,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <WebPage>publish.htm</WebPage>
-    <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -303,13 +302,6 @@
   <ItemGroup>
     <Compile Include="Algorithm.cs" />
     <Compile Include="AlgorithmMethods.cs" />
-    <Compile Include="benchmarks\Rosenbrock.cs" />
-    <Compile Include="benchmarks\Schwefel.cs" />
-    <Compile Include="components\initialization\SolutionInitialization.cs" />
-    <Compile Include="components\maps\ChaoticMaps.cs" />
-    <Compile Include="components\maps\Distributions.cs" />
-    <Compile Include="components\MOAandMOP\MOAMOP.cs" />
-    <Compile Include="components\steps\StepCalculation.cs" />
     <Compile Include="FileMethods.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -335,13 +327,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="AlgorithmRunner_TemporaryKey.pfx" />
-    <None Include="benchmarks\Rosenbrock.dat" />
-    <None Include="benchmarks\Schwefel.dat" />
     <None Include="bin\Debug\AlgorithmRunner.exe.config" />
-    <None Include="components\initialization\SolutionInitialization.dat" />
-    <None Include="components\maps\ChaoticMaps.dat" />
-    <None Include="components\MOAandMOP\MOAMOP.dat" />
-    <None Include="components\steps\StepCalculation.dat" />
     <None Include="packages.config" />
     <None Include="Properties\DataSources\Results.OverallResults.datasource" />
     <None Include="Properties\Settings.settings">
@@ -361,7 +347,6 @@
     <Content Include="bin\Debug\AlgorithmRunner.exe" />
     <Content Include="bin\Debug\AlgorithmRunner.pdb" />
     <Content Include="results.txt" />
-    <None Include="components\maps\Distributions.dat" />
     <Content Include="param.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -398,7 +383,12 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="benchmarks\" />
     <Folder Include="bin\Release\" />
+    <Folder Include="components\initialization\" />
+    <Folder Include="components\maps\" />
+    <Folder Include="components\MOAandMOP\" />
+    <Folder Include="components\steps\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
